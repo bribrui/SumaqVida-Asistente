@@ -1,0 +1,44 @@
+<header>
+  <div class="logo">
+    <a href="/index.html">SumaqVida</a>
+  </div>
+
+  <nav class="desktop-menu">
+    <a href="/index.html#sobre">Nosotros</a>
+    <div class="dropdown">
+      <a href="#">Funciones</a>
+      <div class="dropdown-content">
+        <a href="/views/pages/registro-diario.html">Registro diario</a>
+        <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
+        <a href="/views/pages/recetas.html">Recetas</a>
+      </div>
+    </div>
+    <a href="/index.html#faq">Preguntas</a>
+  </nav>
+
+  <div class="login-btn desktop-menu">
+    <a href="/views/pages/login.html">Iniciar sesión</a>
+  </div>
+
+  <!-- Botón hamburguesa para móviles -->
+  <div class="hamburger" onclick="toggleMobileMenu()">
+    ☰
+  </div>
+
+  <!-- Menú lateral móvil -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="close-btn" onclick="toggleMobileMenu()">×</div>
+    <div class="menu-centrado">
+      <a href="/index.html#sobre">Nosotros</a>
+      <details>
+        <summary>Funciones</summary>
+        <a href="/views/pages/registro-diario.html">Registro diario</a>
+        <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
+        <a href="/views/pages/recetas.html">Recetas</a>
+      </details>
+      <a href="/index.html#faq">Preguntas</a>
+    </div>
+    <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesión</a>
+  </div>
+  
+</header>

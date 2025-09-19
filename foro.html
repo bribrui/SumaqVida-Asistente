@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Foro SumaqVida</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    body { font-family: 'Montserrat', sans-serif; background: #f9f9fb; margin: 0; }
+    header { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
+    .foro-layout { display: flex; gap: 2rem; max-width: 1200px; margin: 0 auto; margin-top: 110px; }
+    .foro-left, .foro-right { flex: 1; }
+    .foro-center { flex: 2; min-width: 0; }
+    .foro-header {
+      background: #e0356d;
+      color: #fff;
+      padding: 1.5rem 1rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      margin-top: 110px;
+      box-shadow: 0 2px 12px #e0356d22;
+    }
+    .foro-form {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 2px 12px #e0356d22;
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+    }
+    .foro-form input, .foro-form textarea {
+      width: 100%;
+      border-radius: 0.7rem;
+      border: 1px solid #e0356d;
+      padding: 0.7rem;
+      margin-bottom: 0.7rem;
+      font-size: 1rem;
+      background: #f9f9fb;
+    }
+    .foro-form .media-inputs {
+      display: flex;
+      gap: 0.7rem;
+      margin-bottom: 0.7rem;
+    }
+    .foro-form .hashtags-input {
+      margin-bottom: 0.7rem;
+    }
+    .foro-form .hashtags-input input {
+      width: 100%;
+      border-radius: 0.7rem;
+      border: 1px solid #e0356d;
+      padding: 0.7rem;
+      font-size: 1rem;
+      background: #f9f9fb;
+    }
+    .foro-form .recetas-sugeridas {
+      margin-bottom: 1rem;
+      font-size: 0.98rem;
+      color: #e0356d;
+    }
+    .foro-form button {
+      background: #e0356d;
+      color: #fff;
+      border: none;
+      border-radius: 0.7rem;
+      padding: 0.7rem 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 8px #e0356d22;
+      transition: background 0.2s;
+    }
+    .foro-form button:hover {
+      background: #c0275a;
+    }
+    .foro-list {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .foro-post {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 1px 8px #e0356d22;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      border-left: 6px solid #e0356d;
+      position: relative;
+    }
+    .foro-post .foro-user {
+      font-weight: bold;
+      color: #e0356d;
+      margin-bottom: 0.3rem;
+      font-size: 1.1rem;
+    }
+    .foro-post .foro-date {
+      font-size: 0.9rem;
+      color: #888;
+      margin-bottom: 0.5rem;
+    }
+    .foro-post .foro-content {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 0.7rem;
+    }
+    .foro-post .foro-hashtags {
+      margin-bottom: 0.7rem;
+      color: #e0356d;
+      font-size: 0.98rem;
+    }
+    .foro-post .foro-media img, .foro-post .foro-media video {
+      max-width: 100%;
+      border-radius: 0.7rem;
+      margin-bottom: 0.7rem;
+      display: block;
+    }
+    .foro-post .foro-stars {
+      margin-bottom: 0.7rem;
+    }
+    .foro-stars .bi-star, .foro-stars .bi-star-fill {
+      color: #ffd700;
+      cursor: pointer;
+      font-size: 1.3rem;
+      margin-right: 0.1rem;
+      transition: color 0.2s;
+    }
+    .foro-post .foro-reactions {
+      display: flex;
+      gap: 1.2rem;
+      margin-bottom: 0.7rem;
+      align-items: center;
+      font-size: 1.1rem;
+    }
+    .foro-post .foro-reactions button {
+      background: #f3e6f7;
+      color: #e0356d;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.2rem 0.7rem;
+      cursor: pointer;
+      font-size: 1.1rem;
+      margin-left: 0.2rem;
+      transition: background 0.2s;
+    }
+    .foro-post .foro-reactions button:hover {
+      background: #e0356d;
+      color: #fff;
+    }
+    .foro-comments {
+      margin-top: 0.7rem;
+      background: #f9f9fb;
+      border-radius: 0.7rem;
+      padding: 0.7rem;
+    }
+    .foro-comments ul {
+      padding-left: 1rem;
+      margin: 0;
+    }
+    .foro-comment {
+      margin-bottom: 0.5rem;
+      font-size: 0.98rem;
+      color: #444;
+    }
+    .foro-comment .comment-user {
+      font-weight: bold;
+      color: #e0356d;
+      margin-right: 0.3rem;
+    }
+    .foro-comment-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .foro-comment-form input {
+      flex: 1;
+      border-radius: 0.7rem;
+      border: 1px solid #e0356d;
+      padding: 0.3rem;
+      font-size: 0.98rem;
+    }
+    .foro-comment-form button {
+      background: #e0356d;
+      color: #fff;
+      border: none;
+      border-radius: 0.7rem;
+      padding: 0.3rem 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .foro-top {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 1px 8px #e0356d22;
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+    .foro-top h3 {
+      color: #e0356d;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    .foro-top-user {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.7rem;
+      gap: 0.7rem;
+    }
+    .foro-top-user .bi-trophy {
+      color: #ffd700;
+      font-size: 1.3rem;
+    }
+    .foro-top-user .top-stars {
+      color: #ffd700;
+      font-size: 1.1rem;
+      margin-left: 0.3rem;
+    }
+    .foro-right-panel {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 1px 8px #e0356d22;
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+    .foro-right-panel h3 {
+      color: #e0356d;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    @media (max-width: 900px) {
+      .foro-layout { flex-direction: column; margin-top: 120px; }
+      .foro-left, .foro-right, .foro-center { width: 100%; }
+      .foro-header { margin-top: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Menú principal igual al header -->
+  <header>
+    <div class="logo">
+      <a href="/index.html">SumaqVida</a>
+    </div>
+    <nav class="desktop-menu">
+      <a href="/index.html#sobre">Nosotros</a>
+      <div class="dropdown">
+        <a href="#">Funciones</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </div>
+      </div>
+      <a href="/Sumaqvida/foro.html">Foro</a>  
+      <a href="/Sumaqvida/Calendario/calendario.html">Calendario</a>
+      <a href="/Sumaqvida/views/pages/glosario.html">Glosario</a>
+      <a href="/Sumaqvida/views/pages/blog.html">Blog</a>
+      <a href="/Sumaqvida/views/pages/videos.html">Videos</a>
+      <a href="/Sumaqvida/index.html#faq">Preguntas</a>
+    </nav>
+    <div class="login-btn desktop-menu">
+      <a href="/views/pages/login.html">Iniciar sesión</a>
+    </div>
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="close-btn" onclick="toggleMobileMenu()">×</div>
+      <div class="menu-centrado">
+        <a href="/index.html#sobre">Nosotros</a>
+        <details>
+          <summary>Funciones</summary>
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </details>
+        <a href="/index.html#faq">Preguntas</a>
+      </div>
+      <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesión</a>
+    </div>
+  </header>
+
+<script>
+function toggleMobileMenu() {
+  var menu = document.getElementById('mobileMenu');
+  menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+    <i class="bi bi-chat-dots"></i> <b>Foro SumaqVida</b>
+    <div style="font-size:1rem;margin-top:0.5rem;">
+      Comparte tus experiencias, dudas, recetas y tips. ¡Tu voz ayuda a la comunidad!
+    </div>
+  </div>
+  <div class="foro-layout">
+    <div class="foro-left">
+      <div class="foro-top">
+        <h3><i class="bi bi-trophy"></i> Top usuarios SumaqVida</h3>
+        <div id="foroTopUsers"></div>
+      </div>
+    </div>
+    <div class="foro-center">
+    <form class="foro-form" id="foroForm" enctype="multipart/form-data">
+  <input type="text" id="foroUser" placeholder="Tu nombre o apodo" required>
+  <textarea id="foroContent" rows="3" placeholder="¿Qué quieres compartir hoy?" required></textarea>
+  <div class="hashtags-input">
+    <input type="text" id="foroHashtags" placeholder="Agrega hashtags separados por espacios, ej: #diabetes #receta #bienestar">
+  </div>
+  <div class="recetas-sugeridas">
+    <span><b>¿Quieres vincular una receta?</b></span>
+    <select id="foroReceta">
+      <option value="">-- Selecciona una receta --</option>
+      <option value="/views/pages/recetas.html#ensalada">Ensalada SumaqVida</option>
+      <option value="/views/pages/recetas.html#pollo">Pollo al vapor</option>
+      <option value="/views/pages/recetas.html#quinoa">Quinoa Power</option>
+      <!-- Agrega más recetas aquí -->
+    </select>
+  </div>
+  <div class="media-inputs">
+    <label for="foroMedia" class="toolbar-button bp-tooltip" data-bp-tooltip-pos="up-left" data-bp-tooltip="Adjuntar foto o video" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;background:#e0356d;color:#fff;padding:0.5rem 1rem;border-radius:0.7rem;">
+      <i class="bi bi-camera" style="font-size:1.3rem;"></i> <span>Adjuntar foto/video</span>
+    </label>
+    <input type="file" id="foroMedia" accept="image/*,video/*" style="display:none;">
+  </div>
+  <div id="foroPreview" style="margin-bottom:1rem;"></div>
+  <button type="submit" style="background:#e0356d;color:#fff;border:none;border-radius:0.7rem;padding:0.7rem 1.2rem;font-weight:bold;cursor:pointer;width:100%;font-size:1.1rem;box-shadow:0 2px 8px #e0356d22;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;">
+    <i class="bi bi-send-fill" style="font-size:1.2rem;"></i> <span>Publicar</span>
+  </button>
+</form>
+      <div class="foro-list" id="foroList"></div>
+    </div>
+    <div class="foro-right">
+      <div class="foro-right-panel">
+        <h3><i class="bi bi-lightbulb"></i> Tips y Retos SumaqVida</h3>
+        <ul>
+          <li>💡 ¿Sabías que caminar 30 minutos al día mejora tu glucosa?</li>
+          <li>🏆 Reto: Comparte tu receta saludable favorita.</li>
+          <li>📹 Mira nuestro <a href="https://youtube.com/shorts/M3xMhBWwLbk" target="_blank">video destacado</a>.</li>
+          <li>🌟 ¿Tienes un consejo? ¡Compártelo en el foro!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script>
+function cargarPosts() {
+  fetch('/Sumaqvida/api/foro.php?action=get_posts')
+    .then(res => res.json())
+    .then(posts => {
+      const contenedor = document.getElementById('foroList');
+      contenedor.innerHTML = '';
+      posts.forEach(post => {
+        // Estrellas vacías y llenas según promedio
+        let starsHtml = '';
+        for (let i = 1; i <= 5; i++) {
+          const starClass = (post.stars >= i) ? 'bi-star-fill' : 'bi-star';
+          starsHtml += `<i class="bi ${starClass}" data-post="${post.id}" data-star="${i}" style="cursor:pointer;" onclick="calificar(${post.id},${i})"></i>`;
+        }
+        // Hashtags
+        let hashtagsHtml = '';
+        if (post.hashtags) {
+          hashtagsHtml = `<div class="foro-hashtags">${post.hashtags.split(' ').map(h => h ? `<span>#${h.replace('#','')}</span>` : '').join(' ')}</div>`;
+        }
+        // Receta vinculada
+        let recetaHtml = '';
+        if (post.receta_url && post.receta_url !== '') {
+          recetaHtml = `<div class="foro-hashtags"><a href="${post.receta_url}" target="_blank"><i class="bi bi-book"></i> Ver receta vinculada</a></div>`;
+        }
+        // Reacciones
+        let reactionsHtml = `
+          <button onclick="reaccionar(${post.id},0)">😮</button>
+          <button onclick="reaccionar(${post.id},1)">😍</button>
+          <button onclick="reaccionar(${post.id},2)">😋</button>
+        `;
+        // Comentarios
+        let commentsHtml = '<div class="foro-comments"><ul>';
+        post.comments.forEach(c => {
+          commentsHtml += `<li><b>${c.user}</b>: ${c.text}</li>`;
+        });
+        commentsHtml += `</ul>
+          <button onclick="mostrarComentario(${post.id})">Comentar</button>
+        </div>`;
+        // Media
+        let mediaHtml = '';
+        if (post.media_type && post.media_url) {
+          if (post.media_type.startsWith('image')) {
+            mediaHtml += `<div class="foro-media"><img src="${post.media_url}" alt="Imagen"></div>`;
+          } else if (post.media_type.startsWith('video')) {
+            mediaHtml += `<div class="foro-media"><video src="${post.media_url}" controls></video></div>`;
+          }
+        }
+        contenedor.innerHTML += `
+          <div class="foro-post">
+            <div class="foro-user"><i class="bi bi-person-circle"></i> ${post.user}</div>
+            <div class="foro-date"><i class="bi bi-clock"></i> ${post.date}</div>
+            <div class="foro-content">${post.content}</div>
+            ${hashtagsHtml}
+            ${recetaHtml}
+            ${mediaHtml}
+            <div class="foro-stars">${starsHtml}</div>
+            <div class="foro-reactions">
+              Reacciones: 😮 ${post.reactions[0]||0} | 😍 ${post.reactions[1]||0} | 😋 ${post.reactions[2]||0}
+              ${reactionsHtml}
+            </div>
+            ${commentsHtml}
+          </div>
+          <hr>
+        `;
+      });
+    });
+}
+
+// Publicar un nuevo post
+document.getElementById('foroForm').onsubmit = function(e) {
+  e.preventDefault();
+  const user = document.getElementById('foroUser').value.trim() || 'Anónimo';
+  const content = document.getElementById('foroContent').value.trim();
+  const hashtags = document.getElementById('foroHashtags').value.trim();
+  const receta_url = document.getElementById('foroReceta').value;
+  let mediaFile = document.getElementById('foroMedia').files[0];
+  let media_type = '';
+  let media_url = '';
+
+  if (mediaFile) {
+    media_type = mediaFile.type;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      media_url = e.target.result;
+      publicarPost(user, content, media_type, media_url, hashtags, receta_url);
+      document.getElementById('foroForm').reset();
+      document.getElementById('foroPreview').innerHTML = '';
+    };
+    reader.readAsDataURL(mediaFile);
+  } else {
+    publicarPost(user, content, media_type, media_url, hashtags, receta_url);
+    document.getElementById('foroForm').reset();
+    document.getElementById('foroPreview').innerHTML = '';
+  }
+};
+
+function publicarPost(user, content, media_type, media_url, hashtags, receta_url) {
+  const formData = new FormData();
+  formData.append('user', user);
+  formData.append('content', content);
+  formData.append('media_type', media_type);
+  formData.append('media_url', media_url);
+  formData.append('hashtags', hashtags);
+  formData.append('receta_url', receta_url);
+
+  fetch('/Sumaqvida/api/foro.php?action=add_post', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) cargarPosts();
+    else alert('Error al publicar');
+  });
+}
+
+function comentar(post_id, user, text) {
+  const formData = new FormData();
+  formData.append('post_id', post_id);
+  formData.append('user', user);
+  formData.append('text', text);
+
+  fetch('/Sumaqvida/api/foro.php?action=add_comment', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) cargarPosts();
+  });
+}
+
+function reaccionar(post_id, reaction) {
+  const user = prompt('Tu nombre para reaccionar:');
+  const formData = new FormData();
+  formData.append('post_id', post_id);
+  formData.append('user', user);
+  formData.append('reaction', reaction);
+
+  fetch('/Sumaqvida/api/foro.php?action=add_reaction', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) cargarPosts();
+  });
+}
+
+function calificar(post_id, stars) {
+  const user = prompt('Tu nombre para calificar:');
+  const formData = new FormData();
+  formData.append('post_id', post_id);
+  formData.append('user', user);
+  formData.append('stars', stars);
+
+  fetch('/Sumaqvida/api/foro.php?action=add_star', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) cargarPosts();
+  });
+}
+
+function mostrarComentario(post_id) {
+  const user = prompt('Tu nombre para comentar:');
+  const text = prompt('Escribe tu comentario:');
+  if (text) comentar(post_id, user, text);
+}
+
+// Previsualización de imagen/video antes de publicar
+document.getElementById('foroMedia').onchange = function() {
+  const preview = document.getElementById('foroPreview');
+  preview.innerHTML = '';
+  const file = this.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    if (file.type.startsWith('image')) {
+      preview.innerHTML = `<img src="${e.target.result}" style="max-width:100%;border-radius:0.7rem;">`;
+    } else if (file.type.startsWith('video')) {
+      preview.innerHTML = `<video src="${e.target.result}" controls style="max-width:100%;border-radius:0.7rem;"></video>`;
+    }
+  };
+  reader.readAsDataURL(file);
+};
+
+window.onload = cargarPosts;
+</script>
+</body>
+</html>

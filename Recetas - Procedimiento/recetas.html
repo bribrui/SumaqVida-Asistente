@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <title>Detalle de Receta</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    body {
+      background: #f6f6f6;
+    }
+    .receta-header {
+      background: linear-gradient(90deg, #e0356d 60%, #f78585 100%);
+      color: #fff;
+      padding: 2rem 1rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    .receta-header img {
+      max-width: 350px;
+      border-radius: 1rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      border: 4px solid #fff;
+      
+    }
+    .receta-info {
+      margin-bottom: 1rem;
+    }
+    .receta-section {
+      margin-bottom: 2rem;
+      background: #ffe8e8;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .receta-section h5 {
+      color: #e0356d;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .form-check-input:checked {
+      background-color: #e0356d;
+      border-color: #e0356d;
+    }
+    .receta-footer {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      margin-top: 2rem;
+      text-align: center;
+      color: #888;
+    }
+    .badge {
+      font-size: 1rem;
+      background: #e0356d;
+    }
+    .icon-title {
+      font-size: 2rem;
+      vertical-align: middle;
+      margin-right: 0.5rem;
+      color: #e0356d;
+    }
+    @media (max-width: 991px) {
+      .row {
+        flex-direction: column;
+      }
+      .col-lg-4, .col-lg-8 {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-5">
+    <div id="receta-detalle"></div>
+    <a href="/recetas.html" class="btn btn-outline-custom mt-4"><i class="bi bi-arrow-left"></i> Volver a recetas</a>
+    <div class="receta-footer">
+      © 2025 SumaqVida - Todos los derechos reservados
+    </div>
+  </div>
+  <script>
+    const recetas = {
+      1: {
+        titulo: "Helado de frutos rojos",
+        imagen: "/assets/img/helado-frutos-rojos-receta.jpg",
+        descripcion: "Un postre ligero y refrescante elaborado con fresas, arándanos y frambuesas naturales. Bajo en azúcar, rico en antioxidantes y fibra, ideal para cuidar la glucosa sin dejar de disfrutar de un sabor dulce y fresco.",
+        tiempo: "10 minutos + 2 horas de congelación",
+        porciones: "4",
+        ingredientes: [
+  { nombre: "1 taza de frutos rojos congelados", imagen: "/assets/ilustraciones/frutos rojos.png" },
+  { nombre: "1/2 taza de yogur griego sin azúcar", imagen: "/assets/ilustraciones/yogurt griego.png" },
+  { nombre: "1 cucharada de stevia o eritritol (opcional)", imagen: "/assets/ilustraciones/stevia.png" },
+  { nombre: "1 cucharadita de jugo de limón", imagen: "/assets/ilustraciones/limon.png" }
+],
+        preparacion: [
+          "Coloca todos los ingredientes en una licuadora o procesador de alimentos.",
+          "Mezcla hasta obtener una textura cremosa y suave (aproximadamente 1-2 minutos).",
+          "Sirve inmediatamente como helado suave o congela por 1 hora para una textura más firme, removiendo cada 20 minutos paraevitar cristales. Sirve frío."
+        ],
+        consejos: "Puedes usar frutos rojos frescos y añadir semillas de chía.",
+        nutricional: {
+          calorias: "50 kcal",
+          grasa_total: "1.2 g (2% VD)",
+          grasa_saturada: "0.6 g (3% VD)",
+          grasa_trans: "0 g",
+          colesterol: "2 mg (1% VD)",
+          sodio: "15 mg (1% VD)",
+          carbohidratos: "7 g (3% VD)",
+          fibra: "2 g (8% VD)",
+          azucares: "4 g",
+          azucares_añadidos: "0 g (0% VD)",
+          proteinas: "4 g",
+          vitaminas: {
+            vitamina_c: "15% VD",
+            calcio: "4% VD",
+            hierro: "2% VD",
+            potasio: "5% VD"
+          }
+        }
+      },
+      2: {
+        titulo: "Pudín de chía y coco",
+        imagen: "/assets/img/pudin-chia-coco.jpg",
+        descripcion: "Un postre saludable, cremoso y fácil de preparar. Rico en fibra, omega 3 y bajo en azúcar, ideal para personas con diabetes o quienes buscan una opción nutritiva.",
+        tiempo: "5 minutos + 2 horas de refrigeración",
+        porciones: "4",
+        ingredientes: [
+          { nombre: "1/4 taza de semillas de chía", imagen: "/assets/ilustraciones/chia.png" },
+          { nombre: "1 taza de leche de coco baja en grasa", imagen: "/assets/ilustraciones/leche-coco.png" },
+          { nombre: "1 cucharada de stevia o eritritol (ajustar al gusto)", imagen: "/assets/ilustraciones/stevia.png" },
+          { nombre: "1 cucharadita de extracto de vainilla", imagen: "/assets/ilustraciones/vainilla.png" },
+          { nombre: "1 pizca de canela (opcional)", imagen: "/assets/ilustraciones/canela.png" }
+        ],
+        preparacion: [
+          "Mezcla la leche de coco, las semillas de chía, el endulzante y la vainilla en un bol.",
+          "Revuelve bien y deja reposar por 10 minutos, luego mezcla de nuevo para evitar grumos.",
+          "Cubre y refrigera por al menos 2 horas (o toda la noche) hasta que espese.",
+          "Sirve frío con un toque de canela encima, si lo deseas."
+        ],
+        consejos: "Puedes agregar frutas frescas al servir para más sabor y nutrientes.",
+        nutricional: {
+          calorias: "90 kcal",
+          grasa_total: "4 g",
+          grasa_saturada: "2.5 g",
+          grasa_trans: "0 g",
+          colesterol: "0 mg",
+          sodio: "15 mg",
+          carbohidratos: "4 g",
+          fibra: "3 g",
+          azucares: "1 g",
+          azucares_añadidos: "0 g",
+          proteinas: "2 g",
+          vitaminas: {
+            vitamina_c: "0% VD",
+            calcio: "8% VD",
+            hierro: "6% VD",
+            potasio: "4% VD"
+          }
+        }
+      },
+      3: {
+        titulo: "Mazamorra de quinua",
+        imagen: "/assets/img/mazamorra-quinua.jpg",
+        descripcion: "Un postre tradicional andino, nutritivo y delicioso. Rico en proteínas, fibra y minerales, ideal para disfrutar en familia.",
+        tiempo: "25 minutos",
+        porciones: "6",
+        ingredientes: [
+          { nombre: "2 tazas de quinua (300 g)", imagen: "/assets/ilustraciones/quinua.png" },
+          { nombre: "2 tazas de agua", imagen: "/assets/ilustraciones/agua.png" },
+          { nombre: "2 tazas de leche evaporada (400 ml)", imagen: "/assets/ilustraciones/leche-evaporada.png" },
+          { nombre: "2 cucharadas de maizena", imagen: "/assets/ilustraciones/maizena.png" },
+          { nombre: "1 cucharadita de vainilla", imagen: "/assets/ilustraciones/vainilla.png" },
+          { nombre: "Stevia al gusto o 4 cucharadas de azúcar integral", imagen: "/assets/ilustraciones/stevia.png" },
+          { nombre: "50 g de pasas frescas", imagen: "/assets/ilustraciones/pasas.png" },
+          { nombre: "1 ramita de canela", imagen: "/assets/ilustraciones/canela.png" },
+          { nombre: "5 clavos de olor", imagen: "/assets/ilustraciones/clavo.png" },
+          { nombre: "Canela molida al gusto", imagen: "/assets/ilustraciones/canela-molida.png" }
+        ],
+        preparacion: [
+          "Lava cuidadosamente los granos de quinua, cambiando el agua unas 4 veces y colando al finalizar.",
+          "En una olla, hierve el agua con la ramita de canela y los clavos de olor.",
+          "Cuando esté caliente, añade la quinua y la stevia o azúcar. Deja hervir 12-15 minutos hasta que la quinua esté bien cocida (debe verse un aro y tener textura de arroz cocido).",
+          "Retira la canela y los clavos de olor.",
+          "En otro recipiente, mezcla la leche evaporada con la maizena y agrégala a la quinua cocida.",
+          "Añade las pasas y cocina 3 minutos más, moviendo constantemente hasta que la mezcla espese como una mazamorra.",
+          "Sirve caliente o frío, espolvoreando canela molida al gusto."
+        ],
+        consejos: "Puedes usar leche vegetal para una versión sin lactosa. Añade frutos secos para más sabor y nutrientes.",
+        nutricional: {
+          calorias: "180 kcal (aprox.)",
+          grasa_total: "4 g",
+          grasa_saturada: "2 g",
+          grasa_trans: "0 g",
+          colesterol: "8 mg",
+          sodio: "45 mg",
+          carbohidratos: "32 g",
+          fibra: "3 g",
+          azucares: "10 g",
+          azucares_añadidos: "4 g",
+          proteinas: "7 g",
+          vitaminas: {
+            vitamina_c: "2% VD",
+            calcio: "12% VD",
+            hierro: "10% VD",
+            potasio: "7% VD"
+          }
+        }
+      },
+      4: {
+        titulo: "Acelgas salteadas con ajo y jengibre",
+        imagen: "/assets/img/acelga-salteada.jpg",
+        descripcion: "Una guarnición saludable y sabrosa, rica en fibra, vitaminas y minerales. Perfecta para acompañar cualquier plato principal.",
+        tiempo: "15 minutos",
+        porciones: "4",
+        ingredientes: [
+          { nombre: "500 gramos de acelga fresca, lavada y picada", imagen: "/assets/ilustraciones/acelga.png" },
+          { nombre: "2 cucharadas de aceite de oliva virgen extra", imagen: "/assets/ilustraciones/aceite-oliva.png" },
+          { nombre: "4 dientes de ajo, finamente picados", imagen: "/assets/ilustraciones/ajo.png" },
+          { nombre: "1 cucharada de jengibre fresco, rallado", imagen: "/assets/ilustraciones/jengibre.png" },
+          { nombre: "1 cucharadita de salsa de soja sin gluten", imagen: "/assets/ilustraciones/salsa-soja.png" },
+          { nombre: "Sal al gusto", imagen: "/assets/ilustraciones/sal.png" },
+          { nombre: "Pimienta negra recién molida al gusto", imagen: "/assets/ilustraciones/pimienta.png" },
+          { nombre: "1 cucharada de semillas de sésamo tostadas (opcional)", imagen: "/assets/ilustraciones/sesamo.png" }
+        ],
+        preparacion: [
+          "Calienta el aceite de oliva en una sartén grande a fuego medio.",
+          "Agrega el ajo picado y el jengibre rallado a la sartén y sofríe durante 1-2 minutos hasta que estén fragantes, cuidando que no se quemen.",
+          "Añade la acelga picada a la sartén y saltea durante 5-7 minutos, removiendo ocasionalmente, hasta que las hojas estén tiernas y de un verde brillante.",
+          "Incorpora la salsa de soja sin gluten y mezcla bien para que las acelgas se impregnen del sabor.",
+          "Sazona con sal y pimienta al gusto. Cocina por 1-2 minutos más.",
+          "Retira del fuego y espolvorea con semillas de sésamo tostadas si lo deseas antes de servir."
+        ],
+        consejos: "Puedes agregar un chorrito de limón al final para un toque fresco.",
+        nutricional: {
+          calorias: "90 kcal (aprox.)",
+          grasa_total: "6 g",
+          grasa_saturada: "1 g",
+          grasa_trans: "0 g",
+          colesterol: "0 mg",
+          sodio: "180 mg",
+          carbohidratos: "7 g",
+          fibra: "3 g",
+          azucares: "2 g",
+          azucares_añadidos: "0 g",
+          proteinas: "3 g",
+          vitaminas: {
+            vitamina_c: "30% VD",
+            calcio: "10% VD",
+            hierro: "12% VD",
+            potasio: "15% VD"
+          }
+        }
+      },
+      5: {
+        titulo: "Hamburguesas de lentejas",
+        imagen: "/assets/img/hamburguesa-lentejas.jpg",
+        descripcion: "Hamburguesas saludables, ricas en fibra y proteína vegetal. Perfectas para personas con diabetes y quienes buscan una opción nutritiva y deliciosa.",
+        tiempo: "30 minutos",
+        porciones: "4",
+        ingredientes: [
+          { nombre: "1 taza de lentejas cocidas (aprox. 200g)", imagen: "/assets/ilustraciones/lentejas.png" },
+          { nombre: "1/2 cebolla picada finamente", imagen: "/assets/ilustraciones/cebolla.png" },
+          { nombre: "1 diente de ajo picado", imagen: "/assets/ilustraciones/ajo.png" },
+          { nombre: "1/2 pimiento rojo picado", imagen: "/assets/ilustraciones/pimiento.png" },
+          { nombre: "1/4 taza de avena en hojuelas (sin gluten, si es necesario)", imagen: "/assets/ilustraciones/avena.png" },
+          { nombre: "1 huevo (o 1 cda. de semillas de chía remojadas en 3 cdas. de agua)", imagen: "/assets/ilustraciones/huevo.png" },
+          { nombre: "2 cucharadas de perejil fresco picado", imagen: "/assets/ilustraciones/perejil.png" },
+          { nombre: "1 cucharadita de comino molido", imagen: "/assets/ilustraciones/comino.png" },
+          { nombre: "1/2 cucharadita de pimentón ahumado", imagen: "/assets/ilustraciones/pimenton.png" },
+          { nombre: "Sal al gusto", imagen: "/assets/ilustraciones/sal.png" },
+          { nombre: "Pimienta negra recién molida al gusto", imagen: "/assets/ilustraciones/pimienta.png" },
+          { nombre: "Aceite de oliva virgen extra para cocinar", imagen: "/assets/ilustraciones/aceite-oliva.png" }
+        ],
+        preparacion: [
+          "Cocina las lentejas hasta que estén blandas pero no deshechas. Escúrrelas bien y déjalas enfriar.",
+          "En una sartén, calienta una cucharada de aceite de oliva a fuego medio. Sofríe la cebolla, el ajo y el pimiento rojo picados hasta que estén blandos y ligeramente dorados (5-7 minutos).",
+          "En un bol grande, combina las lentejas cocidas, el sofrito de verduras, la avena en hojuelas, el huevo (o sustituto vegano), el perejil picado, el comino, el pimentón ahumado, la sal y la pimienta.",
+          "Con un tenedor o pasapurés, tritura ligeramente la mezcla. No es necesario que quede completamente homogénea; dejar algunos trozos de lentejas le dará mejor textura.",
+          "Con las manos, forma hamburguesas del tamaño deseado. Asegúrate de que estén bien compactas.",
+          "Calienta una sartén antiadherente a fuego medio con un poco de aceite de oliva. Cocina las hamburguesas 5-7 minutos por cada lado, o hasta que estén doradas y calientes por dentro. También puedes cocinarlas al horno a 180°C durante 20 minutos, dándoles la vuelta a mitad de cocción.",
+          "Sirve en pan integral para hamburguesa, acompañadas de tus ingredientes favoritos: lechuga, tomate, aguacate, cebolla morada, pepinillos, etc."
+        ],
+        consejos: "Puedes usar harina de almendras en lugar de avena para reducir carbohidratos. Prepara una salsa saludable con yogur griego y hierbas frescas.",
+        nutricional: {
+          calorias: "160 kcal (aprox.)",
+          grasa_total: "4 g",
+          grasa_saturada: "0.7 g",
+          grasa_trans: "0 g",
+          colesterol: "35 mg",
+          sodio: "120 mg",
+          carbohidratos: "22 g",
+          fibra: "6 g",
+          azucares: "2 g",
+          azucares_añadidos: "0 g",
+          proteinas: "8 g",
+          vitaminas: {
+            vitamina_c: "10% VD",
+            calcio: "4% VD",
+            hierro: "15% VD",
+            potasio: "10% VD"
+          }
+        }
+      },
+      6: {
+        titulo: "Tomates rellenos con quinua",
+        imagen: "/assets/img/tomates-rellenos-quinua.jpg", 
+        descripcion: "Un plato fresco y nutritivo, ideal como entrada o comida ligera. Combina la proteína del atún y la quinua integral con el sabor refrescante del tomate.",
+        tiempo: "20 minutos",
+        porciones: "6",
+        ingredientes: [
+          { nombre: "6 tomates", imagen: "/assets/ilustraciones/tomate.png" },
+          { nombre: "200 gramos de quinua integral", imagen: "/assets/ilustraciones/quinua.png" },
+          { nombre: "2 latas de atún natural (110 g cada una)", imagen: "/assets/ilustraciones/atun.png" },
+          { nombre: "4 cucharadas de aceite de oliva virgen extra", imagen: "/assets/ilustraciones/aceite-oliva.png" },
+          { nombre: "Zumo de medio limón", imagen: "/assets/ilustraciones/limon.png" },
+          { nombre: "1 cucharada de cebollino picado", imagen: "/assets/ilustraciones/cebollino.png" },
+          { nombre: "Sal al gusto", imagen: "/assets/ilustraciones/sal.png" },
+          { nombre: "Pimienta al gusto", imagen: "/assets/ilustraciones/pimienta.png" }
+        ],
+        preparacion: [
+          "Pon la quinua en un colador grande y lávala bajo el chorro de agua fría.",
+          "Escúrrela, ponla en una cazuela con 400 ml de agua, lleva a ebullición y cuece 12 minutos a fuego bajo.",
+          "Escúrrela y deja reposar en una ensaladera.",
+          "Escurre el atún y desmenúzalo.",
+          "Lava los tomates, sécalos, corta un sombrero a cada uno (a 3/4 de su altura) y vacía el interior con cuidado de no dañar las paredes.",
+          "Pica la pulpa y échala en una ensaladera con el atún, el cebollino picado, el aceite, el zumo de limón, sal y pimienta al gusto. Añade la quinua y mezcla todo.",
+          "Llena los tomates con la mezcla y resérvalos en el frigorífico.",
+          "Sirve los tomates en los platos con sus sombreros y decora con cebollino."
+        ],
+        consejos: "Puedes añadir huevo duro picado o aguacate para variar la receta. Sirve bien frío.",
+        nutricional: {
+          calorias: "140 kcal (aprox.)",
+          grasa_total: "6 g",
+          grasa_saturada: "1 g",
+          grasa_trans: "0 g",
+          colesterol: "12 mg",
+          sodio: "180 mg",
+          carbohidratos: "13 g",
+          fibra: "3 g",
+          azucares: "5 g",
+          azucares_añadidos: "0 g",
+          proteinas: "9 g",
+          vitaminas: {
+            vitamina_c: "25% VD",
+            calcio: "4% VD",
+            hierro: "8% VD",
+            potasio: "12% VD"
+          }
+        }
+      },
+      7: {
+        titulo: "Chaufa de quinua",
+        imagen: "/assets/img/chaufa-quinua.jpg",
+        descripcion: "Una versión saludable del clásico chaufa, usando quinua en vez de arroz. Rico en proteínas, fibra y bajo en grasas. Ideal para almuerzo o cena nutritiva.",
+        tiempo: "30 minutos",
+        porciones: "4",
+        ingredientes: [
+          { nombre: "1 taza de quinua", imagen: "/assets/ilustraciones/quinua.png" },
+          { nombre: "2 huevos", imagen: "/assets/ilustraciones/huevo.png" },
+          { nombre: "1 taza de pollo cocido y desmenuzado (opcional)", imagen: "/assets/ilustraciones/pollo.png" },
+          { nombre: "1/2 taza de pimiento rojo picado", imagen: "/assets/ilustraciones/pimiento.png" },
+          { nombre: "1/2 taza de cebolla china picada", imagen: "/assets/ilustraciones/cebolla-china.png" },
+          { nombre: "2 dientes de ajo picados", imagen: "/assets/ilustraciones/ajo.png" },
+          { nombre: "2 cucharadas de sillao (salsa de soya)", imagen: "/assets/ilustraciones/salsa-soja.png" },
+          { nombre: "1 cucharadita de aceite de ajonjolí (opcional)", imagen: "/assets/ilustraciones/aceite-sesamo.png" },
+          { nombre: "Sal y pimienta al gusto", imagen: "/assets/ilustraciones/sal.png" },
+          { nombre: "Aceite vegetal", imagen: "/assets/ilustraciones/aceite-vegetal.png" }
+        ],
+        preparacion: [
+          "Lava bien la quinua y cocínala en agua con sal por 15 minutos. Escurre y reserva.",
+          "En una sartén grande, calienta aceite y sofríe el ajo, pimiento y cebolla china.",
+          "Añade el pollo desmenuzado (si usas) y saltea por 3 minutos.",
+          "Incorpora la quinua cocida y mezcla bien.",
+          "Agrega el sillao y el aceite de ajonjolí. Rectifica la sazón.",
+          "En otra sartén, prepara los huevos revueltos y mézclalos con el chaufa."
+        ],
+        consejos: "Sirve caliente, decorado con cebolla china fresca o semillas de ajonjolí. Puedes acompañar con palta o salsa criolla.",
+        nutricional: {
+          calorias: "220 kcal (aprox.)",
+          grasa_total: "7 g",
+          grasa_saturada: "1.5 g",
+          grasa_trans: "0 g",
+          colesterol: "90 mg",
+          sodio: "400 mg",
+          carbohidratos: "26 g",
+          fibra: "3 g",
+          azucares: "2 g",
+          azucares_añadidos: "0 g",
+          proteinas: "13 g",
+          vitaminas: {
+            vitamina_c: "20% VD",
+            calcio: "5% VD",
+            hierro: "10% VD",
+            potasio: "9% VD"
+          }
+        }
+      },
+      8: {
+        titulo: "Arroz con leche integral (y opción chocolate)",
+        imagen: "/assets/img/arroz-leche-integral.jpg", // Cambia la ruta si tienes otra imagen
+        descripcion: "Un postre tradicional en versión saludable, usando arroz integral y leche desnatada o vegetal. Bajo en azúcar y rico en fibra.",
+        tiempo: "2 horas (incluye remojo y cocción)",
+        porciones: "6",
+        ingredientes: [
+          { nombre: "100 gr de arroz redondo integral", imagen: "/assets/ilustraciones/arroz-integral.png" },
+          { nombre: "1 litro de leche desnatada o vegetal", imagen: "/assets/ilustraciones/leche.png" },
+          { nombre: "La piel de un limón o de una naranja", imagen: "/assets/ilustraciones/limon.png" },
+          { nombre: "1 ramita de canela", imagen: "/assets/ilustraciones/canela.png" },
+          { nombre: "1 cucharada de stevia (o edulcorante al gusto)", imagen: "/assets/ilustraciones/stevia.png" },
+          { nombre: "Canela en polvo para decorar", imagen: "/assets/ilustraciones/canela-molida.png" }
+        ],
+        preparacion: [
+          "Pon el arroz en remojo en un cuenco grande con agua durante al menos 2-3 horas (mejor toda la noche).",
+          "Lava el arroz, retira las trazas que flotan, cuela y escurre bien.",
+          "Pon a cocer 700ml de la leche en una olla junto con la piel del limón (sin parte blanca) y la ramita de canela. Infusiona 15 minutos a fuego medio.",
+          "Cuando la leche hierva, retira la piel y la canela. Añade el arroz poco a poco y remueve con cuchara de madera.",
+          "Cuece a fuego lento unos 60 minutos, removiendo de vez en cuando y añadiendo el resto de la leche poco a poco si es necesario, hasta lograr la textura deseada.",
+          "Cuando el arroz esté listo (debe quedar un poco duro), retira del fuego, añade la stevia y deja reposar 10 minutos.",
+          "Sirve en tazas o cuencos y espolvorea canela molida por encima.",
+          "Opción chocolate: añade 1 cucharadita de cacao en polvo o 30g de chocolate sin azúcar troceado justo al sacar del fuego, mezcla bien."
+        ],
+        consejos: "Usa edulcorantes resistentes al calor como stevia con eritritol. Puedes variar la leche según tus preferencias.",
+        nutricional: {
+          calorias: "120 kcal (aprox.)",
+          grasa_total: "2 g",
+          grasa_saturada: "0.5 g",
+          grasa_trans: "0 g",
+          colesterol: "2 mg",
+          sodio: "40 mg",
+          carbohidratos: "22 g",
+          fibra: "2 g",
+          azucares: "4 g",
+          azucares_añadidos: "0 g",
+          proteinas: "4 g",
+          vitaminas: {
+            vitamina_c: "3% VD",
+            calcio: "10% VD",
+            hierro: "4% VD",
+            potasio: "6% VD"
+          }
+        }
+      },
+      9: {
+        titulo: "Ensalada de quinua con verduras (apta para diabéticos)",
+        imagen: "/assets/img/ensalada-quinua-verduras.jpg", // Cambia la ruta si tienes otra imagen
+        descripcion: "Ensalada fresca, colorida y nutritiva, ideal para diabéticos, vegetarianos y personas que buscan una opción sin gluten. Bajo índice glucémico y rica en fibra, antioxidantes y grasas saludables.",
+        tiempo: "35 minutos",
+        porciones: "4",
+        ingredientes: [
+          { nombre: "1 taza de quinua tricolor (200 g)", imagen: "/assets/ilustraciones/quinua.png" },
+          { nombre: "2 tazas de agua o caldo de verduras bajo en sodio (500 ml)", imagen: "/assets/ilustraciones/agua.png" },
+          { nombre: "1 cucharadita de sal marina (5 g)", imagen: "/assets/ilustraciones/sal.png" },
+          { nombre: "1 pepino mediano, pelado y en cubitos (150 g)", imagen: "/assets/ilustraciones/pepino.png" },
+          { nombre: "2 tomates medianos, sin semillas y en cubitos (200 g)", imagen: "/assets/ilustraciones/tomate.png" },
+          { nombre: "1 pimiento rojo en tiras finas (120 g)", imagen: "/assets/ilustraciones/pimiento.png" },
+          { nombre: "1/2 taza de apio picado (60 g)", imagen: "/assets/ilustraciones/apio.png" },
+          { nombre: "1/4 taza de cebolla morada en juliana (40 g)", imagen: "/assets/ilustraciones/cebolla-morada.png" },
+          { nombre: "1/2 taza de hojas de espinaca baby (30 g)", imagen: "/assets/ilustraciones/espinaca.png" },
+          { nombre: "3 cucharadas de aceite de oliva extra virgen (45 ml)", imagen: "/assets/ilustraciones/aceite-oliva.png" },
+          { nombre: "2 cucharadas de vinagre de manzana (30 ml)", imagen: "/assets/ilustraciones/vinagre-manzana.png" },
+          { nombre: "1 limón grande, solo el jugo (60 ml)", imagen: "/assets/ilustraciones/limon.png" },
+          { nombre: "2 cucharadas de cilantro fresco picado (10 g)", imagen: "/assets/ilustraciones/cilantro.png" },
+          { nombre: "1 diente de ajo, finamente picado", imagen: "/assets/ilustraciones/ajo.png" },
+          { nombre: "1/2 cucharadita de orégano seco (2 g)", imagen: "/assets/ilustraciones/oregano.png" },
+          { nombre: "Pimienta negra recién molida al gusto", imagen: "/assets/ilustraciones/pimienta.png" }
+        ],
+        preparacion: [
+          "Enjuaga la quinua bajo agua fría en un colador fino hasta que el agua salga clara.",
+          "En una olla mediana, hierve el agua con la sal. Añade la quinua, reduce el fuego a medio-bajo y cocina tapada durante 12-15 minutos hasta que absorba todo el líquido.",
+          "Retira del fuego y deja reposar tapada por 5 minutos. Destapa y esponja con un tenedor. Transfiere a un recipiente grande y deja enfriar completamente.",
+          "Mientras se enfría la quinua, prepara todas las verduras: corta el pepino y tomates en cubitos, el pimiento en tiras, la cebolla en juliana, pica el apio y el cilantro. Lava y seca las espinacas.",
+          "En un frasco con tapa o bowl pequeño, mezcla el aceite de oliva, vinagre de manzana, jugo de limón, ajo picado, orégano y pimienta. Agita o bate hasta emulsionar.",
+          "En el recipiente con la quinua fría, añade todas las verduras. Vierte el aderezo gradualmente y mezcla suavemente. Ajusta el sazón si es necesario.",
+          "Deja reposar la ensalada en el refrigerador por al menos 15 minutos antes de servir. Sirve fría y disfruta."
+        ],
+        consejos: "Enjuaga bien la quinua para eliminar el sabor amargo. Guarda el aderezo por separado si planeas conservar la ensalada varios días. Añade fruta de temporada como durazno o granada para variar.",
+        nutricional: {
+          calorias: "280 kcal",
+          grasa_total: "12 g",
+          grasa_saturada: "2 g",
+          grasa_trans: "0 g",
+          colesterol: "0 mg",
+          sodio: "320 mg",
+          carbohidratos: "38 g",
+          fibra: "8 g",
+          azucares: "6 g",
+          azucares_añadidos: "0 g",
+          proteinas: "8 g",
+          vitaminas: {
+            vitamina_c: "35% VD",
+            calcio: "7% VD",
+            hierro: "15% VD",
+            potasio: "18% VD"
+          }
+        }
+      },
+      10: {
+        titulo: "Guiso de quinua",
+        imagen: "/assets/img/guiso-quinua.jpg", // Cambia la ruta si tienes otra imagen
+        descripcion: "Un plato tradicional peruano, cremoso y nutritivo, ideal para toda la familia. Rico en proteínas, fibra y sabor.",
+        tiempo: "40 minutos",
+        porciones: "4",
+        ingredientes: [
+          { nombre: "200 gramos de quinua", imagen: "/assets/ilustraciones/quinua.png" },
+          { nombre: "1 papa amarilla", imagen: "/assets/ilustraciones/papa.png" },
+          { nombre: "1 taza de pasta de ají amarillo", imagen: "/assets/ilustraciones/aji-amarillo.png" },
+          { nombre: "1 cucharada de pasta de ají panca", imagen: "/assets/ilustraciones/aji-panca.png" },
+          { nombre: "1 cucharada de pasta de ajo", imagen: "/assets/ilustraciones/ajo.png" },
+          { nombre: "1/2 taza de leche", imagen: "/assets/ilustraciones/leche.png" },
+          { nombre: "150 gramos de queso fresco", imagen: "/assets/ilustraciones/queso-fresco.png" },
+          { nombre: "1 taza de caldo de verduras", imagen: "/assets/ilustraciones/caldo.png" },
+          { nombre: "1 huevo frito", imagen: "/assets/ilustraciones/huevo.png" },
+          { nombre: "2 guarniciones de arroz", imagen: "/assets/ilustraciones/arroz.png" },
+          { nombre: "50 gramos de choclo", imagen: "/assets/ilustraciones/choclo.png" },
+          { nombre: "20 gramos de mantequilla", imagen: "/assets/ilustraciones/mantequilla.png" },
+          { nombre: "10 gramos de perejil", imagen: "/assets/ilustraciones/perejil.png" }
+        ],
+        preparacion: [
+          "Calienta una sartén con aceite y fríe la pasta de ajo y la pasta de ají amarillo. Remueve bien.",
+          "Añade el caldo de verduras y la papa amarilla cortada en cubitos. Deja cocinar.",
+          "Cuando la papa esté casi sancochada, agrega un poco más de caldo, la quinua previamente cocida, queso fresco y leche. Remueve bien y deja cocinar un par de minutos.",
+          "Sirve acompañado de arroz blanco graneado y un huevo frito encima.",
+          "Decora con choclo y perejil picado. ¡Buen provecho!"
+        ],
+        consejos: "Remueve la quinua constantemente al guisar. Si comienza a secarse, agrega más agua o caldo.",
+        nutricional: {
+          calorias: "350 kcal (aprox.)",
+          grasa_total: "12 g",
+          grasa_saturada: "5 g",
+          grasa_trans: "0 g",
+          colesterol: "90 mg",
+          sodio: "350 mg",
+          carbohidratos: "45 g",
+          fibra: "5 g",
+          azucares: "4 g",
+          azucares_añadidos: "0 g",
+          proteinas: "15 g",
+          vitaminas: {
+            vitamina_c: "20% VD",
+            calcio: "18% VD",
+            hierro: "15% VD",
+            potasio: "14% VD"
+          }
+        }
+      },  
+      11: {
+      titulo: "Hamburguesas de quinua y verduras",
+      imagen: "/assets/img/hamburguesa-quinua-verduras.jpg", // Cambia la ruta si tienes otra imagen
+      descripcion: "Hamburguesas saludables y sin gluten, hechas con quinua, verduras frescas y queso. Perfectas para una comida ligera y nutritiva.",
+      tiempo: "40 minutos",
+      porciones: "4",
+      ingredientes: [
+        { nombre: "40 g de quinua cruda", imagen: "/assets/ilustraciones/quinua.png" },
+        { nombre: "100 g de calabacín", imagen: "/assets/ilustraciones/calabacin.png" },
+        { nombre: "50 g de pimiento rojo", imagen: "/assets/ilustraciones/pimiento.png" },
+        { nombre: "50 g de cebolla", imagen: "/assets/ilustraciones/cebolla.png" },
+        { nombre: "1 huevo", imagen: "/assets/ilustraciones/huevo.png" },
+        { nombre: "30 g de harina de maíz sin gluten", imagen: "/assets/ilustraciones/harina-maiz.png" },
+        { nombre: "40 g de queso rallado tipo emmental", imagen: "/assets/ilustraciones/queso.png" },
+        { nombre: "1 diente de ajo", imagen: "/assets/ilustraciones/ajo.png" },
+        { nombre: "Sal, pimienta o especias al gusto", imagen: "/assets/ilustraciones/sal.png" },
+        { nombre: "20 ml de aceite de oliva virgen", imagen: "/assets/ilustraciones/aceite-oliva.png" }
+      ],
+      preparacion: [
+        "Lava la quinua en un colador fino bajo agua fría hasta que el agua salga clara.",
+        "Tuesta la quinua en un cazo a fuego fuerte removiendo para que no se queme.",
+        "Añade 100 ml de agua al cazo. Cuando hierva, tapa y baja el fuego. Cocina 15 minutos, apaga y deja reposar 5 minutos.",
+        "Pica la cebolla fina y saltéala a fuego fuerte con el aceite. Añade el pimiento rojo y el calabacín picados finos y saltea.",
+        "Pica el ajo y añádelo a las verduras. Saltea 5 minutos más y reserva.",
+        "Deja enfriar unos minutos y mezcla las verduras con la quinua en un bol.",
+        "Bate el huevo y añádelo junto con la harina y el queso rallado. Mezcla hasta obtener una masa compacta y algo pegajosa.",
+        "Divide la masa en 4 partes y forma bolas. Puedes hacer 8 mini hamburguesas si prefieres.",
+        "En una sartén con un poco de aceite y a fuego medio, coloca las bolas y aplasta ligeramente para dar forma de hamburguesa. Dora por ambos lados.",
+        "Si la masa está muy húmeda, gira las hamburguesas con un plato o tapa. Si están compactas, usa una espátula.",
+        "Puedes añadir especias como curry o hierbas provenzales para variar el sabor.",
+        "Sirve con ensalada de tomate o las verduras que prefieras."
+      ],
+      consejos: "Puedes usar otras verduras como zanahoria, pimiento verde, champiñones o espinacas. Consulta el significado de porción antes de cocinar.",
+      nutricional: {
+        calorias: "664.8 kcal (total), 166.2 kcal (por porción)",
+        grasa_total: "40.6 g (total), 10.15 g (por porción)",
+        grasa_saturada: "—",
+        grasa_trans: "0 g",
+        colesterol: "—",
+        sodio: "—",
+        carbohidratos: "46.46 g (total), 11.6 g (por porción)",
+        fibra: "8.78 g (total), 2.19 g (por porción)",
+        azucares: "—",
+        azucares_añadidos: "0 g",
+        proteinas: "28.18 g (total), 7 g (por porción)",
+        vitaminas: {
+          vitamina_c: "—",
+          calcio: "—",
+          hierro: "—",
+          potasio: "—"
+        }
+      }
+    },
+    12: {
+      titulo: "Galletas de avena y pasas sin azúcar",
+      imagen: "/assets/img/galletas-avena-pasas.jpg", // Cambia la ruta si tienes otra imagen
+      descripcion: "Galletas saludables, fáciles y deliciosas, sin azúcar añadida. Ideales como snack para diabéticos o quienes buscan opciones más sanas.",
+      tiempo: "30 minutos",
+      porciones: "30 galletas",
+      ingredientes: [
+        { nombre: "150 g de harina (integral preferible)", imagen: "/assets/ilustraciones/harina.png" },
+        { nombre: "150 g de copos de avena cruda", imagen: "/assets/ilustraciones/avena.png" },
+        { nombre: "85 g de mantequilla light o margarina light", imagen: "/assets/ilustraciones/mantequilla.png" },
+        { nombre: "1 huevo", imagen: "/assets/ilustraciones/huevo.png" },
+        { nombre: "15 g de stevia granulada", imagen: "/assets/ilustraciones/stevia.png" },
+        { nombre: "1 cucharadita de aceite de oliva o de coco", imagen: "/assets/ilustraciones/aceite-oliva.png" },
+        { nombre: "1 cucharada de levadura (polvos de hornear)", imagen: "/assets/ilustraciones/levadura.png" },
+        { nombre: "1 cucharadita de esencia de vainilla", imagen: "/assets/ilustraciones/vainilla.png" },
+        { nombre: "Una pizca de sal", imagen: "/assets/ilustraciones/sal.png" },
+        { nombre: "Un puñado de uvas pasas", imagen: "/assets/ilustraciones/pasas.png" }
+      ],
+      preparacion: [
+        "Funde la mantequilla al microondas o a fuego medio y ponla en un bol junto con la stevia. Mezcla bien.",
+        "Añade el huevo, la vainilla, el aceite y la pizca de sal. Mezcla para integrar.",
+        "Agrega la harina, la avena y la levadura. Amasa hasta obtener una pasta homogénea y consistente.",
+        "Añade las pasas y vuelve a amasar hasta que queden bien repartidas.",
+        "Cubre la bandeja del horno con papel manteca y precalienta el horno a 180°C.",
+        "Haz bolas con la masa y moldea galletas de unos 4 cm de diámetro, aplastando y redondeando los bordes con los dedos.",
+        "Coloca las galletas sobre el papel, separadas entre sí. Hornea 15 minutos a 180°C.",
+        "Deja enfriar y ¡listo!"
+      ],
+      consejos: "Puedes usar harina sin gluten si lo prefieres. Añade canela o frutos secos para variar el sabor.",
+      nutricional: {
+        calorias: "126.4 kcal (por galleta)",
+        grasa_total: "5 g",
+        grasa_saturada: "1.2 g",
+        grasa_trans: "0 g",
+        colesterol: "8 mg",
+        sodio: "30 mg",
+        carbohidratos: "17 g",
+        fibra: "1.5 g",
+        azucares: "2 g",
+        azucares_añadidos: "0 g",
+        proteinas: "2.5 g",
+        vitaminas: {
+          vitamina_c: "0% VD",
+          calcio: "2% VD",
+          hierro: "4% VD",
+          potasio: "2% VD"
+        }
+      }
+    },
+    13: {
+        titulo: "Ensalada atún y aguacate",
+        imagen: "/assets/img/ensalada-atun-aguacate.jpg",
+        descripcion: "El salmón o el atún blanco en bolsitas o latas es una forma súper fácil de obtener una de tus raciones de pescado cada semana. Cambia la rutina de los sándwiches de atún preparando una ensalada de salmón/atún al estilo mediterráneo para cubrir un tazón de aguacate. Esta receta baja en carbohidratos y alta en fibra es perfecta para un almuerzo rápido y fácil para dos.",
+        tiempo: "10 min",
+        porciones: "2",
+        ingredientes: [
+          { nombre: "170g de atún o salmón en lata (escurrido)", imagen: "/assets/ilustraciones/atun.png" },
+          { nombre: "2 cucharadas de yogur griego natural sin grasa", imagen: "/assets/ilustraciones/yogurt griego.png" },
+          { nombre: "1 cucharadita de aceite de oliva", imagen: "/assets/ilustraciones/aceite-oliva.png" },
+          { nombre: "2 cucharadas de cebollino picado (o cebolla)", imagen: "/assets/ilustraciones/cebollino.png" },
+          { nombre: "1 cucharada de aceitunas verdes picadas", imagen: "/assets/ilustraciones/aceituna.png" },
+          { nombre: "1 cucharadita de ralladura de limón", imagen: "/assets/ilustraciones/limon.png" },
+          { nombre: "2 cucharadas de nueces tostadas picadas", imagen: "/assets/ilustraciones/nuez.png" },
+          { nombre: "1 aguacate grande (cortado a la mitad, sin hueso)", imagen: "/assets/ilustraciones/aguacate.png" }
+        ],
+        preparacion: [
+          "En un tazón mediano, mezcla el salmón o el atún, el yogur, el aceite de oliva, el cebollino, las aceitunas verdes, la ralladura de limón y las nueces tostadas.",
+          "Remueve la mezcla para que todo se integre bien.",
+          "Pon aproximadamente la mitad de la mezcla en cada una de las mitades de aguacate y sírvelas."
+        ],
+        consejos: "Receta baja en carbohidratos, alta en fibra y rápida. Ideal para almuerzo mediterráneo, sin gluten y económico.",
+        nutricional: {
+          calorias: "320 kcal",
+          grasa_total: "23 g (29% VD)",
+          grasa_saturada: "3.4 g (17% VD)",
+          grasa_trans: "0 g",
+          colesterol: "40 mg (13% VD)",
+          sodio: "420 mg (18% VD)",
+          carbohidratos: "11 g (4% VD)",
+          fibra: "7 g (25% VD)",
+          azucares: "2 g",
+          azucares_añadidos: "0 g (0% VD)",
+          proteinas: "22 g",
+          vitaminas: {
+            vitamina_c: "—",
+            calcio: "—",
+            hierro: "—",
+            potasio: "740 mg (16% VD)"
+          }
+        }
+      },
+      14: {
+      titulo: "Salteado de pollo con verduras",
+      imagen: "/assets/img/salteado-de-pollo-con-verduras.jpg",
+      descripcion: "Receta fácil y nutritiva: pollo salteado con cebolletas, champiñones y pimiento rojo. Ideal para almuerzo o cena saludable.",
+      tiempo: "25 minutos",
+      porciones: "4",
+      ingredientes: [
+        { nombre: "4 muslos de pollo", imagen: "/assets/ilustraciones/pollo.png" },
+        { nombre: "2 cebolletas", imagen: "/assets/ilustraciones/cebolla.png" },
+        { nombre: "2 dientes de ajo", imagen: "/assets/ilustraciones/ajo.png" },
+        { nombre: "200 g de champiñones", imagen: "/assets/ilustraciones/champinones.png" },
+        { nombre: "1 pimiento rojo", imagen: "/assets/ilustraciones/pimiento.png" },
+        { nombre: "Aceite de oliva virgen extra", imagen: "/assets/ilustraciones/aceite-oliva.png" },
+        { nombre: "Sal", imagen: "/assets/ilustraciones/sal.png" },
+        { nombre: "Pimienta", imagen: "/assets/ilustraciones/pimienta.png" },
+        { nombre: "Perejil", imagen: "/assets/ilustraciones/perejil.png" }
+      ],
+      preparacion: [
+        "Pelar las cebolletas y picarlas junto con el pimiento rojo en juliana.",
+        "Lavar los champiñones y cortarlos en finas lonchas.",
+        "En la plancha, rociar un poco de aceite y cocinar las verduras y los champiñones.",
+        "Deshuesar y retirar la piel de los muslos de pollo. Cortar en taquitos.",
+        "Agregar el pollo a la sartén y saltearlo junto a las verduras.",
+        "Salpimentar y espolvorear perejil picado.",
+        "Mezclar todo bien y servir."
+      ],
+      consejos: "Puedes añadir orejones de tomate y rúcula para una ensalada templada. Si usas salsa de soja, reduce la sal.",
+      nutricional: {
+        calorias: "281.86 kcal por ración",
+        grasa_total: "9.88 g",
+        carbohidratos: "10 g",
+        proteinas: "37.49 g",
+        fibra: "4.68 g",
+        sal: "0.77 g",
+        vitaminas: {
+          vitamina_c: "—",
+          calcio: "—",
+          hierro: "—",
+          potasio: "—"
+        }
+      }
+    },
+    15: {
+      titulo: "Jugo verde para la diabetes",
+      imagen: "/assets/img/smoothie-verde.jpg",
+      descripcion: "Jugo natural a base de espinaca, pepino, perejil, manzana verde, piña y jengibre. Rico en fibra y vitaminas, ideal para consumir fresco y en porciones adecuadas.",
+      tiempo: "5 minutos",
+      porciones: "2",
+      ingredientes: [
+        { nombre: "4 hojas de espinaca", imagen: "/assets/ilustraciones/espinaca.png" },
+        { nombre: "1/2 pepino", imagen: "/assets/ilustraciones/pepino.png" },
+        { nombre: "5 ramas de perejil", imagen: "/assets/ilustraciones/perejil.png" },
+        { nombre: "1 manzana verde", imagen: "/assets/ilustraciones/manzana.png" },
+        { nombre: "1 rodaja de piña", imagen: "/assets/ilustraciones/pina.png" },
+        { nombre: "1 taza pequeña de jengibre", imagen: "/assets/ilustraciones/jengibre.png" }
+      ],
+      preparacion: [
+        "Lava y desinfecta todas las verduras y frutas.",
+        "Corta el pepino, la manzana y la piña en trozos pequeños.",
+        "Coloca todos los ingredientes en la licuadora (no usar extractor para conservar la fibra).",
+        "Licúa hasta obtener una mezcla homogénea.",
+        "Sirve inmediatamente para aprovechar las vitaminas."
+      ],
+      consejos: "Es mejor consumir los ingredientes sólidos en ensalada para aprovechar la fibra. Si tomas el jugo, respeta las porciones y prepáralo en casa, evitando el extractor.",
+      nutricional: {
+        calorias: "Aprox. 80 kcal por vaso",
+        fibra: "3 g",
+        carbohidratos: "18 g",
+        azucares: "12 g",
+        proteinas: "1 g",
+        vitaminas: {
+          vitamina_c: "Alto",
+          vitamina_a: "Alto",
+          calcio: "—",
+          hierro: "—",
+          potasio: "—"
+        }
+      }
+    },
+    16: {
+      titulo: "Omelet de Verduras",
+      imagen: "/assets/img/omelette-espinaca.jpeg",
+      descripcion: "Omelet saludable con cebollín, brócoli, tomate, espinaca y especias. Ideal para un desayuno nutritivo y energético.",
+      tiempo: "10 min preparación, 15 min cocción",
+      porciones: "4",
+      ingredientes: [
+        { nombre: "2 tallos de cebollín (cortados en rodajas finas)", imagen: "/assets/ilustraciones/cebolla.png" },
+        { nombre: "1 taza de brócoli (en rodajas finas)", imagen: "/assets/ilustraciones/brocoli.png" },
+        { nombre: "1/2 taza de tomate roma (en cubos pequeños)", imagen: "/assets/ilustraciones/tomate.png" },
+        { nombre: "1 taza de espinaca (en tiras delgadas)", imagen: "/assets/ilustraciones/espinaca.png" },
+        { nombre: "1/2 cdta. de sal kosher", imagen: "/assets/ilustraciones/sal.png" },
+        { nombre: "1 cdta. de ajo en polvo", imagen: "/assets/ilustraciones/ajo.png" },
+        { nombre: "1 cdta. de orégano seco", imagen: "/assets/ilustraciones/oregano.png" },
+        { nombre: "1/4 cdta. de pimienta negra", imagen: "/assets/ilustraciones/pimienta.png" },
+        { nombre: "1/2 cdta. de pimentón español ahumado (paprika)", imagen: "/assets/ilustraciones/pimenton.png" },
+        { nombre: "4 huevos (batidos)", imagen: "/assets/ilustraciones/huevo.png" },
+        { nombre: "1/2 taza de leche descremada", imagen: "/assets/ilustraciones/leche.png" }
+      ],
+      preparacion: [
+        "Calentar el horno a 350°F.",
+        "En una vasija mezclar cebollín, brócoli, tomate, espinaca, sal, ajo en polvo, orégano, pimienta y pimentón.",
+        "Calentar una sartén antiadherente apta para horno a fuego medio. Sofreír los vegetales 2 minutos.",
+        "Mezclar la leche con los huevos batidos y agregar a la sartén. Revolver para distribuir los ingredientes.",
+        "Colocar la sartén en el horno y hornear 10 minutos. Verificar con palillo que esté cocido.",
+        "Retirar y enfriar 1-2 minutos antes de servir."
+      ],
+      consejos: "Puedes agregar otras verduras o especias al gusto. Ideal para desayuno saludable.",
+      nutricional: {
+        calorias: "100 kcal por porción",
+        grasa_total: "5 g (6% VD)",
+        grasa_saturada: "2 g (10% VD)",
+        grasa_trans: "0 g",
+        colesterol: "185 mg (62% VD)",
+        sodio: "340 mg (15% VD)",
+        carbohidratos: "7 g (3% VD)",
+        fibra: "1 g (4% VD)",
+        azucares: "3 g",
+        proteinas: "9 g",
+        vitaminas: {
+          potasio: "350 mg (7% VD)",
+          vitamina_c: "—",
+          calcio: "—",
+          hierro: "—"
+        }
+      }
+    },
+    17: {
+      titulo: "Espagueti de zapallito",
+      imagen: "/assets/img/spaghettu-zapallo-italiano.jpg",
+      descripcion: "Versión ligera y baja en carbohidratos de la clásica pasta primavera, usando espagueti de zapallo en vez de pasta.",
+      tiempo: "5 min preparación, 20 min cocción",
+      porciones: "5",
+      ingredientes: [
+        { nombre: "1 calabaza espagueti (aprox. 4 lb)", imagen: "/assets/ilustraciones/zapallo.png" },
+        { nombre: "3 cucharadas de aceite de oliva virgen extra (dividido)", imagen: "/assets/ilustraciones/aceite-oliva.png" },
+        { nombre: "450 g de pechuga de pollo sin piel, cortada en cubos de 2.5 cm", imagen: "/assets/ilustraciones/pollo.png" },
+        { nombre: "1/4 cdta. de orégano seco", imagen: "/assets/ilustraciones/oregano.png" },
+        { nombre: "1/4 cdta. de pimienta negra", imagen: "/assets/ilustraciones/pimienta.png" },
+        { nombre: "2 cabezas de brócoli (en floretes, aprox. 3 1/2 tazas)", imagen: "/assets/ilustraciones/brocoli.png" },
+        { nombre: "1 pimiento rojo (picado)", imagen: "/assets/ilustraciones/pimiento.png" },
+        { nombre: "2 dientes de ajo (picados)", imagen: "/assets/ilustraciones/ajo.png" },
+        { nombre: "3 tazas de espinaca tierna", imagen: "/assets/ilustraciones/espinaca.png" },
+        { nombre: "1 taza de caldo de pollo bajo en grasa y sodio", imagen: "/assets/ilustraciones/caldo.png" },
+        { nombre: "3 cucharadas de queso parmesano fresco rallado", imagen: "/assets/ilustraciones/queso.png" }
+      ],
+      preparacion: [
+        "Corta el espagueti de zapallo a la mitad y quita las semillas. Coloca en molde para microondas, lado cortado hacia abajo, y cocina 10-15 min hasta suave.",
+        "Mientras, añade 1 1/2 cda de aceite a sartén grande a fuego medio alto. Espolvorea el pollo con orégano y pimienta, cocina 10 min hasta cocido. Reserva.",
+        "En la misma sartén, calienta el resto del aceite. Añade brócoli y pimiento rojo, saltea 5-7 min. Añade ajo y saltea 30 seg. Añade espinaca y caldo, cocina 4 min más.",
+        "Saca la pulpa del zapallo con tenedor. Añade los fideos de zapallo y el pollo a la sartén. Calienta 2 min, mezcla bien.",
+        "Cubre con queso parmesano, divide en 5 tazones y sirve."
+      ],
+      consejos: "Alto en fibra, rico en verduras, sin gluten y rápido. Ideal para cena ligera.",
+      nutricional: {
+        calorias: "270 kcal",
+        grasa_total: "12 g (15% VD)",
+        grasa_saturada: "2.3 g (12% VD)",
+        grasa_trans: "0 g",
+        colesterol: "55 mg (18% VD)",
+        sodio: "260 mg (11% VD)",
+        carbohidratos: "18 g (7% VD)",
+        fibra: "5 g (18% VD)",
+        azucares: "7 g",
+        proteinas: "24 g",
+        vitaminas: {
+          potasio: "750 mg (16% VD)",
+          vitamina_c: "—",
+          calcio: "—",
+          hierro: "—"
+        }
+      }
+    },
+    18: {
+      titulo: "Tilapia al horno con brócoli y limón",
+      imagen: "/assets/img/pescado-brocoli.jpg",
+      descripcion: "Tilapia al horno con brócoli y limón, ideal para acompañar con ensalada verde, quinoa o arroz integral. Cena completa y balanceada.",
+      tiempo: "10 min preparación, 20 min cocción",
+      porciones: "4",
+      ingredientes: [
+        { nombre: "4 filetes de tilapia", imagen: "/assets/ilustraciones/pescado.png" },
+        { nombre: "1 brócoli grande, cortado en floretes", imagen: "/assets/ilustraciones/brocoli.png" },
+        { nombre: "2 limones (uno en rodajas, otro en jugo)", imagen: "/assets/ilustraciones/limon.png" },
+        { nombre: "3 cucharadas de aceite de oliva", imagen: "/assets/ilustraciones/aceite-oliva.png" },
+        { nombre: "3 dientes de ajo, finamente picados", imagen: "/assets/ilustraciones/ajo.png" },
+        { nombre: "1 cucharadita de tomillo seco", imagen: "/assets/ilustraciones/tomillo.png" },
+        { nombre: "1 cucharadita de orégano seco", imagen: "/assets/ilustraciones/oregano.png" },
+        { nombre: "Sal y pimienta al gusto", imagen: "/assets/ilustraciones/sal.png" },
+        { nombre: "Perejil fresco picado (opcional)", imagen: "/assets/ilustraciones/perejil.png" }
+      ],
+      preparacion: [
+        "Precalienta el horno a 200°C (400°F).",
+        "Corta el brócoli en floretes y las rodajas de un limón. Exprime el jugo del otro limón. Pica el ajo.",
+        "Coloca los filetes de tilapia en una bandeja, rocía con 2 cucharadas de aceite, jugo de limón, ajo, tomillo, orégano, sal y pimienta. Coloca las rodajas de limón sobre los filetes.",
+        "Mezcla el brócoli con 1 cucharada de aceite, sal y pimienta. Coloca alrededor de la tilapia.",
+        "Hornea 15-20 min hasta que la tilapia esté cocida y el brócoli tierno.",
+        "Decora con perejil fresco y sirve caliente."
+      ],
+      consejos: "Sirve con quinoa, arroz integral o salsa de yogur y eneldo. Consume inmediatamente para aprovechar los nutrientes.",
+      nutricional: {
+        calorias: "Aprox. 220 kcal por porción",
+        proteinas: "25 g",
+        carbohidratos: "8 g",
+        grasa_total: "10 g",
+        fibra: "3 g",
+        sodio: "—",
+        vitaminas: {
+          vitamina_c: "—",
+          calcio: "—",
+          hierro: "—",
+          potasio: "—"
+        }
+      }
+    },
+    19: {
+      titulo: "Bizcocho de café sin azúcar",
+      imagen: "/assets/img/bizcocho-de-cafe-sin-azucar.jpg",
+      descripcion: "Bizcocho saludable y fácil, sin azúcar añadido. Ideal para diabéticos y quienes buscan opciones dulces más sanas.",
+      tiempo: "10 min preparación, 30 min horneado",
+      porciones: "10 (aprox. 40g por ración)",
+      ingredientes: [
+        { nombre: "160 g de harina (integral preferible)", imagen: "/assets/ilustraciones/harina.png" },
+        { nombre: "1 sobre de levadura/polvos de hornear (16g)", imagen: "/assets/ilustraciones/levadura.png" },
+        { nombre: "3 huevos M/L", imagen: "/assets/ilustraciones/huevo.png" },
+        { nombre: "110 g de mantequilla light", imagen: "/assets/ilustraciones/mantequilla.png" },
+        { nombre: "1 cucharada sopera de aceite de oliva o coco", imagen: "/assets/ilustraciones/aceite-oliva.png" },
+        { nombre: "20 g de stevia granulada", imagen: "/assets/ilustraciones/stevia.png" },
+        { nombre: "100 ml de café", imagen: "/assets/ilustraciones/cafe.png" },
+        { nombre: "2 cucharaditas de chocolate en polvo sin azúcar", imagen: "/assets/ilustraciones/chocolate.png" },
+        { nombre: "Una pizca de sal", imagen: "/assets/ilustraciones/sal.png" }
+      ],
+      preparacion: [
+        "Precalienta el horno a 180ºC.",
+        "Separa claras y yemas. Mezcla yemas con mantequilla fundida, aceite y stevia.",
+        "Añade harina, levadura y sal. Mezcla hasta masa homogénea.",
+        "Agrega café preparado y chocolate en polvo. Mezcla bien.",
+        "Monta claras a punto de nieve y agrégalas a la mezcla anterior.",
+        "Vierte en molde engrasado y hornea 30 min a 180ºC. Prueba con palillo.",
+        "Deja enfriar, desmolda y sirve."
+      ],
+      consejos: "Usa harina integral para más fibra. Puedes añadir frutos secos o cambiar el chocolate por cacao puro.",
+      nutricional: {
+        calorias: "144.22 kcal por ración (40g)",
+        carbohidratos: "10.18 g",
+        proteinas: "3 g",
+        grasa_total: "7 g",
+        fibra: "1 g",
+        sodio: "—",
+        vitaminas: {
+          vitamina_c: "—",
+          calcio: "—",
+          hierro: "—",
+          potasio: "—"
+        }
+      }
+    },
+    20: {
+      titulo: "Flan de coco sin azúcar",
+      imagen: "/assets/img/flan-de-coco-sin-azucar-w_opt.jpg",
+      descripcion: "Flan cremoso y saludable, bajo en carbohidratos y rico en grasas buenas. Ideal para postre sin azúcar.",
+      tiempo: "15 min preparación, 50 min cocción, 4 horas enfriado",
+      porciones: "8 flanes",
+      ingredientes: [
+        { nombre: "250 ml leche de coco (mezclada)", imagen: "/assets/ilustraciones/leche-coco.png" },
+        { nombre: "150 ml leche", imagen: "/assets/ilustraciones/leche.png" },
+        { nombre: "60 g chocolate blanco sin azúcar", imagen: "/assets/ilustraciones/chocolate.png" },
+        { nombre: "4 huevos", imagen: "/assets/ilustraciones/huevo.png" },
+        { nombre: "50 g eritritol o edulcorante al gusto", imagen: "/assets/ilustraciones/stevia.png" }
+      ],
+      preparacion: [
+        "En cazo a fuego medio, pon leche de coco, leche, edulcorante y chocolate blanco troceado. Remueve hasta fundir.",
+        "Retira del fuego y atempera. Añade los huevos uno a uno y bate.",
+        "Vierte en flaneras y hornea al baño maría 50 min a 165ºC.",
+        "Enfría en nevera al menos 4 horas antes de desmoldar y servir."
+      ],
+      consejos: "No congelar el flan. Sirve solo, con chocolate negro rallado o frutas frescas.",
+      nutricional: {
+        calorias: "196.4 kcal por ración (105g)",
+        carbohidratos: "7 g",
+        proteinas: "5.8 g",
+        grasa_total: "16.5 g",
+        fibra: "1.6 g",
+        sodio: "—",
+        vitaminas: {
+          vitamina_c: "—",
+          calcio: "—",
+          hierro: "—",
+          potasio: "—"
+        }
+      }
+    },
+    21: {
+      titulo: "Donuts de boniato sin azúcar",
+      imagen: "/assets/img/donuts-boniato-sin-azucar.jpg",
+      descripcion: "Donuts saludables y horneados, hechos con boniato, harina integral y cacao. Ideales para otoño, ricos en fibra, vitamina A y energía sostenida.",
+      tiempo: "30 min preparación, 25 min cocción",
+      porciones: "8 donuts",
+      ingredientes: [
+        { nombre: "3 huevos M/L", imagen: "/assets/ilustraciones/huevo.png" },
+        { nombre: "200 g puré de boniato (boniato cocido)", imagen: "/assets/ilustraciones/boniato.png" },
+        { nombre: "30 ml leche", imagen: "/assets/ilustraciones/leche.png" },
+        { nombre: "50 g harina de avena integral", imagen: "/assets/ilustraciones/avena.png" },
+        { nombre: "25 g cacao puro en polvo", imagen: "/assets/ilustraciones/chocolate.png" },
+        { nombre: "50 g eritritol o edulcorante al gusto", imagen: "/assets/ilustraciones/stevia.png" },
+        { nombre: "10 g levadura en polvo tipo Royal", imagen: "/assets/ilustraciones/levadura.png" }
+      ],
+      preparacion: [
+        "En un bol, batir los huevos junto con el boniato y la leche.",
+        "Agregar la harina, el cacao, el edulcorante y la levadura.",
+        "Repartir la masa en los moldes y hornear 25 min a 180ºC. Dejar enfriar sobre rejilla.",
+        "Opcional: bañar en chocolate negro 70% sin azúcar. ¡Y listos!"
+      ],
+      consejos: "Puedes decorar con frutos secos o glaseado sin azúcar. Ideales para desayuno o merienda saludable.",
+      nutricional: {
+        calorias: "90.7 kcal por ración (70g)",
+        carbohidratos: "9.2 g",
+        proteinas: "4.9 g",
+        grasa_total: "3.7 g",
+        fibra: "2.2 g",
+        sodio: "—",
+        vitaminas: {
+          vitamina_a: "Alto",
+          potasio: "—",
+          calcio: "—",
+          hierro: "—"
+        }
+      }
+    },
+
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const receta = recetas[id];
+
+    if (receta) {
+      document.getElementById('receta-detalle').innerHTML = `
+        <div class="receta-header">
+          <img src="${receta.imagen}" alt="${receta.titulo}">
+          <div>
+            <h1><span class="icon-title"><i class="bi bi-egg-fried"></i></span>${receta.titulo}</h1>
+            <p>${receta.descripcion}</p>
+            <div class="receta-info">
+              <span class="badge me-2"><i class="bi bi-clock"></i> ${receta.tiempo || ''}</span>
+              <span class="badge"><i class="bi bi-people"></i> ${receta.porciones || ''} porciones</span>
+            </div>
+          </div>
+        </div>
+        <!-- Votación y botones debajo de la info principal -->
+        <div class="receta-section text-center mb-3" style="background:transparent;box-shadow:none;">
+          <span style="color:#e0356d;">Califica esta receta:</span>
+          <span id="estrellas-voto">
+            <i class="bi bi-star" data-star="1" style="font-size:1.5rem;cursor:pointer;color:#ffd700;"></i>
+            <i class="bi bi-star" data-star="2" style="font-size:1.5rem;cursor:pointer;color:#ffd700;"></i>
+            <i class="bi bi-star" data-star="3" style="font-size:1.5rem;cursor:pointer;color:#ffd700;"></i>
+            <i class="bi bi-star" data-star="4" style="font-size:1.5rem;cursor:pointer;color:#ffd700;"></i>
+            <i class="bi bi-star" data-star="5" style="font-size:1.5rem;cursor:pointer;color:#ffd700;"></i>
+          </span>
+          <div class="mt-2">
+            <button class="btn btn-outline-danger btn-sm" id="btn-favorito"><i class="bi bi-heart"></i> Favorito</button>
+            <button class="btn btn-outline-success btn-sm" id="btn-lista-super"><i class="bi bi-cart"></i> Lista de compras</button>
+            <button class="btn btn-outline-secondary btn-sm" id="btn-calendario"><i class="bi bi-calendar-event"></i> Calendario</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="receta-section">
+              <h5><i class="bi bi-basket"></i> Ingredientes</h5>
+              <form id="ingredientes-form">
+                ${receta.ingredientes.map((i, idx) => `
+                  <div class="form-check mb-2 d-flex align-items-center">
+                    <input class="form-check-input me-2" type="checkbox" id="ing${idx}">
+                    <img src="${i.imagen}" alt="img" style="width:32px;height:32px;object-fit:cover;border-radius:6px;margin-right:10px;">
+                    <label class="form-check-label" for="ing${idx}">${i.nombre}</label>
+                  </div>
+                `).join('')}
+              </form>
+            </div>
+            <div class="receta-section">
+              <h5><i class="bi bi-journal-text"></i> Preparación</h5>
+              <ol class="list-group list-group-numbered">
+                ${receta.preparacion.map(p => `<li class="list-group-item">${p}</li>`).join('')}
+              </ol>
+            </div>
+            ${receta.consejos ? `
+            <div class="receta-section">
+              <h5><i class="bi bi-lightbulb"></i> Consejos</h5>
+              <p>${receta.consejos}</p>
+            </div>` : ''}
+            <div class="receta-section">
+              <h5><i class="bi bi-info-circle"></i> Información Nutricional</h5>
+              <table class="table table-bordered align-middle mb-3" style="background:#fff;">
+                <tbody>
+                  <tr><td>Calorías</td><td><strong>${receta.nutricional.calorias || '—'}</strong></td></tr>
+                  <tr><td>Grasa Total</td><td><strong>${receta.nutricional.grasa_total || '—'}</strong></td></tr>
+                  <tr><td>Grasa Saturada</td><td><strong>${receta.nutricional.grasa_saturada || '—'}</strong></td></tr>
+                  <tr><td>Grasa Trans</td><td><strong>${receta.nutricional.grasa_trans || '—'}</strong></td></tr>
+                  <tr><td>Colesterol</td><td><strong>${receta.nutricional.colesterol || '—'}</strong></td></tr>
+                  <tr><td>Sodio</td><td><strong>${receta.nutricional.sodio || '—'}</strong></td></tr>
+                  <tr><td>Carbohidratos Totales</td><td><strong>${receta.nutricional.carbohidratos || '—'}</strong></td></tr>
+                  <tr><td>Fibra Dietética</td><td><strong>${receta.nutricional.fibra || '—'}</strong></td></tr>
+                  <tr><td>Azúcares Totales</td><td><strong>${receta.nutricional.azucares || '—'}</strong></td></tr>
+                  <tr><td>Azúcares añadidos</td><td><strong>${receta.nutricional.azucares_añadidos || '—'}</strong></td></tr>
+                  <tr><td>Proteínas</td><td><strong>${receta.nutricional.proteinas || '—'}</strong></td></tr>
+                </tbody>
+              </table>
+              <h6 class="mb-2" style="color:#e0356d;">🥗 Vitaminas y Minerales:</h6>
+              <table class="table table-bordered align-middle" style="background:#fff;">
+                <tbody>
+                  <tr><td>Vitamina C</td><td><strong>${receta.nutricional.vitaminas.vitamina_c || '—'}</strong></td></tr>
+                  <tr><td>Calcio</td><td><strong>${receta.nutricional.vitaminas.calcio || '—'}</strong></td></tr>
+                  <tr><td>Hierro</td><td><strong>${receta.nutricional.vitaminas.hierro || '—'}</strong></td></tr>
+                  <tr><td>Potasio</td><td><strong>${receta.nutricional.vitaminas.potasio || '—'}</strong></td></tr>
+                  <tr><td>Vitamina A</td><td><strong>${receta.nutricional.vitaminas.vitamina_a || '—'}</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Gráficos con Chart.js -->
+        <div class="row">
+          <div class="col-lg-6 mb-4">
+            <h5><i class="bi bi-graph-up-arrow"></i> Análisis de Nutrientes</h5>
+            <canvas id="graficoCircular"></canvas>
+          </div>
+          <div class="col-lg-6 mb-4">
+            <h5><i class="bi bi-graph-line"></i> Progreso de Nutrientes</h5>
+            <canvas id="graficoLinea"></canvas>
+          </div>
+        </div>
+      `;
+      // Gráficos con Chart.js
+      setTimeout(() => {
+        // Circular
+        const ctxPie = document.getElementById('graficoCircular').getContext('2d');
+        new Chart(ctxPie, {
+          type: 'doughnut',
+          data: {
+            labels: ['Fibra', 'Proteínas', 'Grasa Total', 'Carbohidratos', 'Azúcares'],
+            datasets: [{
+              data: [
+                parseFloat(receta.nutricional.fibra),
+                parseFloat(receta.nutricional.proteinas),
+                parseFloat(receta.nutricional.grasa_total),
+                parseFloat(receta.nutricional.carbohidratos),
+                parseFloat(receta.nutricional.azucares)
+              ],
+              backgroundColor: [
+                '#e0356d', '#36b9cc', '#f6c23e', '#1cc88a', '#d35b5b'
+              ]
+            }]
+          },
+          options: {
+            plugins: {
+              legend: { position: 'bottom' }
+            }
+          }
+        });
+        // Línea
+        const ctxLine = document.getElementById('graficoLinea').getContext('2d');
+        new Chart(ctxLine, {
+          type: 'line',
+          data: {
+            labels: ['Fibra', 'Proteínas', 'Grasa Total', 'Carbohidratos', 'Azúcares'],
+            datasets: [{
+              label: 'Cantidad (g)',
+              data: [
+                parseFloat(receta.nutricional.fibra),
+                parseFloat(receta.nutricional.proteinas),
+                parseFloat(receta.nutricional.grasa_total),
+                parseFloat(receta.nutricional.carbohidratos),
+                parseFloat(receta.nutricional.azucares)
+              ],
+              fill: false,
+              borderColor: '#e0356d',
+              backgroundColor: '#e0356d',
+              tension: 0.3
+            }]
+          },
+          options: {
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: { beginAtZero: true }
+            }
+          }
+        });
+      }, 100);
+    } else {
+      document.getElementById('receta-detalle').innerHTML = `<p class="text-danger">Receta no encontrada.</p>`;
+    }
+  </script>
+</body>
+</html>

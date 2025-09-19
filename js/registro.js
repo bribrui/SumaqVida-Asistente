@@ -72,62 +72,75 @@ if (form && tabla) {
     const insulina = parseInt(data.get('insulina'));
     const comida = data.get('comida');
     const actividad = data.get('actividad');
-    const fecha = new Date().toLocaleString();
+    const observaciones = data.get('observaciones') || '';
+    const fecha = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
-    tabla.innerHTML += `
-      <tr>
-        <td>${fecha}</td>
-        <td>${glucosa} mg/dL</td>
-        <td>${insulina} U</td>
-        <td>${comida}</td>
-        <td>${actividad}</td>
-      </tr>`;
-
-    if (glucosaActual) glucosaActual.textContent = glucosa + ' mg/dL';
-    if (ultimaComida) ultimaComida.textContent = comida;
-
-    registrosHoy++;
-    if (cardGlucosa) cardGlucosa.textContent = `${glucosa} mg/dL`;
-    if (cardActividad) cardActividad.textContent = actividad;
-    if (cardRegistros) cardRegistros.textContent = registrosHoy;
-
-    actualizarProgreso();
-
-    if (glucosaEstado && recomendaciones) {
-        if (actividad === "Sí") {
-        recomendaciones.textContent += " Realizaste actividad física, eso puede ayudar a estabilizar tu glucosa.";
-        } else if (actividad === "No") {
-        recomendaciones.textContent += " No hubo actividad física, considera incorporar ejercicio moderado.";
-        }
-      if (glucosa < 70) {
-        glucosaEstado.textContent = "⚠️ Muy baja";
-        recomendaciones.className = 'alert alert-warning';
-        recomendaciones.textContent = "Nivel bajo. Come algo con azúcar y monitorea tu estado.";
-        if (insulina >= 4) recomendaciones.textContent += " ⚠️ Dosis alta de insulina con glucosa baja.";
-      } else if (glucosa <= 130) {
-        glucosaEstado.textContent = "✅ Normal";
-        recomendaciones.className = 'alert alert-success';
-        recomendaciones.textContent = "Todo en orden. Sigue tu rutina con normalidad.";
-        if (insulina === 0) recomendaciones.textContent += " No se usó insulina, lo cual fue adecuado.";
-      } else {
-        glucosaEstado.textContent = "⚠️ Alta";
-        recomendaciones.className = 'alert alert-danger';
-        recomendaciones.textContent = "Nivel alto. Evita carbohidratos simples y considera aplicar insulina si es habitual.";
-        if (insulina === 0) recomendaciones.textContent += " ⚠️ No se aplicó insulina.";
+    // Enviar al backend para guardar en la base de datos
+    const formData = new FormData();
+    formData.append('glucosa', glucosa);
+    formData.append('insulina', insulina);
+    formData.append('comida', comida);
+    formData.append('actividad', actividad);
+    formData.append('observaciones', observaciones);
+    formData.append('fecha', fecha);
+    fetch('/Sumaqvida/api/guardar_registro_diario.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(resp => {
+      if (!resp.success) {
+        Swal.fire({ icon: 'error', title: 'Error', text: resp.error || 'No se pudo guardar en la base de datos.' });
+        return;
       }
-    }
-
-    form.reset();
-
-    Swal.fire({
-      icon: 'success',
-      title: 'Registro exitoso',
-      text: 'Tus datos se han guardado correctamente.',
-      timer: 2000,
-      showConfirmButton: false
+      tabla.innerHTML += `
+        <tr>
+          <td>${fecha}</td>
+          <td>${glucosa} mg/dL</td>
+          <td>${insulina} U</td>
+          <td>${comida}</td>
+          <td>${actividad}</td>
+        </tr>`;
+      if (glucosaActual) glucosaActual.textContent = glucosa + ' mg/dL';
+      if (ultimaComida) ultimaComida.textContent = comida;
+      registrosHoy++;
+      if (cardGlucosa) cardGlucosa.textContent = `${glucosa} mg/dL`;
+      if (cardActividad) cardActividad.textContent = actividad;
+      if (cardRegistros) cardRegistros.textContent = registrosHoy;
+      actualizarProgreso();
+      if (glucosaEstado && recomendaciones) {
+        if (actividad === "Sí") {
+          recomendaciones.textContent += " Realizaste actividad física, eso puede ayudar a estabilizar tu glucosa.";
+        } else if (actividad === "No") {
+          recomendaciones.textContent += " No hubo actividad física, considera incorporar ejercicio moderado.";
+        }
+        if (glucosa < 70) {
+          glucosaEstado.textContent = "⚠️ Muy baja";
+          recomendaciones.className = 'alert alert-warning';
+          recomendaciones.textContent = "Nivel bajo. Come algo con azúcar y monitorea tu estado.";
+          if (insulina >= 4) recomendaciones.textContent += " ⚠️ Dosis alta de insulina con glucosa baja.";
+        } else if (glucosa <= 130) {
+          glucosaEstado.textContent = "✅ Normal";
+          recomendaciones.className = 'alert alert-success';
+          recomendaciones.textContent = "Todo en orden. Sigue tu rutina con normalidad.";
+          if (insulina === 0) recomendaciones.textContent += " No se usó insulina, lo cual fue adecuado.";
+        } else {
+          glucosaEstado.textContent = "⚠️ Alta";
+          recomendaciones.className = 'alert alert-danger';
+          recomendaciones.textContent = "Nivel alto. Evita carbohidratos simples y considera aplicar insulina si es habitual.";
+          if (insulina === 0) recomendaciones.textContent += " ⚠️ No se aplicó insulina.";
+        }
+      }
+      form.reset();
+      Swal.fire({
+        icon: 'success',
+        title: 'Registro exitoso',
+        text: 'Tus datos se han guardado correctamente.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+      sugerirRecetaPorGlucosa(glucosa);
     });
-
-    sugerirRecetaPorGlucosa(glucosa);
   });
 }
 

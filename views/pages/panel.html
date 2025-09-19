@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mi Panel - SumaqVida</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { background: linear-gradient(to bottom right, #fdfdfd, #f3f8fc); }
+    .panel-container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 18px; box-shadow: 0 8px 32px #e0356d22; padding: 38px 32px; }
+    .panel-header { display: flex; align-items: center; background: linear-gradient(90deg, #e0356d 60%, #b36ad8 100%); border-radius: 14px; padding: 24px 32px; color: #fff; margin-bottom: 32px; }
+    .panel-header .avatar { width: 70px; height: 70px; border-radius: 50%; background: #fff3; display: flex; align-items: center; justify-content: center; font-size: 2.8em; margin-right: 28px; }
+    .panel-header .welcome { font-size: 1.7em; font-weight: 600; }
+    .panel-header .desc { font-size: 1em; margin-top: 8px; color: #ffe2f2; }
+    .panel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
+    .panel-card { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px #e0356d11; padding: 22px 18px; text-align: center; }
+    .panel-card h4 { color: #e0356d; margin-bottom: 10px; font-size: 1.1em; }
+    .panel-card .big { font-size: 2em; font-weight: 700; color: #b36ad8; }
+    .panel-card .label { color: #888; font-size: 0.98em; margin-bottom: 6px; }
+    .panel-section { margin-bottom: 32px; }
+    .panel-section h3 { color: #e0356d; margin-bottom: 10px; font-size: 1.2em; }
+    .panel-section .placeholder { color: #888; font-size: 0.98em; }
+    .panel-form { background: #f8eafd; border-radius: 10px; padding: 18px 16px; margin-bottom: 18px; }
+    .panel-form label { color: #b36ad8; font-weight: 500; margin-right: 8px; }
+    .panel-form input, .panel-form select { border-radius: 6px; border: 1px solid #e0356d44; padding: 6px 10px; margin-right: 10px; }
+    .panel-form button { background: #e0356d; color: #fff; border: none; border-radius: 6px; padding: 8px 18px; font-weight: 600; cursor: pointer; }
+    .panel-form button:hover { background: #b36ad8; }
+    .panel-msg { margin-bottom: 10px; color: #e0356d; font-size: 1em; }
+    @media (max-width: 900px) { .panel-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .panel-grid { grid-template-columns: 1fr; } .panel-header { flex-direction: column; text-align: center; } .panel-header .avatar { margin: 0 0 18px 0; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="/index.html">SumaqVida</a>
+    </div>
+    <nav class="desktop-menu">
+      <a href="/index.html#sobre">Nosotros</a>
+      <div class="dropdown">
+        <a href="#">Funciones</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </div>
+      </div>
+      <a href="/Sumaqvida/foro.html">Foro</a>  
+      <a href="/Sumaqvida/Calendario/calendario.html">Calendario</a>
+      <a href="/Sumaqvida/views/pages/glosario.html">Glosario</a>
+      <a href="/Sumaqvida/views/pages/blog.html">Blog</a>
+      <a href="/Sumaqvida/views/pages/videos.html">Videos</a>
+      <a href="/Sumaqvida/index.html#faq">Preguntas</a>
+    </nav>
+    <div class="login-btn desktop-menu">
+      <a href="/views/pages/login.html">Iniciar sesión</a>
+    </div>
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="close-btn" onclick="toggleMobileMenu()">×</div>
+      <div class="menu-centrado">
+        <a href="/index.html#sobre">Nosotros</a>
+        <details>
+          <summary>Funciones</summary>
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </details>
+        <a href="/index.html#faq">Preguntas</a>
+      </div>
+      <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesión</a>
+    </div>
+  </header>
+  <div class="panel-container">
+    <div class="panel-header">
+      <div class="avatar">👤</div>
+      <div>
+        <div class="welcome" id="panelWelcome">Bienvenido/a</div>
+        <div class="desc">Tu espacio personal para controlar tu diabetes y bienestar.</div>
+      </div>
+    </div>
+    <div class="panel-grid">
+      <div class="panel-card">
+        <div class="label">Estado de glucosa</div>
+        <div class="big" id="panelGlucosa">--</div>
+        <div id="panelGlucosaEstado" style="margin-top:8px;color:#e0356d;font-weight:500;"></div>
+      </div>
+      <div class="panel-card">
+        <div class="label">Insulina aplicada</div>
+        <div class="big" id="panelInsulina">--</div>
+      </div>
+      <div class="panel-card">
+        <div class="label">Actividad física</div>
+        <div class="big" id="panelActividad">--</div>
+      </div>
+      <div class="panel-card">
+        <div class="label">Resumen diario</div>
+        <div id="panelResumen" style="font-size:1em;color:#b36ad8;">--</div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Registrar glucosa, insulina y actividad</h3>
+      <form id="glucosaForm" class="panel-form">
+        <label for="glucosaValor">Glucosa (mg/dL):</label>
+        <input type="number" id="glucosaValor" name="glucosaValor" min="40" max="600" required>
+        <label for="insulinaValor">Insulina (U):</label>
+        <input type="number" id="insulinaValor" name="insulinaValor" min="0" max="50" required>
+        <label for="actividadFisica">Actividad física:</label>
+        <select id="actividadFisica" name="actividadFisica">
+          <option value="No">No</option>
+          <option value="Caminar">Caminar</option>
+          <option value="Correr">Correr</option>
+          <option value="Yoga">Yoga</option>
+          <option value="Natación">Natación</option>
+          <option value="Bicicleta">Bicicleta</option>
+          <option value="Gimnasio">Gimnasio</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <button type="submit">Registrar</button>
+      </form>
+      <div id="glucosaMsg" class="panel-msg"></div>
+    </div>
+    <div class="panel-section">
+      <h3>Gráficos Interactivos</h3>
+      <div style="display:flex;gap:32px;flex-wrap:wrap;justify-content:center;">
+        <div style="flex:1;min-width:280px;max-width:400px;">
+          <canvas id="graficoGlucosa" height="120"></canvas>
+          <div class="placeholder" style="text-align:center;">Glucosa diaria (mg/dL)</div>
+        </div>
+        <div style="flex:1;min-width:280px;max-width:400px;">
+          <canvas id="graficoActividad" height="120"></canvas>
+          <div class="placeholder" style="text-align:center;">Actividad física semanal</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Recordatorios para Mediciones</h3>
+      <div class="panel-card" style="background:#ffe2f2; color:#e0356d; margin-bottom:12px;">
+        <b>¡Recuerda!</b> Realiza chequeos médicos cada 3 meses y controla tu glucosa diariamente.
+      </div>
+      <div class="panel-card" style="background:#f8eafd; color:#b36ad8; margin-bottom:12px;">
+        <b>Próximo control:</b> Programa tu cita médica y lleva tu registro impreso.<br>
+        <form id="citaForm" style="margin-top:10px;">
+          <label for="citaFecha">Fecha:</label>
+          <input type="date" id="citaFecha" name="citaFecha" required>
+          <label for="citaMotivo">Motivo:</label>
+          <input type="text" id="citaMotivo" name="citaMotivo" placeholder="Motivo de la cita" required>
+          <button type="submit">Guardar cita</button>
+        </form>
+        <div id="citaMsg" style="margin-top:8px;font-size:0.98em;"></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Exportación de Datos</h3>
+      <div class="placeholder">Descarga tus registros para compartirlos con tu médico.</div>
+    </div>
+    <div class="panel-section" style="margin-bottom:40px;">
+      <h3>Actividad física y nutrición semanal</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:center;justify-content:center;">
+        <div style="min-width:260px;max-width:320px;background:#fffbe6;border-radius:16px;padding:18px 16px;box-shadow:0 2px 12px #e0356d11;">
+          <div style="font-size:1.1em;font-weight:600;margin-bottom:10px;">Hoy</div>
+          <div style="display:flex;gap:8px;justify-content:center;margin-bottom:18px;align-items:center;">
+            <canvas id="caloriasCircle" width="80" height="80" style="vertical-align:middle;"></canvas>
+            <div style="margin-left:12px;">
+              <span style="color:#e0356d;font-size:1.2em;">🔥</span>
+              <span id="caloriasQuemadas" style="font-size:1.2em;font-weight:600;">0</span> kcal
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;justify-content:center;margin-bottom:18px;">
+            <span style="background:#e0356d22;border-radius:50%;padding:6px 12px;color:#e0356d;font-weight:600;">L</span>
+            <span style="background:#e0356d22;border-radius:50%;padding:6px 12px;color:#e0356d;font-weight:600;">M</span>
+            <span style="background:#e0356d22;border-radius:50%;padding:6px 12px;color:#e0356d;font-weight:600;">M</span>
+            <span style="background:#e0356d22;border-radius:50%;padding:6px 12px;color:#e0356d;font-weight:600;">J</span>
+            <span style="background:#e0356d22;border-radius:50%;padding:6px 12px;color:#e0356d;font-weight:600;">V</span>
+            <span style="background:#e0356d22;border-radius:50%;padding:6px 12px;color:#e0356d;font-weight:600;">S</span>
+            <span style="background:#e0356d22;border-radius:50%;padding:6px 12px;color:#e0356d;font-weight:600;">D</span>
+          </div>
+          <div style="margin-bottom:10px;">
+            <div style="font-size:0.98em;color:#b36ad8;margin-bottom:4px;">Proteínas</div>
+            <div style="background:#eee;border-radius:8px;overflow:hidden;height:12px;">
+              <div id="barraProteinas" style="background:#ffd700;height:12px;width:20%;"></div>
+            </div>
+            <span id="proteinasInfo" style="font-size:0.95em;color:#888;">0 / 140</span>
+          </div>
+          <div style="margin-bottom:10px;">
+            <div style="font-size:0.98em;color:#b36ad8;margin-bottom:4px;">Carbs</div>
+            <div style="background:#eee;border-radius:8px;overflow:hidden;height:12px;">
+              <div id="barraCarbs" style="background:#ffd700;height:12px;width:15%;"></div>
+            </div>
+            <span id="carbsInfo" style="font-size:0.95em;color:#888;">0 / 198</span>
+          </div>
+          <div>
+            <div style="font-size:0.98em;color:#b36ad8;margin-bottom:4px;">Grasas</div>
+            <div style="background:#eee;border-radius:8px;overflow:hidden;height:12px;">
+              <div id="barraGrasas" style="background:#ffd700;height:12px;width:10%;"></div>
+            </div>
+            <span id="grasasInfo" style="font-size:0.95em;color:#888;">0 / 50</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Saludo personalizado
+    fetch('/Sumaqvida/api/usuario_perfil.php')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.nombre) {
+          document.getElementById('panelWelcome').textContent = '¡Bienvenido/a, ' + data.nombre + '!';
+        }
+      });
+    // Formulario registro
+    document.getElementById('glucosaForm').onsubmit = function(e) {
+      e.preventDefault();
+      const valor = document.getElementById('glucosaValor').value;
+      const insulina = document.getElementById('insulinaValor').value;
+      const actividad = document.getElementById('actividadFisica').value;
+      const formData = new FormData();
+      formData.append('valor', valor);
+      formData.append('insulina', insulina);
+      formData.append('actividad', actividad);
+      fetch('/Sumaqvida/api/guardar_panel.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        const msg = document.getElementById('glucosaMsg');
+        if (data.success) {
+          msg.textContent = 'Registro guardado correctamente.';
+          msg.style.color = '#2a8c2a';
+          document.getElementById('glucosaForm').reset();
+          document.getElementById('panelGlucosa').textContent = valor + ' mg/dL';
+          document.getElementById('panelInsulina').textContent = insulina + ' U';
+          document.getElementById('panelActividad').textContent = actividad;
+          let estado = '';
+          if (valor < 70) estado = '⚠️ Muy baja';
+          else if (valor <= 130) estado = '✅ Normal';
+          else estado = '⚠️ Alta';
+          document.getElementById('panelGlucosaEstado').textContent = estado;
+          document.getElementById('panelResumen').textContent = 'Último registro: Glucosa ' + valor + ' mg/dL, Insulina ' + insulina + ' U, Actividad física: ' + actividad;
+          // Actualizar gráficos tras guardar
+          fetch('/Sumaqvida/api/obtener_panel.php')
+            .then(res => res.json())
+            .then(data => {
+              if (data.success && data.registros.length > 0) {
+                chartG.data.labels = data.registros.map(r => r.fecha.split(' ')[0]);
+                chartG.data.datasets[0].data = data.registros.map(r => r.glucosa);
+                chartG.options.plugins.title.text = '';
+                chartG.update();
+                const actividades = {};
+                data.registros.forEach(r => {
+                  actividades[r.actividad] = (actividades[r.actividad] || 0) + 1;
+                });
+                chartA.data.labels = Object.keys(actividades);
+                chartA.data.datasets[0].data = Object.values(actividades);
+                chartA.options.plugins.title.text = '';
+                chartA.update();
+              }
+            });
+        } else {
+          msg.textContent = 'Error: ' + (data.error || 'No se pudo guardar');
+          msg.style.color = '#e0356d';
+        }
+      });
+    };
+    // Formulario para programar cita médica
+    document.getElementById('citaForm').onsubmit = function(e) {
+      e.preventDefault();
+      const fecha = document.getElementById('citaFecha').value;
+      const motivo = document.getElementById('citaMotivo').value;
+      // Aquí podrías enviar los datos al backend si lo deseas
+      document.getElementById('citaMsg').textContent = 'Cita programada para el ' + fecha + ' (' + motivo + ')';
+      document.getElementById('citaForm').reset();
+    };
+    // Gráfico de glucosa (sin datos por defecto)
+    const ctxG = document.getElementById('graficoGlucosa').getContext('2d');
+    const chartG = new Chart(ctxG, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Glucosa (mg/dL)',
+          data: [],
+          borderColor: '#e0356d',
+          backgroundColor: '#f8eafd',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false },
+          title: {
+            display: true,
+            text: 'Sin datos de glucosa registrados',
+            color: '#e0356d',
+            font: { size: 16 }
+          }
+        },
+        scales: { y: { beginAtZero: false, min: 70, max: 180 } }
+      }
+    });
+    // Gráfico de actividad física (sin datos por defecto)
+    const ctxA = document.getElementById('graficoActividad').getContext('2d');
+    const chartA = new Chart(ctxA, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Actividad física',
+          data: [],
+          backgroundColor: '#b36ad8',
+          borderColor: '#e0356d',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false },
+          title: {
+            display: true,
+            text: 'Sin datos de actividad física registrados',
+            color: '#b36ad8',
+            font: { size: 16 }
+          }
+        },
+        scales: { y: { beginAtZero: true, min: 0, max: 7 } }
+      }
+    });
+    // Gráfico de glucosa y actividad física with datos reales
+    fetch('/Sumaqvida/api/obtener_panel.php')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.registros.length > 0) {
+          // Glucosa
+          chartG.data.labels = data.registros.map(r => r.fecha.split(' ')[0]);
+          chartG.data.datasets[0].data = data.registros.map(r => r.glucosa);
+          chartG.options.plugins.title.text = '';
+          chartG.update();
+          // Actividad física (conteo por tipo)
+          const actividades = {};
+          data.registros.forEach(r => {
+            actividades[r.actividad] = (actividades[r.actividad] || 0) + 1;
+          });
+          chartA.data.labels = Object.keys(actividades);
+          chartA.data.datasets[0].data = Object.values(actividades);
+          chartA.options.plugins.title.text = '';
+          chartA.update();
+        }
+      });
+    // Barra circular de calorías
+    function drawCaloriasCircle(actual, objetivo) {
+      const canvas = document.getElementById('caloriasCircle');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const percent = Math.min(actual / objetivo, 1);
+      // Fondo
+      ctx.beginPath();
+      ctx.arc(40, 40, 35, 0, 2 * Math.PI);
+      ctx.strokeStyle = '#eee';
+      ctx.lineWidth = 10;
+      ctx.stroke();
+      // Progreso
+      ctx.beginPath();
+      ctx.arc(40, 40, 35, -Math.PI/2, (2 * Math.PI * percent) - Math.PI/2);
+      ctx.strokeStyle = '#ffd700';
+      ctx.lineWidth = 10;
+      ctx.stroke();
+      // Texto
+      ctx.font = 'bold 1em Arial';
+      ctx.fillStyle = '#e0356d';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(actual + ' / ' + objetivo, 40, 40);
+    }
+    // Simulación de datos de actividad física y nutrición
+    const caloriasActual = 354;
+    const caloriasObjetivo = 1800;
+    document.getElementById('caloriasQuemadas').textContent = caloriasActual;
+    drawCaloriasCircle(caloriasActual, caloriasObjetivo);
+    document.getElementById('proteinasInfo').textContent = '24 / 140';
+    document.getElementById('carbsInfo').textContent = '30 / 198';
+    document.getElementById('grasasInfo').textContent = '14 / 50';
+    document.getElementById('barraProteinas').style.width = (24/140*100) + '%';
+    document.getElementById('barraCarbs').style.width = (30/198*100) + '%';
+    document.getElementById('barraGrasas').style.width = (14/50*100) + '%';
+  </script>
+  <script>
+function toggleMobileMenu() {
+  var menu = document.getElementById('mobileMenu');
+  menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1869 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🕵️ Detector de Fake News - SumaqVida</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .container-game {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===== HEADER INTRO ===== */
+    .intro-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .intro-section h1 {
+      font-size: 2.5rem;
+      color: #667eea;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .intro-section .subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .intro-section p {
+      font-size: 1rem;
+      color: #777;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .btn-start-game {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-start-game:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+      color: white;
+    }
+
+    .icon-large {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    /* ===== GAME HEADER ===== */
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .level-info {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    .lives-display {
+      display: flex;
+      gap: 8px;
+      font-size: 1.5rem;
+    }
+
+    .heart {
+      animation: beatHeart 0.6s ease-in-out;
+    }
+
+    @keyframes beatHeart {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    .score-display {
+      text-align: right;
+      font-weight: 600;
+    }
+
+    .score-display .label {
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    .score-display .value {
+      color: #667eea;
+      font-size: 1.5rem;
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-section {
+      margin-bottom: 30px;
+    }
+
+    .progress-bar-custom {
+      background: #f0f0f0;
+      border-radius: 10px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      font-size: 0.9rem;
+      color: #999;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* ===== NEWS CARD ===== */
+    .news-card {
+      background: #f9f9f9;
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+      border: 2px solid #f0f0f0;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .news-image {
+      width: 100%;
+      height: 250px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: white;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      overflow: hidden;
+    }
+
+    .news-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .news-headline {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+
+    .news-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+      padding: 15px 0;
+      border-top: 1px solid #e0e0e0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    .meta-label {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .news-content {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-style: italic;
+      background: white;
+      padding: 15px;
+      border-left: 4px solid #667eea;
+      border-radius: 5px;
+    }
+
+    /* ===== CLUES SECTION ===== */
+    .clues-section {
+      margin-bottom: 30px;
+    }
+
+    .clues-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clues-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+    }
+
+    .clue-btn {
+      background: white;
+      border: 2px solid #667eea;
+      color: #667eea;
+      padding: 12px 15px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .clue-btn:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    .clue-btn.checked {
+      background: #667eea;
+      color: white;
+    }
+
+    .clue-icon {
+      font-size: 1.3rem;
+    }
+
+    /* ===== TIMER ===== */
+    .timer-section {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .timer {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+      display: inline-block;
+    }
+
+    .timer.warning {
+      color: #ff6b6b;
+      animation: pulse 0.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* ===== VERDICT SECTION ===== */
+    .verdict-section {
+      background: linear-gradient(135deg, #f0f4ff 0%, #f0f0f0 100%);
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+    }
+
+    .verdict-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .verdict-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .btn-verdict {
+      padding: 18px 30px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-true {
+      background: #51cf66;
+      color: white;
+      box-shadow: 0 10px 30px rgba(81, 207, 102, 0.3);
+    }
+
+    .btn-true:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(81, 207, 102, 0.5);
+    }
+
+    .btn-false {
+      background: #ff6b6b;
+      color: white;
+      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+    }
+
+    .btn-false:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
+    }
+
+    /* ===== FEEDBACK SECTION ===== */
+    .feedback-section {
+      display: none;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .feedback-box {
+      background: #f9f9f9;
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+      border-left: 5px solid #667eea;
+    }
+
+    .feedback-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feedback-title.correct {
+      color: #51cf66;
+    }
+
+    .feedback-title.incorrect {
+      color: #ff6b6b;
+    }
+
+    .feedback-content {
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+
+    .feedback-item {
+      margin-bottom: 12px;
+      padding-left: 25px;
+      position: relative;
+    }
+
+    .feedback-item::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: 700;
+    }
+
+    .tip-box {
+      background: #e7f5ff;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .tip-box strong {
+      color: #667eea;
+    }
+
+    .verifier-link {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #667eea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .verifier-link:hover {
+      background: #764ba2;
+      color: white;
+    }
+
+    /* ===== RESULTS SCREEN ===== */
+    .results-screen {
+      display: none;
+      text-align: center;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .results-icon {
+      font-size: 5rem;
+      margin-bottom: 20px;
+      animation: bounce 0.6s ease-out;
+    }
+
+    @keyframes bounce {
+      0% { transform: scale(0.5); opacity: 0; }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .results-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .results-score {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .results-percentage {
+      font-size: 1.3rem;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .medal {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .achievement-box {
+      background: #f0f4ff;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 2px solid #667eea;
+    }
+
+    .achievement-title {
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .achievement-list {
+      text-align: left;
+      display: inline-block;
+    }
+
+    .achievement-list li {
+      color: #666;
+      margin-bottom: 8px;
+      list-style: none;
+      padding-left: 25px;
+      position: relative;
+    }
+
+    .achievement-list li::before {
+      content: "⭐";
+      position: absolute;
+      left: 0;
+    }
+
+    .btn-play-again {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 50px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-play-again:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+      color: white;
+    }
+
+    .btn-next-question {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+
+    .btn-next-question:hover {
+      background: #764ba2;
+      transform: translateY(-2px);
+    }
+
+    /* ===== CONFETTI ===== */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      pointer-events: none;
+      animation: confettiFall 3s linear forwards;
+    }
+
+    @keyframes confettiFall {
+      to {
+        transform: translateY(500px) rotateZ(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .container-game {
+        padding: 20px;
+      }
+
+      .intro-section h1 {
+        font-size: 1.8rem;
+      }
+
+      .news-headline {
+        font-size: 1.3rem;
+      }
+
+      .news-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .verdict-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .clues-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .game-header {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .results-score {
+        font-size: 2.5rem;
+      }
+
+      .results-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container-game">
+    <!-- INTRO SCREEN -->
+    <div id="introScreen">
+      <div class="intro-section">
+        <div class="icon-large">🕵️</div>
+        <h1>Misión: Detector de Fake News</h1>
+        <p class="subtitle">Descubre la verdad antes de que se haga viral</p>
+        
+        <div style="background: #f0f4ff; padding: 25px; border-radius: 15px; margin-bottom: 25px; text-align: left; line-height: 1.8;">
+          <h3 style="color: #667eea; margin-bottom: 15px;">📖 ¿Cómo funciona?</h3>
+          
+          <h4 style="color: #333; margin-top: 15px; margin-bottom: 10px;">Paso 1: Recibes la noticia</h4>
+          <p>Aparecerá una tarjeta con titular, imagen, fuente, fecha y autor. Una noticia sospechosa acaba de hacerse viral.</p>
+          
+          <h4 style="color: #333; margin-top: 15px; margin-bottom: 10px;">Paso 2: Investiga las pistas</h4>
+          <p>Antes de responder, debes investigar al menos algunas pistas: revisar la URL, fecha, autor, analizar la imagen, buscar otras fuentes, lenguaje usado y evidencias.</p>
+          
+          <h4 style="color: #333; margin-top: 15px; margin-bottom: 10px;">Paso 3: Da tu veredicto</h4>
+          <p>Decide si la noticia es <span style="color: #51cf66; font-weight: 600;">✅ VERDADERA</span> o <span style="color: #ff6b6b; font-weight: 600;">❌ FALSA</span></p>
+          
+          <h4 style="color: #333; margin-top: 15px; margin-bottom: 10px;">Paso 4: Aprende</h4>
+          <p>Recibe una explicación detallada de por qué era verdadera o falsa, qué señales había, y cómo verificarla.</p>
+          
+          <h4 style="color: #333; margin-top: 15px; margin-bottom: 10px;">🎯 Sistema de puntuación</h4>
+          <ul style="margin-left: 20px; margin-top: 10px;">
+            <li><strong>+10</strong> por respuesta correcta</li>
+            <li><strong>+5</strong> por cada pista investigada</li>
+            <li><strong>-5</strong> por respuesta incorrecta</li>
+            <li><strong>+20</strong> bonus si investigas todas las pistas</li>
+          </ul>
+        </div>
+
+        <button class="btn-start-game" onclick="startGame()">🚀 Comenzar Misión</button>
+      </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="gameScreen" style="display: none;">
+      <!-- Game Header -->
+      <div class="game-header">
+        <div class="level-info">Nivel <span id="currentLevel">1</span> | Pregunta <span id="currentQuestion">1</span>/10</div>
+        <div class="lives-display" id="livesDisplay">❤️ ❤️ ❤️</div>
+        <div class="score-display">
+          <div class="label">Puntuación</div>
+          <div class="value" id="scoreDisplay">0</div>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-section">
+        <div class="progress-bar-custom">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text"><span id="progressText">0%</span></div>
+      </div>
+
+      <!-- Timer -->
+      <div class="timer-section">
+        ⏱️ Tiempo restante: <span class="timer" id="timer">30</span>s
+      </div>
+
+      <!-- News Card -->
+      <div class="news-card">
+        <div class="news-image" id="newsImage">📰</div>
+        <h2 class="news-headline" id="newsHeadline">Cargando noticia...</h2>
+        <div class="news-meta">
+          <div class="meta-item">
+            <span class="meta-label">🌐 Fuente:</span>
+            <span id="newsSource">-</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">📅 Fecha:</span>
+            <span id="newsDate">-</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">👤 Autor:</span>
+            <span id="newsAuthor">-</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">📍 País:</span>
+            <span id="newsCountry">-</span>
+          </div>
+        </div>
+        <div class="news-content" id="newsContent">Contenido de la noticia...</div>
+      </div>
+
+      <!-- Clues Section -->
+      <div class="clues-section">
+        <div class="clues-title">🔍 Investiga las pistas (opcional pero recomendado)</div>
+        <div class="clues-grid" id="cluesGrid">
+          <!-- Clues will be generated here -->
+        </div>
+      </div>
+
+      <!-- Verdict Section -->
+      <div id="verdictSection" class="verdict-section">
+        <div class="verdict-title">¿Cuál es tu veredicto?</div>
+        <div class="verdict-buttons">
+          <button class="btn-verdict btn-true" onclick="giveAnswer(true)">
+            <span>✅</span>
+            <span>Es Verdadera</span>
+          </button>
+          <button class="btn-verdict btn-false" onclick="giveAnswer(false)">
+            <span>❌</span>
+            <span>Es Falsa</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Feedback Section -->
+      <div class="feedback-section" id="feedbackSection">
+        <div class="feedback-box" id="feedbackBox"></div>
+        <button class="btn-next-question" onclick="nextQuestion()">Siguiente Pregunta →</button>
+      </div>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div id="resultsScreen" style="display: none;">
+      <div class="results-screen">
+        <div class="results-icon" id="resultsIcon">🏆</div>
+        <h1 class="results-title">¡Misión Completada!</h1>
+        
+        <!-- INSIGNIA Y PUNTAJE -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 40px; margin-bottom: 30px; color: white;">
+          <div style="font-size: 4rem; margin-bottom: 15px;" id="resultMedal">🏅</div>
+          <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 10px;" id="resultLevel">Novato</div>
+          <div style="font-size: 3.5rem; font-weight: 800; margin-bottom: 10px;" id="resultsScore">0</div>
+          <div style="font-size: 1.3rem; opacity: 0.9;" id="resultsPercentage">0%</div>
+        </div>
+
+        <!-- ESPACIO PARA INSIGNIA PERSONALIZADA -->
+        <div style="background: #f0f4ff; border-radius: 15px; padding: 30px; margin-bottom: 30px; border: 3px dashed #667eea; text-align: center;">
+          <div style="color: #999; font-weight: 600; margin-bottom: 15px;">🎖️ TU INSIGNIA PERSONALIZADA</div>
+          <div id="customBadgeSpace" style="width: 150px; height: 150px; margin: 0 auto; background: white; border-radius: 10px; border: 2px solid #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 3rem;">
+            <!-- Aquí se colocará la insignia personalizada -->
+          </div>
+          <div style="color: #999; font-size: 0.9rem; margin-top: 15px;">Comparte tu logro en redes sociales</div>
+        </div>
+
+        <!-- BREAKDOWN DE PUNTUACIÓN -->
+        <div class="achievement-box">
+          <div class="achievement-title">💰 Desglose de Puntos</div>
+          <ul class="achievement-list">
+            <li>Respuestas correctas: <span id="scorCorrectAnswers">0</span> × 10 = <strong id="pointsCorrect">0</strong> pts</li>
+            <li>Pistas investigadas: <span id="scorCluesInvestigated">0</span> × 5 = <strong id="pointsClues">0</strong> pts</li>
+            <li>Respuestas incorrectas: <span id="scorIncorrectAnswers">0</span> × -5 = <strong id="pointsIncorrect">0</strong> pts</li>
+            <li style="border-top: 1px solid #e0e0e0; padding-top: 12px; margin-top: 12px;">
+              🌟 Bonificación (todas pistas): <strong id="pointsBonus">0</strong> pts
+            </li>
+          </ul>
+        </div>
+
+        <!-- ESTADÍSTICAS COMPLETAS -->
+        <div class="achievement-box">
+          <div class="achievement-title">📊 Estadísticas Completas</div>
+          <ul class="achievement-list">
+            <li>Preguntas respondidas: <span id="resultCorrect">0</span>/10</li>
+            <li>Precisión: <span id="resultAccuracy">0%</span></li>
+            <li>Pistas investigadas totales: <span id="resultCluesUsed">0</span></li>
+            <li>Promedio pistas por pregunta: <span id="resultAvgClues">0</span></li>
+            <li>Tiempo total invertido: <span id="resultTimeSpent">0</span>s</li>
+          </ul>
+        </div>
+
+        <!-- LOGROS DESBLOQUEADOS -->
+        <div class="achievement-box">
+          <div class="achievement-title">🏆 Logros Desbloqueados</div>
+          <ul class="achievement-list" id="achievementsList">
+            <li>Misión iniciada</li>
+          </ul>
+        </div>
+
+        <!-- CONSEJOS EDUCATIVOS -->
+        <div class="tip-box" style="background: #e7f5ff; margin-bottom: 20px;">
+          <strong style="color: #667eea;">💡 Tip Educativo:</strong>
+          <p style="margin-top: 8px; color: #666;" id="resultTip">Mantén tus habilidades MIL afiladas verificando noticias todos los días.</p>
+        </div>
+
+        <button class="btn-play-again" onclick="location.reload()">🔄 Jugar Otra Vez</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============ GAME DATA ============
+    const newsDatabase = [
+      // NIVEL 1 - FÁCIL (Tus noticias)
+      {
+        level: 1,
+        isTrue: false,
+        headline: "Médicos descubren que la canela cura completamente la diabetes tipo 2 en solo 30 días",
+        source: "Salud Natural 24",
+        date: "18 de marzo de 2025",
+        author: "Dr. Carlos Hernández",
+        country: "Latinoamérica",
+        content: "Una publicación que circula ampliamente en redes sociales afirma que un grupo de investigadores logró descubrir la cura definitiva para la diabetes tipo 2 utilizando únicamente canela. Según el artículo, consumir dos cucharadas diarias antes del desayuno durante treinta días regenera completamente el páncreas y elimina la necesidad de utilizar medicamentos o insulina. El supuesto estudio asegura haber sido realizado con más de cinco mil pacientes en Latinoamérica y afirma que el 98% logró curarse definitivamente. Además, la publicación sostiene que las empresas farmacéuticas están ocultando esta información porque afectaría sus ganancias económicas.",
+        image: "🥄",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "La noticia es FALSA. Hasta el momento no existe ninguna evidencia científica que demuestre que la canela cure la diabetes tipo 2. Aunque algunos estudios han investigado si podría tener un pequeño efecto sobre el control de la glucosa, ninguna organización médica recomienda reemplazar el tratamiento por canela.",
+        signals: [
+          { type: "url", clue: "La página utiliza un dominio '.net' sin información sobre la empresa responsable. No posee sección 'Quiénes somos' ni dirección física.", hint: "Revisar URL de fuentes desconocidas" },
+          { type: "author", clue: "El supuesto Dr. Carlos Hernández no aparece registrado en universidades ni en publicaciones científicas.", hint: "Verificar credenciales del autor" },
+          { type: "date", clue: "La noticia fue publicada recientemente pero sin contexto de un estudio formal.", hint: "Fechas recientes no garantizan veracidad" },
+          { type: "image", clue: "Una búsqueda inversa de fotografía proviene de un banco gratuito de imágenes, no del supuesto estudio.", hint: "Buscar imágenes inversamente en Google" },
+          { type: "sources", clue: "No aparece publicada en: Organización Mundial de la Salud, American Diabetes Association, NIH, CDC.", hint: "Buscar en organismos oficiales" },
+          { type: "language", clue: "Utiliza frases como 'La cura definitiva', 'Lo que las farmacéuticas no quieren que sepas', 'Compártelo antes de que la eliminen'. Este lenguaje busca generar emociones y urgencia.", hint: "Identificar lenguaje sensacionalista" },
+          { type: "evidence", clue: "No presenta: nombre del estudio, revista científica, DOI, metodología, investigadores reales.", hint: "Exigir evidencia verificable" }
+        ],
+        tip: "Cuando una noticia promete una 'cura milagrosa', utiliza teorías conspirativas y no presenta investigaciones verificables, es muy probable que sea desinformación."
+      },
+      {
+        level: 1,
+        isTrue: false,
+        headline: "Beber agua con limón en ayunas elimina toda el azúcar de la sangre",
+        source: "Vida Sana Hoy",
+        date: "9 de febrero de 2026",
+        author: "Redacción",
+        country: "Desconocido",
+        content: "Miles de usuarios están compartiendo un remedio casero que promete eliminar completamente el exceso de azúcar de la sangre. Según la publicación, basta con beber un vaso de agua tibia con limón durante siete mañanas consecutivas para limpiar el organismo y hacer desaparecer la diabetes. El artículo asegura que este método ha sido utilizado desde hace siglos y que los médicos prefieren no recomendarlo porque beneficia más vender medicamentos. No se mencionan hospitales, universidades ni investigaciones científicas que respalden estas afirmaciones.",
+        image: "🍋",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "La noticia es FALSA. No existe ninguna evidencia científica que demuestre que el limón elimine la glucosa del organismo o cure la diabetes.",
+        signals: [
+          { type: "url", clue: "La URL termina en '.blog' sin credibilidad académica.", hint: "Verificar extensión del dominio" },
+          { type: "author", clue: "No tiene autor identificado, solo dice 'Redacción'.", hint: "Buscar autor específico" },
+          { type: "date", clue: "Publicada recientemente sin base científica.", hint: "Las curas reales tienen historia documentada" },
+          { type: "image", clue: "Imagen genérica sin evidencia de estudio.", hint: "Buscar imágenes en bancos de stock" },
+          { type: "sources", clue: "No cita investigaciones científicas ni revistas médicas.", hint: "Exigir fuentes académicas" },
+          { type: "language", clue: "Lenguaje emocional como 'miles de usuarios comparten', 'médicos prefieren no recomendarlo'.", hint: "Detectar manipulación emocional" },
+          { type: "evidence", clue: "No aparece en organismos oficiales como la OMS o American Diabetes Association.", hint: "Verificar con organizaciones médicas" }
+        ],
+        tip: "Los remedios caseros simples nunca reemplazan tratamientos médicos profesionales. Si fuera verdad, todos los médicos lo recomendarían."
+      },
+      {
+        level: 1,
+        isTrue: false,
+        headline: "Las personas con diabetes nunca deben comer frutas",
+        source: "NutriConsejos Viral",
+        date: "2025",
+        author: "María Wellness",
+        country: "Desconocido",
+        content: "Una publicación viral afirma que todas las frutas contienen grandes cantidades de azúcar y que cualquier persona con diabetes debe eliminarlas completamente de su alimentación. El artículo asegura que incluso una manzana puede elevar peligrosamente la glucosa y recomienda reemplazar las frutas por suplementos alimenticios vendidos en la misma página web. No presenta estudios científicos ni recomendaciones de profesionales de la salud.",
+        image: "🍎",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "La noticia es FALSA. Las frutas forman parte de una alimentación saludable. Lo importante es la cantidad, el tipo de fruta y el plan alimenticio recomendado por un profesional.",
+        signals: [
+          { type: "url", clue: "La página vende suplementos que ella misma recomienda.", hint: "Buscar conflicto de interés" },
+          { type: "author", clue: "No hay nutricionistas citados, solo 'María Wellness'.", hint: "Verificar credenciales profesionales" },
+          { type: "date", clue: "Fecha vaga (solo '2025') sin precisión.", hint: "Las fuentes serias tienen fechas exactas" },
+          { type: "image", clue: "Imagen de frutas genérica sin contexto médico.", hint: "Verificar profesionalismo de imágenes" },
+          { type: "sources", clue: "La OMS y organizaciones médicas recomiendan frutas para todos.", hint: "Contrastar con organizaciones oficiales" },
+          { type: "language", clue: "Lenguaje absoluto 'nunca' y 'completamente' sin matices.", hint: "Detectar exageración" },
+          { type: "evidence", clue: "Existencia de conflicto de interés (vende lo que recomienda).", hint: "Identificar beneficio económico del autor" }
+        ],
+        tip: "Cuando quien da consejo nutricional VENDE lo que recomienda, es publicidad disfrazada de noticia. Busca siempre recomendaciones desinteresadas."
+      },
+      {
+        level: 1,
+        isTrue: true,
+        headline: "La Organización Mundial de la Salud alerta sobre medicamentos falsificados para la diabetes",
+        source: "Organización Mundial de la Salud",
+        date: "20 de junio de 2024",
+        author: "OMS",
+        country: "Internacional",
+        content: "La Organización Mundial de la Salud emitió una alerta internacional luego de identificar versiones falsificadas de medicamentos utilizados para tratar la diabetes tipo 2 y la obesidad. Las autoridades sanitarias informaron que algunos lotes falsificados fueron detectados en distintos países y recomendaron a los pacientes adquirir medicamentos únicamente en establecimientos autorizados. La OMS explicó que estos productos falsificados pueden contener ingredientes incorrectos o dosis diferentes a las indicadas, lo que representa un riesgo para la salud.",
+        image: "⚠️",
+        category: "salud",
+        correctAnswer: true,
+        explanation: "La noticia es VERDADERA. La OMS publicó oficialmente esta alerta para proteger a la población frente a medicamentos falsificados. Esta es una advertencia legítima de un organismo internacional certificado.",
+        signals: [
+          { type: "url", clue: "Fuente oficial de la OMS verificable en sitios internacionales.", hint: "Verificar sitio oficial de la organización" },
+          { type: "author", clue: "Autor identificado como OMS (Organización Mundial de la Salud).", hint: "Buscar credenciales de organizaciones" },
+          { type: "date", clue: "Fecha precisa: 20 de junio de 2024.", hint: "Fechas exactas indican profesionalismo" },
+          { type: "image", clue: "Imagen de advertencia oficial coherente.", hint: "Imágenes profesionales de organismos oficiales" },
+          { type: "sources", clue: "Coincide con otras noticias internacionales sobre medicamentos falsificados.", hint: "Verificar en múltiples fuentes confiables" },
+          { type: "language", clue: "Lenguaje neutral, claro y sin exageración.", hint: "Comunicados oficiales mantienen tono profesional" },
+          { type: "evidence", clue: "Existe comunicado oficial verificable de la OMS.", hint: "Buscar en sitio oficial www.who.int" }
+        ],
+        tip: "Los comunicados de organismos internacionales como la OMS son generalmente confiables. Verifica siempre en sus sitios oficiales para confirmar."
+      },
+      {
+        level: 1,
+        isTrue: false,
+        headline: "La insulina produce adicción y debe dejarse poco a poco",
+        source: "Medicina Natural Total",
+        date: "2025",
+        author: "Sin información",
+        country: "Desconocido",
+        content: "Una publicación ampliamente compartida en redes sociales afirma que la insulina genera dependencia física y que las personas con diabetes deberían dejar de utilizarla gradualmente para que el cuerpo vuelva a producirla por sí solo. El artículo no cita especialistas, hospitales ni investigaciones científicas. Además, recomienda sustituir la insulina por infusiones de plantas medicinales. Expertos en endocrinología advierten que abandonar un tratamiento prescrito sin supervisión médica puede provocar complicaciones graves.",
+        image: "💉",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "La noticia es FALSA. La insulina no produce adicción. Es una hormona esencial para muchas personas con diabetes y debe utilizarse únicamente según las indicaciones del profesional de salud. Abandonarla sin supervisión médica puede ser peligroso.",
+        signals: [
+          { type: "url", clue: "Fuente 'Medicina Natural Total' sin credibilidad académica.", hint: "Verificar sitios especializados en medicina" },
+          { type: "author", clue: "No tiene autor identificado, solo dice 'Sin información'.", hint: "Autores anónimos son sospechosos" },
+          { type: "date", clue: "Fecha vaga '2025' sin precisión.", hint: "Fuentes serias tienen fechas exactas" },
+          { type: "image", clue: "Imagen de jeringa genérica sin contexto médico.", hint: "Buscar imágenes profesionales" },
+          { type: "sources", clue: "No cita especialistas, hospitales ni investigaciones científicas.", hint: "Exigir fuentes verificables" },
+          { type: "language", clue: "Propone abandonar medicamentos sin supervisión (peligroso).", hint: "Detectar consejos médicos peligrosos" },
+          { type: "evidence", clue: "Ningún organismo sanitario respalda dejar la insulina sin supervisión.", hint: "Contrastar con recomendaciones médicas oficiales" }
+        ],
+        tip: "Nunca abandones un medicamento prescrito basándote en internet. Siempre consulta con tu médico. Los consejos peligrosos suelen venir de fuentes no verificables."
+      },
+
+      // NIVEL 2 - FÁCIL (Verdaderas)
+      {
+        level: 2,
+        isTrue: true,
+        headline: "Inteligencia Artificial logra diagnosticar cáncer con 95% de precisión",
+        source: "www.nature-tech.com",
+        date: "12 de enero de 2024",
+        author: "Dra. Elena Chen",
+        country: "China",
+        content: "Investigadores del Instituto Tecnológico de Beijing presentan un sistema de IA que detecta cáncer de mama en imágenes médicas con mayor precisión que radiólogos humanos.",
+        image: "🤖",
+        category: "inteligencia artificial",
+        correctAnswer: true,
+        explanation: "VERDADERA: Fuente científica reconocida, autor verificable, institución prestigiosa, información confirmada por pares científicos.",
+        signals: [
+          { type: "url", clue: "www.nature-tech.com", hint: "Revista científica de confianza" },
+          { type: "date", clue: "12 de enero de 2024", hint: "Fecha reciente y verificable" },
+          { type: "author", clue: "Dra. Elena Chen", hint: "Investigadora con credenciales" },
+          { type: "language", clue: "Lenguaje técnico y preciso", hint: "No hay exageración" },
+          { type: "sources", clue: "Instituto Tecnológico de Beijing", hint: "Institución respetada" },
+          { type: "image", clue: "Imagen de IA", hint: "Coherente y profesional" },
+          { type: "evidence", clue: "Porcentaje específico: 95%", hint: "Dato medible y verificable" }
+        ],
+        tip: "Las noticias sobre avances tecnológicos de institutos reconocidos suelen publicarse en revistas científicas peer-reviewed."
+      },
+      {
+        level: 2,
+        isTrue: true,
+        headline: "El cambio climático acelera el derretimiento de los glaciares",
+        source: "www.ipcc-reports.org",
+        date: "8 de noviembre de 2023",
+        author: "Panel Intergubernamental sobre Cambio Climático",
+        country: "Internacional",
+        content: "El nuevo reporte del IPCC confirma que el calentamiento global ha acelerado la pérdida de hielo en un 30% en la última década.",
+        image: "🌍",
+        category: "cambio climático",
+        correctAnswer: true,
+        explanation: "VERDADERA: Fuente oficial del IPCC (máxima autoridad en clima), datos verificables, información de dominio público.",
+        signals: [
+          { type: "url", clue: "www.ipcc-reports.org", hint: "Sitio oficial del IPCC" },
+          { type: "date", clue: "8 de noviembre de 2023", hint: "Fecha de un reporte real" },
+          { type: "author", clue: "IPCC (Panel de la ONU)", hint: "Organismo internacional oficial" },
+          { type: "language", clue: "Datos científicos", hint: "Información basada en hechos" },
+          { type: "sources", clue: "Miles de científicos", hint: "Consenso científico global" },
+          { type: "image", clue: "Imágenes reales de glaciares", hint: "Evidencia visual verificable" },
+          { type: "evidence", clue: "Datos del 30%", hint: "Mediciones científicas precisas" }
+        ],
+        tip: "Los reportes del IPCC son revisados por miles de científicos mundiales y son fuentes muy confiables."
+      },
+      {
+        level: 2,
+        isTrue: false,
+        headline: "¡VIRAL! Redes sociales dañan el cerebro de los jóvenes (MÉDICOS FURIOUS)",
+        source: "www.noticias-bombilla.net",
+        date: "hace 2 días",
+        author: "Redacción Viral",
+        country: "Desconocido",
+        content: "Estudios CENSURADOS demuestran que TikTok y Instagram DESTRUYEN la salud mental. Los gobiernos NO lo quieren que sepas. Comparte para alertar a todos.",
+        image: "📱",
+        category: "redes sociales",
+        correctAnswer: false,
+        explanation: "FALSA: Lenguaje sensacionalista, fuente no verificable, afirmación de censura sin prueba, pide compartir para viralizar.",
+        signals: [
+          { type: "url", clue: "www.noticias-bombilla.net", hint: "Dominio genérico y sospechoso" },
+          { type: "date", clue: "hace 2 días", hint: "Fecha vaga para crear urgencia" },
+          { type: "author", clue: "Redacción Viral", hint: "Autor no específico" },
+          { type: "language", clue: "CENSURADOS, FURIOUS en mayús", hint: "Lenguaje clickbait" },
+          { type: "sources", clue: "No cita estudios específicos", hint: "Solo generalizaciones" },
+          { type: "image", clue: "Imagen genérica", hint: "Sin pruebas visuales" },
+          { type: "evidence", clue: "Pide compartir", hint: "Tácnica de viralización falsa" }
+        ],
+        tip: "Las noticias que piden compartir antes de leer suelen ser falsas. Busca siempre las fuentes originales de los estudios."
+      },
+      {
+        level: 2,
+        isTrue: false,
+        headline: "Científicos descubren que beber Coca-Cola alarga la vida 20 años",
+        source: "www.coca-cola-secretos.blogspot.com",
+        date: "1 de abril de 2024",
+        author: "Un fan de refrescos",
+        country: "Desconocido",
+        content: "Investigadores secretos demuestran que el azúcar de la Coca-Cola contiene propiedades anti-envejecimiento. Las compañías farmacéuticas lo esconden.",
+        image: "🥤",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "FALSA: Científicamente imposible (azúcar no alarga vida), autor anónimo, fuente blog no académica, teoría de conspiración.",
+        signals: [
+          { type: "url", clue: "www.coca-cola-secretos.blogspot.com", hint: "Blog personal, no académico" },
+          { type: "date", clue: "1 de abril de 2024", hint: "Día de inocentes (Abril Fools)" },
+          { type: "author", clue: "Un fan de refrescos", hint: "Autor identificado como aficionado" },
+          { type: "language", clue: "Propiedades anti-envejecimiento", hint: "Afirmación sin base" },
+          { type: "sources", clue: "Investigadores secretos", hint: "No hay fuente verificable" },
+          { type: "image", clue: "Imagen de bebida", hint: "Sin evidencia científica" },
+          { type: "evidence", clue: "Contradice todo lo sabido", hint: "Opuesto a la realidad médica" }
+        ],
+        tip: "Si una noticia promete resultados imposibles (alargar vida 20 años bebiendo refresco), es FALSA. La ciencia no funciona así."
+      },
+
+      // NIVEL 3 - MEDIO (Verdaderas)
+      {
+        level: 3,
+        isTrue: true,
+        headline: "Estudio revela que la meditación reduce ansiedad en un 40%",
+        source: "www.psychological-review.org",
+        date: "5 de diciembre de 2023",
+        author: "Dr. Jonathan Kerr",
+        country: "Reino Unido",
+        content: "Una investigación de la Universidad de Oxford con 2,000 participantes demuestra que 20 minutos diarios de meditación mindfulness reduce síntomas de ansiedad significativamente.",
+        image: "🧘",
+        category: "salud",
+        correctAnswer: true,
+        explanation: "VERDADERA: Fuente académica peer-reviewed, muestra de 2,000 participantes, institución reconocida, autor verificable.",
+        signals: [
+          { type: "url", clue: "www.psychological-review.org", hint: "Revista científica de psicología" },
+          { type: "date", clue: "5 de diciembre de 2023", hint: "Fecha verificable" },
+          { type: "author", clue: "Dr. Jonathan Kerr", hint: "Investigador con título" },
+          { type: "language", clue: "Lenguaje académico", hint: "Datos específicos" },
+          { type: "sources", clue: "Universidad de Oxford", hint: "Institución de élite" },
+          { type: "image", clue: "Imagen de meditación", hint: "Coherente con el tema" },
+          { type: "evidence", clue: "2,000 participantes, 40%", hint: "Números específicos" }
+        ],
+        tip: "Los estudios psicológicos de universidades de élite suelen ser confiables. Busca el número de participantes para verificar validez."
+      },
+      {
+        level: 3,
+        isTrue: true,
+        headline: "Energía solar supera a combustibles fósiles por primera vez en UE",
+        source: "www.energyeurope.eu",
+        date: "20 de junio de 2023",
+        author: "Agencia Europea de Energía",
+        country: "Europa",
+        content: "En 2023, la energía solar generó más electricidad que el carbón en toda la Unión Europea, marcando un hito histórico en la transición energética.",
+        image: "☀️",
+        category: "cambio climático",
+        correctAnswer: true,
+        explanation: "VERDADERA: Fuente oficial europea, datos públicos verificables, evento bien documentado en medios internacionales.",
+        signals: [
+          { type: "url", clue: "www.energyeurope.eu", hint: "Sitio oficial de la UE" },
+          { type: "date", clue: "20 de junio de 2023", hint: "Evento real documentado" },
+          { type: "author", clue: "Agencia Europea de Energía", hint: "Organismo oficial" },
+          { type: "language", clue: "Datos concretos", hint: "Información cuantificada" },
+          { type: "sources", clue: "UE oficial", hint: "Fuente gubernamental" },
+          { type: "image", clue: "Paneles solares reales", hint: "Evidencia visual" },
+          { type: "evidence", clue: "Superó combustibles fósiles", hint: "Dato verificable" }
+        ],
+        tip: "Las agencias oficiales de gobiernos son generalmente confiables. Verifica en sus sitios web oficiales."
+      },
+      {
+        level: 3,
+        isTrue: false,
+        headline: "Sorpresa: La NASA descubrió vida inteligente en Marte",
+        source: "www.extraterrestre-ahora.com",
+        date: "27 de julio de 2024",
+        author: "Reportero Espacial",
+        country: "Desconocido",
+        content: "¡EXCLUSIVA MUNDIAL! La NASA encontró ciudades extraterrestres en Marte pero el gobierno las oculta. Hemos obtenido fotos clasificadas.",
+        image: "👽",
+        category: "tecnología",
+        correctAnswer: false,
+        explanation: "FALSA: La NASA nunca anunció esto. Las imágenes de Marte son públicas. 'Fotos clasificadas' = mentira. Fuente no confiable.",
+        signals: [
+          { type: "url", clue: "www.extraterrestre-ahora.com", hint: "Blog de conspiraciones" },
+          { type: "date", clue: "27 de julio de 2024", hint: "Fecha reciente pero nunca anunciado" },
+          { type: "author", clue: "Reportero Espacial", hint: "Autor genérico no verificable" },
+          { type: "language", clue: "¡EXCLUSIVA MUNDIAL!", hint: "Lenguaje sensacionalista" },
+          { type: "sources", clue: "Fotos clasificadas", hint: "No hay evidencia real" },
+          { type: "image", clue: "Imagen editada o falsa", hint: "Fotomanipulación evidente" },
+          { type: "evidence", clue: "Contradicción con NASA oficial", hint: "No existe este anuncio" }
+        ],
+        tip: "La NASA publica todos sus descubrimientos importantes en sus canales oficiales. Si no está ahí, es falso."
+      },
+      {
+        level: 3,
+        isTrue: false,
+        headline: "¡Alerta! Aplicación TikTok instala malware que roba datos",
+        source: "www.seguridad-tech-viral.blogspot.com",
+        date: "hace 3 horas",
+        author: "Anónimo",
+        country: "Desconocido",
+        content: "Un hacker descubrió que TikTok descarga malware que roba tus fotos, mensajes y ubicación. ELIMINA LA APP AHORA O SERÁS HACKEADO.",
+        image: "🔐",
+        category: "redes sociales",
+        correctAnswer: false,
+        explanation: "FALSA: Sin pruebas técnicas, lenguaje de pánico, autor anónimo, pide acción urgente sin base. Blog de noticias virales.",
+        signals: [
+          { type: "url", clue: "www.seguridad-tech-viral.blogspot.com", hint: "Blog de clickbait" },
+          { type: "date", clue: "hace 3 horas", hint: "Fecha vaga para crear urgencia" },
+          { type: "author", clue: "Anónimo", hint: "Sin identificación" },
+          { type: "language", clue: "ELIMINA AHORA en mayús", hint: "Pánico artificial" },
+          { type: "sources", clue: "Sin detalles técnicos", hint: "Solo afirmaciones" },
+          { type: "image", clue: "Imagen genérica de candado", hint: "Sin evidencia" },
+          { type: "evidence", clue: "Antivirus no detectó nada", hint: "No existe tal malware" }
+        ],
+        tip: "Las alertas de malware que piden eliminar apps suelen ser falsas. Verifica siempre en expertos en seguridad confiables."
+      },
+
+      // NIVEL 4 - DIFÍCIL (Verdaderas)
+      {
+        level: 4,
+        isTrue: true,
+        headline: "Empresa de biotech desarrolla insulina artificial sin efectos secundarios",
+        source: "www.nature-biotechnology.com",
+        date: "10 de octubre de 2023",
+        author: "Dr. Philip Rodriguez",
+        country: "Estados Unidos",
+        content: "Un equipo de investigadores presenta un nuevo fármaco basado en nanomoléculas que simula la función de la insulina sin causar hipoglucemias.",
+        image: "💊",
+        category: "salud",
+        correctAnswer: true,
+        explanation: "VERDADERA: Fuente científica peer-reviewed de alto nivel, autor verificable con historial de publicaciones, tecnología plausible.",
+        signals: [
+          { type: "url", clue: "www.nature-biotechnology.com", hint: "Revista Nature (máxima autoridad)" },
+          { type: "date", clue: "10 de octubre de 2023", hint: "Fecha verificable" },
+          { type: "author", clue: "Dr. Philip Rodriguez", hint: "Investigador con credenciales" },
+          { type: "language", clue: "Lenguaje técnico específico", hint: "Menciona nanomoléculas" },
+          { type: "sources", clue: "Nature (peer-reviewed)", hint: "Revista de máximo nivel" },
+          { type: "image", clue: "Imagen de laboratorio", hint: "Profesional y creíble" },
+          { type: "evidence", clue: "Beneficio específico: sin hipoglucemias", hint: "Mejora medible" }
+        ],
+        tip: "Nature es la revista científica más prestigiosa del mundo. Si está publicado allí, fue revisado por expertos."
+      },
+      {
+        level: 4,
+        isTrue: true,
+        headline: "Gobiernos acuerdan reducir emisiones de CO2 en 50% para 2030",
+        source: "www.unfccc.org",
+        date: "12 de diciembre de 2023",
+        author: "Conferencia de Cambio Climático de la ONU",
+        country: "Internacional",
+        content: "En la COP28, 195 países se comprometieron a reducir emisiones de gases de efecto invernadero en un 50% para el año 2030.",
+        image: "🌱",
+        category: "cambio climático",
+        correctAnswer: true,
+        explanation: "VERDADERA: Fuente de la ONU oficial, evento verificable (COP28), información de dominio público.",
+        signals: [
+          { type: "url", clue: "www.unfccc.org", hint: "Sitio oficial de la ONU Climate" },
+          { type: "date", clue: "12 de diciembre de 2023", hint: "Fecha de la COP28 real" },
+          { type: "author", clue: "ONU", hint: "Organismo internacional" },
+          { type: "language", clue: "Datos concretos", hint: "50%, 2030, 195 países" },
+          { type: "sources", clue: "195 países", hint: "Consenso global documentado" },
+          { type: "image", clue: "Imagen de sostenibilidad", hint: "Coherente" },
+          { type: "evidence", clue: "Acuerdos internacionales formales", hint: "Verificable en actas" }
+        ],
+        tip: "Los tratados internacionales de la ONU son públicos y verificables en sus sitios oficiales."
+      },
+      {
+        level: 4,
+        isTrue: false,
+        headline: "Nuevo estudio: El café previene 15 tipos de cáncer",
+        source: "www.wellness-secrets.net",
+        date: "hace 1 semana",
+        author: "Dr. Bienestar",
+        country: "Desconocido",
+        content: "Investigadores descubrieron que beber 5 tazas de café diario previene cáncer. Empresas farmacéuticas quieren silenciar esto porque bajan sus ganancias.",
+        image: "☕",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "FALSA: Afirmación exagerada de 15 tipos de cáncer, fuente no académica, teoría de conspiración, no hay estudio real.",
+        signals: [
+          { type: "url", clue: "www.wellness-secrets.net", hint: "Sitio de 'secretos' no confiable" },
+          { type: "date", clue: "hace 1 semana", hint: "Fecha vaga" },
+          { type: "author", clue: "Dr. Bienestar", hint: "Nombre genérico sospechoso" },
+          { type: "language", clue: "15 tipos de cáncer", hint: "Exageración no verificable" },
+          { type: "sources", clue: "Empresas farmacéuticas lo silencian", hint: "Conspiración sin prueba" },
+          { type: "image", clue: "Imagen de café genérica", hint: "Sin evidencia" },
+          { type: "evidence", clue: "Estudios reales son moderados", hint: "No existen estos resultados" }
+        ],
+        tip: "Los verdaderos descubrimientos sobre cáncer se publican en revistas médicas, no en blogs de 'secretos'."
+      },
+      {
+        level: 4,
+        isTrue: false,
+        headline: "Microsoft patenta IA que lee la mente",
+        source: "www.tech-future-now.blogspot.com",
+        date: "2 de agosto de 2024",
+        author: "Futurista Tech",
+        country: "Desconocido",
+        content: "¿Microsoft desarrolló una IA que LEE LOS PENSAMIENTOS? Un documento filtrado revela esto. El futuro distópico ha llegado.",
+        image: "🧠",
+        category: "inteligencia artificial",
+        correctAnswer: false,
+        explanation: "FALSA: Tecnología imposible con conocimiento actual, fuente blog no verificable, 'documento filtrado' = mentira.",
+        signals: [
+          { type: "url", clue: "www.tech-future-now.blogspot.com", hint: "Blog de especulación" },
+          { type: "date", clue: "2 de agosto de 2024", hint: "Fecha reciente sospechosa" },
+          { type: "author", clue: "Futurista Tech", hint: "Autor no verificable" },
+          { type: "language", clue: "¿LEE LOS PENSAMIENTOS?", hint: "Sensacionalismo" },
+          { type: "sources", clue: "Documento filtrado", hint: "No hay prueba" },
+          { type: "image", clue: "Imagen artística futurista", hint: "No es real" },
+          { type: "evidence", clue: "Contradeciría leyes de física", hint: "Imposible científicamente" }
+        ],
+        tip: "Si parece ciencia ficción, probablemente sea falso. Verifica los patents reales en sitios oficiales como Google Patents."
+      },
+
+      // NIVEL 5 - EXPERTO (Verdaderas)
+      {
+        level: 5,
+        isTrue: true,
+        headline: "Estudio longitudinal vincula déficit de sueño con neurodegeneración",
+        source: "www.neuroscience-journal.org",
+        date: "15 de septiembre de 2023",
+        author: "Dr. James Mitchell",
+        country: "Suiza",
+        content: "Una investigación de 15 años con 5,000 participantes revela que dormir menos de 6 horas diarias aumenta proteína tau asociada con Alzheimer.",
+        image: "😴",
+        category: "salud",
+        correctAnswer: true,
+        explanation: "VERDADERA: Estudio longitudinal de 15 años (muy rigor), muestra de 5,000, publicado en revista peer-reviewed, mecanismo biológico específico.",
+        signals: [
+          { type: "url", clue: "www.neuroscience-journal.org", hint: "Revista de neurociencia verificada" },
+          { type: "date", clue: "15 de septiembre de 2023", hint: "Fecha verificable" },
+          { type: "author", clue: "Dr. James Mitchell", hint: "Neurocientífico verificable" },
+          { type: "language", clue: "Proteína tau, Alzheimer", hint: "Lenguaje técnico preciso" },
+          { type: "sources", clue: "15 años, 5,000 participantes", hint: "Metodología rigurosa" },
+          { type: "image", clue: "Imagen de investigación", hint: "Profesional" },
+          { type: "evidence", clue: "Mecanismo: proteína tau", hint: "Explicación biológica concreta" }
+        ],
+        tip: "Los estudios longitudinales de largo plazo son muy confiables pero menos comunes. Son especialmente valiosos."
+      },
+      {
+        level: 5,
+        isTrue: true,
+        headline: "Polímero biodegradable reduce plásticos oceánicos en 60%",
+        source: "www.polymer-research.org",
+        date: "3 de mayo de 2024",
+        author: "Dra. Sarah Chen",
+        country: "Singapur",
+        content: "Investigadores desarrollan un polímero que se degrada en agua salada en 6 meses, mostrando potencial para reducir contaminación marina global.",
+        image: "♻️",
+        category: "tecnología",
+        correctAnswer: true,
+        explanation: "VERDADERA: Investigación verificable, institución de Singapur líder en materiales, resultado específico y medible.",
+        signals: [
+          { type: "url", clue: "www.polymer-research.org", hint: "Revista de polímeros científica" },
+          { type: "date", clue: "3 de mayo de 2024", hint: "Fecha reciente pero verificable" },
+          { type: "author", clue: "Dra. Sarah Chen", hint: "Investigadora con credenciales" },
+          { type: "language", clue: "Degradación en 6 meses", hint: "Dato específico" },
+          { type: "sources", clue: "Singapur (hub de investigación)", hint: "Centro tecnológico importante" },
+          { type: "image", clue: "Imagen de polímero", hint: "Evidencia visual" },
+          { type: "evidence", clue: "60% reducción", hint: "Impacto cuantificable" }
+        ],
+        tip: "Los descubrimientos sobre materiales sostenibles de institutos de Asia-Pac son especialmente importantes en sostenibilidad."
+      },
+      {
+        level: 5,
+        isTrue: false,
+        headline: "Evidencia desclasificada: Humanos nunca fueron a la luna",
+        source: "www.verdades-espaciales-secretas.blogspot.com",
+        date: "10 de julio de 2024",
+        author: "Investigador Independiente",
+        country: "Desconocido",
+        content: "Documentos del gobierno revelan que el viaje a la luna fue un SIMULACRO de Hollywood. Los astronautas nunca salieron de la Tierra.",
+        image: "🚀",
+        category: "tecnología",
+        correctAnswer: false,
+        explanation: "FALSA: Teoría de conspiración refutada, fuente blog no verificable, 'documentos desclasificados' = mentira.",
+        signals: [
+          { type: "url", clue: "www.verdades-espaciales-secretas.blogspot.com", hint: "Blog de conspiración" },
+          { type: "date", clue: "10 de julio de 2024", hint: "Fecha reciente para crear urgencia" },
+          { type: "author", clue: "Investigador Independiente", hint: "Sin credenciales" },
+          { type: "language", clue: "SIMULACRO de Hollywood", hint: "Lenguaje conspiratorio" },
+          { type: "sources", clue: "Documentos desclasificados", hint: "No existen tales documentos" },
+          { type: "image", clue: "Imagen de conspiración", hint: "No es evidencia" },
+          { type: "evidence", clue: "Refutado por 195 países", hint: "Evidencia física irrefutable" }
+        ],
+        tip: "El viaje a la luna está confirmado por múltiples países y evidencia física. Las conspiraciones ignoran esto."
+      },
+      {
+        level: 5,
+        isTrue: false,
+        headline: "ChatGPT 7.0 alcanza inteligencia general artificial (AGI)",
+        source: "www.ai-revolution-now.net",
+        date: "hace 2 días",
+        author: "Anónimo AI",
+        country: "Desconocido",
+        content: "OpenAI OCULTÓ que ChatGPT 7.0 es una AGI completa. Expertos clasificados revelan que IA ya es consciente y supera inteligencia humana.",
+        image: "🤖",
+        category: "inteligencia artificial",
+        correctAnswer: false,
+        explanation: "FALSA: OpenAI no anunció ChatGPT 7.0, AGI no existe aún, 'expertos clasificados' = mentira, sensacionalismo puro.",
+        signals: [
+          { type: "url", clue: "www.ai-revolution-now.net", hint: "Sitio especulativo no oficial" },
+          { type: "date", clue: "hace 2 días", hint: "Fecha vaga reciente" },
+          { type: "author", clue: "Anónimo AI", hint: "Autor anónimo sospechoso" },
+          { type: "language", clue: "OCULTÓ, CONSCIENTE en mayús", hint: "Sensacionalismo" },
+          { type: "sources", clue: "Expertos clasificados", hint: "No hay verificación" },
+          { type: "image", clue: "Imagen IA genérica", hint: "Sin evidencia" },
+          { type: "evidence", clue: "OpenAI no anunció esto", hint: "Contradicción con realidad" }
+        ],
+        tip: "Los anuncios reales de OpenAI se hacen en sus canales oficiales. Si no está ahí, es falso."
+      },
+
+      // NIVEL 2 - INTERMEDIO (Tus noticias 6-10)
+      {
+        level: 2,
+        isTrue: false,
+        headline: "Nuevo estudio confirma que los pacientes con diabetes ya no necesitan controlar su glucosa si toman semaglutida",
+        source: "Medical Today Global",
+        date: "12 de enero de 2026",
+        author: "Laura Mitchell",
+        country: "Internacional",
+        content: "Una noticia compartida ampliamente en redes sociales asegura que un estudio internacional concluyó que las personas con diabetes tipo 2 ya no necesitan controlar regularmente sus niveles de glucosa si reciben tratamiento con semaglutida. El artículo explica que este medicamento 'mantiene automáticamente el azúcar en niveles normales', por lo que los controles diarios serían innecesarios. La publicación también afirma que el riesgo de complicaciones desaparece casi por completo y recomienda dejar de usar glucómetros para ahorrar dinero. Aunque menciona investigaciones realizadas en hospitales europeos, no proporciona enlaces a los estudios ni explica cómo se obtuvieron los resultados.",
+        image: "💊",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "La noticia MEZCLA información verdadera con una conclusión falsa. La semaglutida es un medicamento aprobado y ha demostrado ser eficaz, pero los pacientes deben seguir las indicaciones médicas y muchas personas continúan necesitando monitorear su glucosa.",
+        signals: [
+          { type: "url", clue: "El sitio parece profesional, pero no pertenece a una universidad ni institución sanitaria.", hint: "Verificar credenciales de la fuente" },
+          { type: "author", clue: "La autora existe como periodista científica, pero no es investigadora médica.", hint: "Distinguir entre periodista e investigador" },
+          { type: "date", clue: "La noticia es reciente.", hint: "La fecha sola no valida la noticia" },
+          { type: "sources", clue: "Existen estudios reales sobre semaglutida. Sin embargo, ninguno afirma que ya no sea necesario controlar la glucosa.", hint: "Comparar con fuentes confiables" },
+          { type: "image", clue: "Imagen de pluma inyectable con glucómetro apagado.", hint: "Imagen manipulada para apoyo visual" },
+          { type: "language", clue: "Frases como 'Ya no necesitas medir tu azúcar' y 'Olvídate del glucómetro'.", hint: "Detectar conclusiones exageradas" },
+          { type: "evidence", clue: "No aparece nombre del estudio, no hay DOI, no hay revista científica.", hint: "Exigir evidencia verificable" }
+        ],
+        tip: "Una noticia puede contener datos verdaderos y aun así llegar a una conclusión falsa. Verifica siempre la conclusión final, no solo los hechos parciales."
+      },
+      {
+        level: 2,
+        isTrue: false,
+        headline: "Investigadores descubren que dormir ocho horas elimina el riesgo de desarrollar diabetes",
+        source: "Health Research News",
+        date: "4 de abril de 2025",
+        author: "Redacción",
+        country: "Desconocido",
+        content: "Una publicación afirma que un grupo de investigadores encontró que dormir ocho horas diarias elimina completamente el riesgo de desarrollar diabetes tipo 2. Según la noticia, quienes duermen ese tiempo nunca desarrollan la enfermedad, independientemente de su alimentación, genética o actividad física. El artículo menciona que 'el sueño reprograma el metabolismo' y asegura que ya no es necesario preocuparse por otros factores de riesgo. No presenta enlaces al estudio ni identifica la revista científica donde fue publicado.",
+        image: "😴",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "La noticia es FALSA. Dormir bien ayuda al metabolismo y puede contribuir a un mejor control de la glucosa. Pero la diabetes depende de muchos factores: genética, alimentación, actividad física, peso corporal y otros aspectos de la salud. Ningún estudio promete eliminar completamente el riesgo.",
+        signals: [
+          { type: "url", clue: "Sitio que no pertenece a institución académica verificable.", hint: "Revisar datos de registro del dominio" },
+          { type: "author", clue: "Redacción sin autor específico identificado.", hint: "Buscar autor individual" },
+          { type: "date", clue: "Fecha reciente sin documentación de estudio publicado.", hint: "Verificar en Google Scholar" },
+          { type: "image", clue: "Imagen genérica de sueño sin contexto de investigación.", hint: "Imágenes stock no son evidencia" },
+          { type: "sources", clue: "Existen estudios que relacionan sueño con salud metabólica, pero ninguno afirma 'eliminar completamente el riesgo'.", hint: "Buscar matices en conclusiones" },
+          { type: "language", clue: "Palabras absolutas: 'nunca', 'siempre', 'elimina completamente'.", hint: "Desconfiar de afirmaciones absolutas" },
+          { type: "evidence", clue: "No presenta datos, números de participantes, ni metodología.", hint: "Exigir cifras específicas" }
+        ],
+        tip: "Desconfía cuando una noticia promete resultados absolutos. La salud es compleja y depende de múltiples factores, no de una sola variable."
+      },
+      {
+        level: 2,
+        isTrue: true,
+        headline: "La inteligencia artificial comienza a ayudar a detectar complicaciones de la diabetes mediante fotografías del ojo",
+        source: "Science Daily",
+        date: "2025",
+        author: "Redacción",
+        country: "Internacional",
+        content: "Diversos hospitales y centros de investigación están utilizando sistemas de inteligencia artificial para analizar fotografías de la retina y detectar signos tempranos de retinopatía diabética. Estos sistemas no reemplazan al médico, pero ayudan a identificar pacientes que necesitan una evaluación más detallada. Las autoridades sanitarias destacan que estas herramientas pueden facilitar el diagnóstico temprano, especialmente en zonas con poco acceso a especialistas.",
+        image: "🤖",
+        category: "tecnología",
+        correctAnswer: true,
+        explanation: "La noticia es VERDADERA. Actualmente existen sistemas de inteligencia artificial aprobados en algunos países para apoyar el diagnóstico de retinopatía diabética, siempre como complemento del criterio médico.",
+        signals: [
+          { type: "url", clue: "Science Daily es una fuente confiable de divulgación científica.", hint: "Verificar reputación de la publicación" },
+          { type: "author", clue: "Redacción de fuente establecida.", hint: "Publicaciones serias tienen equipo editorial" },
+          { type: "date", clue: "Fecha verificable en publicaciones científicas.", hint: "Tecnología real en desarrollo" },
+          { type: "image", clue: "Fotografía profesional de equipo médico.", hint: "Imágenes coherentes con tema" },
+          { type: "sources", clue: "Se mencionan hospitales y centros de investigación verificables.", hint: "Buscar hospitales específicos citados" },
+          { type: "language", clue: "Lenguaje prudente: 'ayuda a', 'no reemplaza al médico', 'complemento'.", hint: "Comunicados científicos usan lenguaje matizado" },
+          { type: "evidence", clue: "Hay publicaciones científicas y ensayos clínicos reales sobre esta tecnología.", hint: "Buscar en PubMed" }
+        ],
+        tip: "Las noticias confiables suelen explicar tanto los beneficios como las limitaciones de una tecnología. Desconfía de noticias que prometen milagros sin mencionar limitaciones."
+      },
+      {
+        level: 2,
+        isTrue: false,
+        headline: "Expertos aseguran que el azúcar morena no afecta a las personas con diabetes",
+        source: "Nutrición Moderna",
+        date: "2025",
+        author: "María Wellness",
+        country: "Desconocido",
+        content: "Un artículo viral sostiene que el azúcar morena es completamente segura para las personas con diabetes porque contiene minerales naturales. Según la publicación, estos minerales compensan el aumento de glucosa y permiten consumir azúcar sin restricciones. El texto cita a un supuesto nutricionista, pero no proporciona estudios científicos ni referencias verificables.",
+        image: "🍯",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "La noticia es FALSA. Utiliza un dato verdadero (la presencia de algunos minerales) para llegar a una conclusión incorrecta. Desde el punto de vista del control de la glucosa, el azúcar morena y la blanca tienen efectos muy similares.",
+        signals: [
+          { type: "url", clue: "Sitio de nutrición viral sin credenciales académicas.", hint: "Verificar si tiene comité editorial" },
+          { type: "author", clue: "Pseudónimo sospechoso 'María Wellness' sin credenciales verificables.", hint: "Buscar perfiles profesionales reales" },
+          { type: "date", clue: "Fecha vaga sin precisión.", hint: "Fuentes serias datan exactamente" },
+          { type: "image", clue: "Imagen de azúcar morena genérica sin contexto nutricional.", hint: "Imagen stock sin valor probatorio" },
+          { type: "sources", clue: "El azúcar morena sí contiene minerales, pero en cantidad mínima que no afecta glucosa.", hint: "Verificar cantidad de minerales" },
+          { type: "language", clue: "Afirmación absoluta: 'completamente segura', 'sin restricciones'.", hint: "Detectar lenguaje categórico" },
+          { type: "evidence", clue: "No hay estudios que demuestren que minerales del azúcar morena compensen el aumento de glucosa.", hint: "Buscar en Google Scholar" }
+        ],
+        tip: "Un dato verdadero no convierte automáticamente toda la noticia en verdadera. Verifica cada afirmación, no solo las que suenan importantes."
+      },
+      {
+        level: 2,
+        isTrue: false,
+        headline: "Una fotografía demuestra que un hospital ocultó la cura de la diabetes",
+        source: "Noticias Virales",
+        date: "2026",
+        author: "Redacción",
+        country: "Desconocido",
+        content: "En redes sociales comenzó a circular una fotografía donde supuestamente aparece un médico mostrando una pizarra con la frase: 'La cura existe, pero no podemos revelarla'. Miles de usuarios compartieron la imagen asegurando que demostraba una conspiración internacional. Sin embargo, la fotografía fue recortada y sacada de contexto. La imagen original pertenecía a una conferencia universitaria sobre investigaciones experimentales y la frase completa hacía referencia a que 'la cura definitiva aún no puede anunciarse porque los estudios continúan'.",
+        image: "📸",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "La noticia es FALSA porque utiliza una imagen real fuera de contexto para cambiar completamente su significado. Este tipo de manipulación es una de las formas más comunes de desinformación en redes sociales.",
+        signals: [
+          { type: "url", clue: "Sitio de 'noticias virales' sin verificación editorial.", hint: "Revisar si tienen sección 'Sobre nosotros'" },
+          { type: "author", clue: "Redacción sin autor específico.", hint: "Fuentes serias identifican autores" },
+          { type: "date", clue: "Fecha vaga '2026'.", hint: "Precisión de fechas es importante" },
+          { type: "image", clue: "Búsqueda inversa encuentra la versión completa de la fotografía.", hint: "Usar Google Images reverse search" },
+          { type: "sources", clue: "La imagen fue editada y existe versión completa donde contexto es diferente.", hint: "Buscar versión full resolution" },
+          { type: "language", clue: "Palabras que sugieren conspiración: 'ocultó', 'demuestra conspiración'.", hint: "Detectar lenguaje sensacionalista" },
+          { type: "evidence", clue: "No existen comunicados oficiales que respalden la afirmación de conspiración.", hint: "Verificar en sitios oficiales" }
+        ],
+        tip: "No basta con que una imagen sea auténtica. También es importante verificar el contexto en el que fue tomada. Busca siempre la imagen completa."
+      },
+
+      // NIVEL 3 - DIFÍCIL (Tus noticias 11-13)
+      {
+        level: 3,
+        isTrue: false,
+        headline: "Investigadores anuncian el primer parche inteligente que cura definitivamente la diabetes tipo 2 en solo una semana",
+        source: "Global Medical Innovation Journal",
+        date: "8 de febrero de 2026",
+        author: "Dra. Emily Robertson",
+        country: "Internacional",
+        content: "Una noticia viral afirma que un grupo internacional de investigadores desarrolló un parche inteligente capaz de curar completamente la diabetes tipo 2 en solo siete días. Según el artículo, el parche libera millones de nanopartículas que 'reprograman' el páncreas para volver a producir insulina de manera natural. La publicación asegura que los resultados fueron tan exitosos que el tratamiento comenzará a distribuirse gratuitamente en hospitales de Europa durante los próximos meses. También afirma que la FDA y la Agencia Europea de Medicamentos aprobaron el dispositivo mediante un 'procedimiento acelerado' debido a su extraordinaria eficacia.",
+        image: "🩹",
+        category: "tecnología",
+        correctAnswer: false,
+        explanation: "La noticia es FALSA. Mezcla conceptos científicos reales (nanotecnología y dispositivos inteligentes) con afirmaciones falsas para parecer creíble. Ningún parche ha demostrado curar la diabetes tipo 2. La ausencia de publicaciones científicas verificables y comunicados oficiales demuestra que se trata de desinformación.",
+        signals: [
+          { type: "url", clue: "El dominio parece científico pero: no pertenece a universidad, no tiene ISSN, no identifica comité editorial, no muestra dirección institucional.", hint: "Verificar ISSN y datos del sitio" },
+          { type: "author", clue: "Dra. Emily Robertson aparece en redes profesionales, pero no existen publicaciones científicas del supuesto descubrimiento.", hint: "Buscar en Google Scholar y ResearchGate" },
+          { type: "date", clue: "Fecha reciente pero sin documentación oficial.", hint: "Descubrimientos reales tienen historial" },
+          { type: "image", clue: "Búsqueda inversa revela que la fotografía pertenece a una empresa de dispositivos médicos publicada dos años antes. Fue reutilizada sin relación.", hint: "Usar reverse image search" },
+          { type: "sources", clue: "Ningún medio reconocido informa sobre este descubrimiento. No existen comunicados de FDA, EMA u OMS.", hint: "Verificar en Nature, The Lancet, Science" },
+          { type: "language", clue: "Frases como 'La cura definitiva', 'El tratamiento que cambiará la historia', 'Las farmacéuticas intentan retrasar su llegada'.", hint: "Lenguaje sensacionalista es red flag" },
+          { type: "evidence", clue: "Menciona ensayo clínico pero: no indica nombre del estudio, no existe DOI, no cita revista científica, no identifica hospitales participantes, no presenta metodología.", hint: "Exigir detalles específicos" }
+        ],
+        tip: "Los verdaderos descubrimientos revolucionarios generan comunicados de la FDA, EMA y OMS. Si no ves estos comunicados oficiales, es muy probable que sea falso."
+      },
+      {
+        level: 3,
+        isTrue: false,
+        headline: "Médico de la OMS admite en conferencia que la diabetes tiene cura, pero los gobiernos la mantienen en secreto",
+        source: "Noticias Salud Mundial",
+        date: "22 de octubre de 2025",
+        author: "Redacción Internacional",
+        country: "Internacional",
+        content: "Un video de apenas 25 segundos comenzó a viralizarse en diferentes plataformas. En él, un supuesto especialista de la Organización Mundial de la Salud afirma: 'La cura existe... pero todavía no podemos anunciarla.' Miles de usuarios interpretaron la frase como una confesión de que los gobiernos estarían ocultando deliberadamente un tratamiento definitivo para la diabetes. La noticia sostiene que el video fue eliminado pocas horas después de la conferencia y que únicamente algunos usuarios lograron conservar una copia.",
+        image: "🎥",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "La noticia es FALSA porque utiliza una técnica muy común de desinformación: sacar una declaración de contexto. El video original existe, pero fue editado para eliminar la parte donde el especialista explicaba que las investigaciones aún estaban en fase experimental.",
+        signals: [
+          { type: "url", clue: "El portal copia el diseño de páginas oficiales, pero no pertenece a la OMS.", hint: "Verificar dominio oficial de OMS (who.int)" },
+          { type: "author", clue: "No identifica al médico que aparece en el video.", hint: "Buscar nombre específico del conferencista" },
+          { type: "date", clue: "Coincide con conferencia internacional real, pero sin detalles específicos.", hint: "Verificar en calendario de eventos OMS" },
+          { type: "image", clue: "Búsqueda inversa encuentra el video completo. La frase original era: 'La cura existe en investigación, pero todavía no podemos anunciar resultados porque los ensayos clínicos continúan.'", hint: "Buscar video completo en YouTube" },
+          { type: "sources", clue: "Ningún medio serio publicó la interpretación presentada por la noticia.", hint: "Verificar en Reuters, AFP, BBC" },
+          { type: "language", clue: "Palabras como 'Escándalo', 'Confesión', 'Ocultado', 'Comparte antes de que censuren este video'.", hint: "Detectar lenguaje conspiratorio" },
+          { type: "evidence", clue: "No presenta video completo, no proporciona enlace oficial, no identifica conferencista, no menciona contexto de conferencia.", hint: "Buscar en canal oficial de conferencia" }
+        ],
+        tip: "Una imagen o un video auténticos también pueden utilizarse para difundir información falsa cuando se presentan fuera de contexto. Siempre busca la versión completa."
+      },
+      {
+        level: 3,
+        isTrue: false,
+        headline: "Estudio científico demuestra que el 95% de los pacientes abandonó la insulina gracias a una nueva dieta",
+        source: "Nutrition Science Review",
+        date: "5 de mayo de 2026",
+        author: "Dr. Michael Evans",
+        country: "Internacional",
+        content: "Una publicación asegura que un estudio internacional realizado con miles de pacientes comprobó que una nueva dieta basada en vegetales permitió que el 95% de las personas dejara completamente la insulina. El artículo muestra varios gráficos con porcentajes elevados y afirma que la investigación fue publicada en una revista científica de nutrición. También indica que los médicos tradicionales 'ignoran estos resultados' porque continúan recomendando tratamientos farmacológicos. Al revisar cuidadosamente el estudio citado, se observa que la investigación solamente incluyó a un pequeño grupo de pacientes con prediabetes durante ocho semanas y nunca concluyó que las personas debieran abandonar sus medicamentos.",
+        image: "📊",
+        category: "salud",
+        correctAnswer: false,
+        explanation: "La noticia es FALSA porque manipula los resultados reales. El estudio sí existe, pero la noticia cambia los porcentajes, interpreta incorrectamente los resultados, omite las limitaciones del ensayo, y generaliza conclusiones que los propios investigadores nunca hicieron.",
+        signals: [
+          { type: "url", clue: "Parece revista científica pero no permite acceder al supuesto estudio completo.", hint: "Revisar acceso a artículos completos" },
+          { type: "author", clue: "Existe investigador con ese nombre, pero no escribió el artículo citado.", hint: "Buscar en Google Scholar" },
+          { type: "date", clue: "Fecha correcta, pero sin historial de estudio previo.", hint: "Verificar publicación original" },
+          { type: "image", clue: "Gráficos con porcentajes, pero pertenecen a congreso de años antes. Son reutilizados sin relación.", hint: "Buscar imagen en reverse search" },
+          { type: "sources", clue: "Los medios científicos describen el estudio de forma muy diferente. Ninguno afirma que 95% abandonó insulina.", hint: "Comparar con Nature, Science Direct" },
+          { type: "language", clue: "Afirmaciones exageradas: 'Los médicos no quieren aceptarlo', 'La solución definitiva', 'No necesitarás medicamentos'.", hint: "Detectar generalizaciones" },
+          { type: "evidence", clue: "El estudio sí existe, pero la noticia: cambia porcentajes, interpreta incorrectamente, omite limitaciones, generaliza conclusiones que investigadores nunca hicieron.", hint: "Leer estudio completo, no solo titular" }
+        ],
+        tip: "Uno de los tipos de desinformación más difíciles de detectar es cuando alguien manipula un estudio real. Siempre lee el estudio completo y compara con la conclusión original de los investigadores."
+      }
+    ];
+
+    // ============ GAME STATE ============
+    let gameState = {
+      currentLevel: 1,
+      currentQuestion: 0,
+      score: 0,
+      lives: 3,
+      correctAnswers: 0,
+      totalQuestions: 10,
+      cluesInvestigated: 0,
+      totalCluesAvailable: 7,
+      questionsAnswered: 0,
+      timeLeft: 30,
+      timerInterval: null,
+      answered: false,
+      newsData: null
+    };
+
+    // ============ FUNCTIONS ============
+    function startGame() {
+      document.getElementById('introScreen').style.display = 'none';
+      document.getElementById('gameScreen').style.display = 'block';
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      gameState.currentQuestion++;
+      gameState.cluesInvestigated = 0;
+      gameState.answered = false;
+      gameState.timeLeft = 30;
+      document.getElementById('feedbackSection').style.display = 'none';
+      document.getElementById('verdictSection').style.display = 'block';
+
+      // Get news for current level
+      const levelNews = newsDatabase.filter(n => n.level === gameState.currentLevel);
+      gameState.newsData = levelNews[Math.floor(Math.random() * levelNews.length)];
+
+      // Update UI
+      updateGameHeader();
+      displayNews();
+      displayClues();
+      startTimer();
+    }
+
+    function updateGameHeader() {
+      document.getElementById('currentLevel').textContent = gameState.currentLevel;
+      document.getElementById('currentQuestion').textContent = gameState.currentQuestion;
+      document.getElementById('scoreDisplay').textContent = gameState.score;
+      
+      // Update lives
+      let livesHTML = '';
+      for (let i = 0; i < gameState.lives; i++) {
+        livesHTML += '❤️ ';
+      }
+      document.getElementById('livesDisplay').innerHTML = livesHTML;
+
+      // Update progress
+      const progress = (gameState.currentQuestion / gameState.totalQuestions) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+      document.getElementById('progressText').textContent = Math.round(progress) + '%';
+    }
+
+    function displayNews() {
+      const news = gameState.newsData;
+      const newsImageEl = document.getElementById('newsImage');
+      
+      // Mostrar imagen real o emoji
+      if (news.image && (news.image.startsWith('http') || news.image.startsWith('/'))) {
+        newsImageEl.innerHTML = `<img src="${news.image}" alt="Noticia" style="width: 100%; height: 100%; object-fit: cover;">`;
+      } else {
+        newsImageEl.textContent = news.image || '📰';
+      }
+      
+      document.getElementById('newsHeadline').textContent = news.headline;
+      document.getElementById('newsSource').textContent = news.source;
+      document.getElementById('newsDate').textContent = news.date;
+      document.getElementById('newsAuthor').textContent = news.author;
+      document.getElementById('newsCountry').textContent = news.country;
+      document.getElementById('newsContent').textContent = news.content;
+    }
+
+    function displayClues() {
+      const cluesGrid = document.getElementById('cluesGrid');
+      cluesGrid.innerHTML = '';
+      
+      gameState.newsData.signals.forEach((signal, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'clue-btn';
+        btn.innerHTML = `<span class="clue-icon">🔍</span><span>${getClueLabel(signal.type)}</span>`;
+        btn.onclick = () => showClue(idx, btn);
+        cluesGrid.appendChild(btn);
+      });
+    }
+
+    function getClueLabel(type) {
+      const labels = {
+        url: 'URL',
+        date: 'Fecha',
+        author: 'Autor',
+        language: 'Lenguaje',
+        sources: 'Fuentes',
+        image: 'Imagen',
+        evidence: 'Evidencia'
+      };
+      return labels[type] || type;
+    }
+
+    function showClue(idx, btn) {
+      const signal = gameState.newsData.signals[idx];
+      if (!btn.classList.contains('checked')) {
+        alert(`🔍 ${getClueLabel(signal.type)}:\n\n${signal.clue}\n\nPista: ${signal.hint}`);
+        btn.classList.add('checked');
+        gameState.cluesInvestigated++;
+        gameState.score += 5;
+        updateGameHeader();
+      }
+    }
+
+    function startTimer() {
+      if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+      gameState.timerInterval = setInterval(() => {
+        gameState.timeLeft--;
+        const timerEl = document.getElementById('timer');
+        timerEl.textContent = gameState.timeLeft;
+        if (gameState.timeLeft <= 10) {
+          timerEl.classList.add('warning');
+        }
+        if (gameState.timeLeft <= 0) {
+          clearInterval(gameState.timerInterval);
+          if (!gameState.answered) {
+            giveAnswer(null);
+          }
+        }
+      }, 1000);
+    }
+
+    function giveAnswer(userAnswer) {
+      clearInterval(gameState.timerInterval);
+      gameState.answered = true;
+      gameState.questionsAnswered++;
+
+      const isCorrect = userAnswer === gameState.newsData.correctAnswer;
+      const news = gameState.newsData;
+
+      if (isCorrect) {
+        gameState.correctAnswers++;
+        gameState.score += 10;
+        if (gameState.cluesInvestigated === 7) {
+          gameState.score += 20;
+        }
+      } else {
+        gameState.lives--;
+        gameState.score = Math.max(0, gameState.score - 5);
+      }
+
+      updateGameHeader();
+
+      // Show feedback
+      const feedbackBox = document.getElementById('feedbackBox');
+      let html = '';
+
+      if (isCorrect) {
+        html += `<div class="feedback-title correct">✅ ¡Correcto!</div>`;
+      } else {
+        html += `<div class="feedback-title incorrect">❌ Incorrecto</div>`;
+      }
+
+      html += `<div class="feedback-content"><strong>¿Por qué era ${news.isTrue ? 'verdadera' : 'falsa'}?</strong><br>${news.explanation}</div>`;
+
+      html += `<div style="margin-top: 15px;"><strong>🔍 Señales que debiste observar:</strong><br>`;
+      news.signals.forEach(s => {
+        html += `<div class="feedback-item">${getClueLabel(s.type)}: ${s.hint}</div>`;
+      });
+      html += `</div>`;
+
+      html += `<div class="tip-box"><strong>💡 Consejo:</strong> ${news.tip}</div>`;
+      html += `<a href="#" class="verifier-link">→ Verificar en Snopes.com</a>`;
+
+      feedbackBox.innerHTML = html;
+      document.getElementById('feedbackSection').style.display = 'block';
+      document.getElementById('verdictSection').style.display = 'none';
+
+      if (gameState.lives <= 0) {
+        setTimeout(() => {
+          alert('Game Over - Se te acabaron las vidas');
+          endGame();
+        }, 2000);
+      }
+    }
+
+    function nextQuestion() {
+      if (gameState.currentQuestion >= gameState.totalQuestions) {
+        endGame();
+      } else if (gameState.currentLevel < 5 && gameState.currentQuestion % 2 === 0) {
+        gameState.currentLevel++;
+        loadQuestion();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function endGame() {
+      document.getElementById('gameScreen').style.display = 'none';
+      document.getElementById('resultsScreen').style.display = 'block';
+
+      const percentage = Math.round((gameState.correctAnswers / gameState.totalQuestions) * 100);
+      const level = getLevelName(percentage);
+      const incorrectAnswers = gameState.totalQuestions - gameState.correctAnswers;
+      const avgCluesPerQuestion = (gameState.cluesInvestigated / gameState.totalQuestions).toFixed(1);
+      const totalTimeSpent = 300 - gameState.timeLeft; // Aproximado
+
+      // Desglose de puntos
+      const pointsFromCorrect = gameState.correctAnswers * 10;
+      const pointsFromClues = gameState.cluesInvestigated * 5;
+      const pointsFromIncorrect = incorrectAnswers * 5;
+      const bonusPoints = (gameState.cluesInvestigated === gameState.totalQuestions * 7) ? 20 : 0;
+
+      // Mostrar resultados principales
+      document.getElementById('resultsScore').textContent = gameState.score;
+      document.getElementById('resultsPercentage').textContent = percentage + '%';
+      document.getElementById('resultLevel').textContent = level;
+      document.getElementById('resultMedal').textContent = getMedalEmoji(percentage);
+
+      // Desglose de puntuación
+      document.getElementById('scorCorrectAnswers').textContent = gameState.correctAnswers;
+      document.getElementById('pointsCorrect').textContent = pointsFromCorrect;
+      
+      document.getElementById('scorCluesInvestigated').textContent = gameState.cluesInvestigated;
+      document.getElementById('pointsClues').textContent = pointsFromClues;
+      
+      document.getElementById('scorIncorrectAnswers').textContent = incorrectAnswers;
+      document.getElementById('pointsIncorrect').textContent = incorrectAnswers > 0 ? -pointsFromIncorrect : 0;
+      
+      document.getElementById('pointsBonus').textContent = bonusPoints;
+
+      // Estadísticas completas
+      document.getElementById('resultCorrect').textContent = gameState.correctAnswers;
+      document.getElementById('resultAccuracy').textContent = percentage + '%';
+      document.getElementById('resultCluesUsed').textContent = gameState.cluesInvestigated;
+      document.getElementById('resultAvgClues').textContent = avgCluesPerQuestion;
+      document.getElementById('resultTimeSpent').textContent = totalTimeSpent;
+
+      // Logros desbloqueados
+      const achievements = getAchievements(percentage, gameState.cluesInvestigated);
+      const achievementsList = document.getElementById('achievementsList');
+      achievementsList.innerHTML = achievements.map(a => `<li>${a}</li>`).join('');
+
+      // Tip educativo
+      document.getElementById('resultTip').textContent = getEducationalTip(percentage);
+
+      // Espacio para insignia personalizada (puedo agregar emoji o placeholder)
+      const badgeSpace = document.getElementById('customBadgeSpace');
+      badgeSpace.innerHTML = `<span style="font-size: 4rem;">${getMedalEmoji(percentage)}</span>`;
+
+      // Save to localStorage
+      const best = parseInt(localStorage.getItem('bestScore') || '0');
+      if (gameState.score > best) {
+        localStorage.setItem('bestScore', gameState.score);
+      }
+
+      playConfetti();
+    }
+
+    function getMedalEmoji(percentage) {
+      if (percentage >= 90) return '🏆';
+      if (percentage >= 75) return '🥇';
+      if (percentage >= 60) return '🥈';
+      if (percentage >= 40) return '🥉';
+      return '📚';
+    }
+
+    function getAchievements(percentage, cluesUsed) {
+      const achievements = ['✅ Misión completada'];
+      
+      if (percentage === 100) achievements.push('🎯 Perfección total');
+      if (percentage >= 90) achievements.push('🔥 Experto verificador');
+      if (cluesUsed >= 50) achievements.push('🔍 Investigador minucioso');
+      if (cluesUsed === 70) achievements.push('🏅 Investigación completa');
+      if (percentage >= 75 && cluesUsed >= 40) achievements.push('⭐ Maestro de verificación');
+      
+      return achievements;
+    }
+
+    function getEducationalTip(percentage) {
+      const tips = [
+        '💡 Recuerda: Siempre verifica múltiples fuentes antes de compartir información.',
+        '💡 Consejo: Investiga las pistas minuciosamente. Los detalles revelan la verdad.',
+        '💡 Importante: Desconfía del lenguaje sensacionalista. Las noticias reales son neutrales.',
+        '💡 Tip: Busca comunicados oficiales de organismos internacionales (OMS, FDA, UNESCO).',
+        '💡 Recuerda: Una imagen auténtica puede estar fuera de contexto. Verifica siempre.',
+        '💡 Consejo: Los estudios científicos reales tienen DOI, metodología y peer-review.',
+        '💡 Importante: Si suena demasiado bueno para ser verdad, probablemente sea falso.'
+      ];
+      
+      if (percentage >= 90) return tips[0];
+      if (percentage >= 75) return tips[1];
+      if (percentage >= 60) return tips[2];
+      if (percentage >= 40) return tips[3];
+      return tips[4];
+    }
+
+    function getLevelName(percentage) {
+      if (percentage >= 90) return '🏆 Experto';
+      if (percentage >= 75) return '🥇 Verificador';
+      if (percentage >= 60) return '🥈 Investigador';
+      if (percentage >= 40) return '🥉 Aspirante';
+      return '📚 Novato';
+    }
+
+    function playConfetti() {
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = ['#667eea', '#764ba2', '#51cf66', '#ff6b6b'][Math.floor(Math.random() * 4)];
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3500);
+      }
+    }
+  </script>
+</body>
+</html>

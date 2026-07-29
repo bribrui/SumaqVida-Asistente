@@ -1,0 +1,545 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎮 Decisiones que Transforman - SumaqVida</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .intro-screen, .game-screen, .results-screen {
+      display: none;
+    }
+
+    .intro-screen.active, .game-screen.active, .results-screen.active {
+      display: block;
+    }
+
+    .intro-screen {
+      padding: 60px 40px;
+      text-align: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .intro-screen h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .intro-screen .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+
+    .intro-screen .tagline {
+      font-size: 1rem;
+      margin-bottom: 30px;
+      opacity: 0.8;
+    }
+
+    .story-box {
+      background: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid #51cf66;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 30px 0;
+      text-align: left;
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: transform 0.2s;
+    }
+
+    .btn-start:hover {
+      transform: scale(1.05);
+    }
+
+    .game-screen {
+      padding: 30px;
+    }
+
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .day-info h2 {
+      color: #667eea;
+      font-size: 1.5rem;
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      background: #f0f0f0;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .stat-value {
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .scene-container {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      padding: 40px;
+      color: white;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .scene-emoji {
+      font-size: 4rem;
+      margin-bottom: 15px;
+    }
+
+    .scene-title {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .scene-time {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .scene-content {
+      padding: 20px;
+    }
+
+    .situation-text {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .choices-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .choice-btn {
+      background: #f0f0f0;
+      border: 2px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+    }
+
+    .choice-btn:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .choice-icon {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+
+    .sumi-hint {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      color: #333;
+    }
+
+    .results-screen {
+      padding: 40px;
+      text-align: center;
+    }
+
+    .results-header {
+      margin-bottom: 30px;
+    }
+
+    .results-header h1 {
+      color: #667eea;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .alex-avatar {
+      font-size: 5rem;
+      margin-bottom: 15px;
+    }
+
+    .alex-status {
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .score-display {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 15px;
+      margin: 30px 0;
+    }
+
+    .score-number {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 10px;
+      transition: transform 0.2s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #667eea;
+      color: white;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .scene-visual {
+      animation: slideUp 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- INTRO SCREEN -->
+    <div class="intro-screen active" id="introScreen">
+      <h1>🎮 Decisiones que Transforman</h1>
+      <p class="subtitle">Cinco días. Cientos de decisiones. Un futuro más saludable.</p>
+      <p class="tagline">Una simulación sobre Alex, un estudiante como tú.</p>
+      
+      <div class="story-box">
+        <p><strong>Hola, soy Alex.</strong></p>
+        <p>La próxima semana hay una feria de innovación importante. Quiero llegar con buena energía, concentración y bienestar.</p>
+        <p>Durante los próximos cinco días debo cuidar mi salud.</p>
+        <p><strong>¿Pero cómo? Cada decisión, pequeña o grande, influye.</strong></p>
+        <p>Desde qué como en el desayuno hasta cuánto duermo por la noche.</p>
+        <p>Tú controlas mis decisiones. Acompáñame en esta semana que puede cambiar todo.</p>
+      </div>
+
+      <button class="btn-start" onclick="startGame()">Comenzar Simulación</button>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div class="game-screen" id="gameScreen">
+      <div class="game-header">
+        <div class="day-info">
+          <h2 id="dayTitle">Día 1: Lunes</h2>
+          <p id="dayDate">Semana de la Feria de Innovación</p>
+        </div>
+        <div class="stats-bar">
+          <div class="stat-item">
+            <span>⚡ Energía:</span>
+            <span class="stat-value" id="statEnergy">75/100</span>
+          </div>
+          <div class="stat-item">
+            <span>💧 Hidratación:</span>
+            <span class="stat-value" id="statHydration">60/100</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene-container">
+        <div class="scene-visual" id="sceneVisual">
+          <div class="scene-emoji" id="sceneEmoji">🌅</div>
+          <div class="scene-title" id="sceneTitle">Despertando</div>
+          <div class="scene-time" id="sceneTime">6:30 AM</div>
+        </div>
+      </div>
+      
+      <div class="scene-content">
+        <div class="situation-text" id="situationText">Suena tu alarma...</div>
+        <div class="choices-container" id="choicesContainer"></div>
+        <div class="sumi-hint" id="sumiHint" style="display: none;">
+          💡 <strong>SUMI IA:</strong> <span id="sumiText"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div class="results-screen" id="resultsScreen">
+      <div class="results-header">
+        <h1>🎉 ¡Lo Hiciste!</h1>
+        <div class="alex-avatar" id="alexAvatar">😊</div>
+        <div class="alex-status" id="alexStatus">Llegaste a la feria con buena energía</div>
+      </div>
+
+      <div class="score-display">
+        <div>Tu Puntuación</div>
+        <div class="score-number" id="scoreNumber">0</div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="goBackToHome()">🏠 Volver</button>
+        <button class="btn btn-secondary" onclick="location.reload()">🔄 Jugar de Nuevo</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const gameState = {
+      currentDay: 1,
+      currentMoment: 0,
+      habits: {
+        energy: 75,
+        hydration: 60,
+        stress: 40
+      },
+      score: 0,
+      decisions: []
+    };
+
+    const decisionsDatabase = {
+      'day1-wake': [
+        { text: '😴 Dormir más', icons: '😴', effects: { energy: 10 }, sumi: 'Descansar es importante' },
+        { text: '🏃 Ejercitarse', icons: '🏃', effects: { energy: 15 }, sumi: 'Ejercicio = energía' }
+      ],
+      'day1-breakfast': [
+        { text: '🥣 Desayuno saludable', icons: '🥣', effects: { energy: 20 }, sumi: 'Buen comienzo' }
+      ],
+      'day1-school': [
+        { text: '💧 Beber agua', icons: '💧', effects: { hydration: 25 }, sumi: 'Hidratación importante' }
+      ],
+      'day1-lunch': [
+        { text: '🍜 Comida balanceada', icons: '🍜', effects: { energy: 20 }, sumi: 'Nutrición equilibrada' }
+      ],
+      'day1-afternoon': [
+        { text: '🚴 Ejercicio', icons: '🚴', effects: { stress: -20 }, sumi: 'Movimiento = bienestar' }
+      ],
+      'day1-night': [
+        { text: '😴 Dormir 8 horas', icons: '😴', effects: { energy: 25 }, sumi: 'El sueño recupera' }
+      ],
+      'day2-wake': [
+        { text: '🌞 Despertar feliz', icons: '🌞', effects: { energy: 15 }, sumi: 'Nuevo día' }
+      ],
+      'day2-breakfast': [
+        { text: '🍎 Fruta fresca', icons: '🍎', effects: { energy: 18 }, sumi: 'Vitaminas naturales' }
+      ],
+      'day2-school': [
+        { text: '🧠 Concentrarse', icons: '🧠', effects: { stress: -15 }, sumi: 'Enfoque = productividad' }
+      ],
+      'day2-lunch': [
+        { text: '🥗 Ensalada', icons: '🥗', effects: { energy: 15 }, sumi: 'Ligero pero nutritivo' }
+      ],
+      'day2-afternoon': [
+        { text: '🎨 Actividad creativa', icons: '🎨', effects: { stress: -20 }, sumi: 'Crear relaja' }
+      ],
+      'day2-night': [
+        { text: '🧘 Meditación', icons: '🧘', effects: { stress: -25 }, sumi: 'Paz mental' }
+      ],
+      'day3-wake': [
+        { text: '✨ Energía positiva', icons: '✨', effects: { energy: 20 }, sumi: 'Actitud positiva' }
+      ],
+      'day3-breakfast': [
+        { text: '🥚 Proteína', icons: '🥚', effects: { energy: 22 }, sumi: 'Fuerza para el día' }
+      ],
+      'day3-school': [
+        { text: '👥 Socializar', icons: '👥', effects: { stress: -18 }, sumi: 'Conexiones nos ayudan' }
+      ],
+      'day3-lunch': [
+        { text: '🍲 Sopa casera', icons: '🍲', effects: { energy: 20 }, sumi: 'Comida reconfortante' }
+      ],
+      'day3-afternoon': [
+        { text: '⚽ Deporte', icons: '⚽', effects: { stress: -25 }, sumi: 'Divertirse es salud' }
+      ],
+      'day3-night': [
+        { text: '🍵 Té relajante', icons: '🍵', effects: { stress: -20 }, sumi: 'Relajación profunda' }
+      ],
+      'day4-wake': [
+        { text: '🌅 Meditación', icons: '🌅', effects: { stress: -20 }, sumi: 'Mente clara' }
+      ],
+      'day4-breakfast': [
+        { text: '💪 Desayuno fuerte', icons: '💪', effects: { energy: 28 }, sumi: 'Fuerzas finales' }
+      ],
+      'day4-school': [
+        { text: '🎯 Completar tareas', icons: '🎯', effects: { stress: -20 }, sumi: 'Lograr te fortalece' }
+      ],
+      'day4-lunch': [
+        { text: '🍱 Comida nutritiva', icons: '🍱', effects: { energy: 22 }, sumi: 'Nutrición = energia' }
+      ],
+      'day4-afternoon': [
+        { text: '🎨 Trabajar en proyecto', icons: '🎨', effects: { stress: -15 }, sumi: 'Crear es terapia' }
+      ],
+      'day4-night': [
+        { text: '😴 Dormir bien', icons: '😴', effects: { energy: 30 }, sumi: 'Descanso pre-feria' }
+      ],
+      'day5-wake': [
+        { text: '✨ ¡Hoy es el día!', icons: '✨', effects: { energy: 30 }, sumi: 'Llegó tu momento' }
+      ],
+      'day5-breakfast': [
+        { text: '🎤 Desayuno de campeón', icons: '🎤', effects: { energy: 30 }, sumi: 'Fuerzas para brillar' }
+      ],
+      'day5-school': [
+        { text: '🏆 Presentación excelente', icons: '🏆', effects: { energy: 25 }, sumi: '¡Eres capaz!' }
+      ],
+      'day5-lunch': [
+        { text: '🎉 Celebración merecida', icons: '🎉', effects: { energy: 20 }, sumi: '¡Lo lograste!' }
+      ],
+      'day5-afternoon': [
+        { text: '🌟 Reconocimiento', icons: '🌟', effects: { energy: 25 }, sumi: 'Felicidades' }
+      ],
+      'day5-night': [
+        { text: '🌙 Paz y satisfacción', icons: '🌙', effects: { energy: 20 }, sumi: 'Orgullo bien ganado' }
+      ]
+    };
+
+    function startGame() {
+      document.getElementById('introScreen').classList.remove('active');
+      document.getElementById('gameScreen').classList.add('active');
+      loadDay();
+    }
+
+    function loadDay() {
+      const moments = ['wake', 'breakfast', 'school', 'lunch', 'afternoon', 'night'];
+      const key = `day${gameState.currentDay}-${moments[gameState.currentMoment]}`;
+      const decisions = decisionsDatabase[key];
+
+      if (!decisions) {
+        alert('Error: No hay decisiones para este momento');
+        return;
+      }
+
+      document.getElementById('dayTitle').textContent = `Día ${gameState.currentDay} de 5`;
+      
+      const container = document.getElementById('choicesContainer');
+      container.innerHTML = decisions.map((d, idx) => `
+        <button class="choice-btn" onclick="makeDecision(${idx})">
+          <span class="choice-icon">${d.icons}</span>
+          <span class="choice-text">${d.text}</span>
+        </button>
+      `).join('');
+
+      updateStats();
+    }
+
+    function makeDecision(idx) {
+      const moments = ['wake', 'breakfast', 'school', 'lunch', 'afternoon', 'night'];
+      const key = `day${gameState.currentDay}-${moments[gameState.currentMoment]}`;
+      const decision = decisionsDatabase[key][idx];
+
+      for (const [habit, effect] of Object.entries(decision.effects)) {
+        if (gameState.habits[habit] !== undefined) {
+          gameState.habits[habit] += effect;
+        }
+      }
+
+      gameState.score += 10;
+      gameState.decisions.push(decision.text);
+
+      document.getElementById('sumiText').textContent = decision.sumi;
+      document.getElementById('sumiHint').style.display = 'block';
+
+      setTimeout(() => advanceGameState(), 2000);
+    }
+
+    function advanceGameState() {
+      gameState.currentMoment++;
+
+      if (gameState.currentMoment === 6) {
+        gameState.currentMoment = 0;
+        gameState.currentDay++;
+
+        if (gameState.currentDay === 6) {
+          showResults();
+        } else {
+          loadDay();
+        }
+      } else {
+        loadDay();
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('statEnergy').textContent = `${Math.round(gameState.habits.energy)}/100`;
+      document.getElementById('statHydration').textContent = `${Math.round(gameState.habits.hydration)}/100`;
+    }
+
+    function showResults() {
+      document.getElementById('gameScreen').classList.remove('active');
+      document.getElementById('resultsScreen').classList.add('active');
+      document.getElementById('scoreNumber').textContent = Math.round(gameState.score / 30 * 100);
+    }
+
+    function goBackToHome() {
+      window.location.href = '/views/pages/minijuegos.html';
+    }
+  </script>
+</body>
+</html>

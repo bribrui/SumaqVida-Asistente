@@ -1,0 +1,634 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎮 Decisiones que Transforman - SumaqVida</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .intro-screen, .game-screen, .results-screen {
+      display: none;
+    }
+
+    .intro-screen.active, .game-screen.active, .results-screen.active {
+      display: block;
+    }
+
+    .intro-screen {
+      padding: 60px 40px;
+      text-align: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .intro-screen h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .intro-screen .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+
+    .intro-screen .tagline {
+      font-size: 1rem;
+      margin-bottom: 30px;
+      opacity: 0.8;
+    }
+
+    .story-box {
+      background: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid #51cf66;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 30px 0;
+      text-align: left;
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: transform 0.2s;
+    }
+
+    .btn-start:hover {
+      transform: scale(1.05);
+    }
+
+    .game-screen {
+      padding: 30px;
+    }
+
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .day-info h2 {
+      color: #667eea;
+      font-size: 1.5rem;
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      background: #f0f0f0;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .stat-value {
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .scene-container {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      padding: 40px;
+      color: white;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .scene-emoji {
+      font-size: 4rem;
+      margin-bottom: 15px;
+    }
+
+    .scene-title {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .scene-time {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .scene-content {
+      padding: 20px;
+    }
+
+    .situation-text {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .choices-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .choice-btn {
+      background: #f0f0f0;
+      border: 2px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+    }
+
+    .choice-btn:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .choice-icon {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+
+    .sumi-hint {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      color: #333;
+    }
+
+    .results-screen {
+      padding: 40px;
+      text-align: center;
+    }
+
+    .results-header {
+      margin-bottom: 30px;
+    }
+
+    .results-header h1 {
+      color: #667eea;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .alex-avatar {
+      font-size: 5rem;
+      margin-bottom: 15px;
+    }
+
+    .alex-status {
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .score-display {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 15px;
+      margin: 30px 0;
+    }
+
+    .score-number {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 10px;
+      transition: transform 0.2s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #667eea;
+      color: white;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .scene-visual {
+      animation: slideUp 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- INTRO SCREEN -->
+    <div class="intro-screen active" id="introScreen">
+      <h1>🎮 Decisiones que Transforman</h1>
+      <p class="subtitle">Cinco días. Cientos de decisiones. Un futuro más saludable.</p>
+      <p class="tagline">Una simulación sobre Alex, un estudiante como tú.</p>
+      
+      <div class="story-box">
+        <p><strong>Hola, soy Alex.</strong></p>
+        <p>La próxima semana hay una feria de innovación importante. Quiero llegar con buena energía, concentración y bienestar.</p>
+        <p>Durante los próximos cinco días debo cuidar mi salud.</p>
+        <p><strong>¿Pero cómo? Cada decisión, pequeña o grande, influye.</strong></p>
+        <p>Desde qué como en el desayuno hasta cuánto duermo por la noche.</p>
+        <p>Tú controlas mis decisiones. Acompáñame en esta semana que puede cambiar todo.</p>
+      </div>
+
+      <button class="btn-start" onclick="startGame()">Comenzar Simulación</button>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div class="game-screen" id="gameScreen">
+      <div class="game-header">
+        <div class="day-info">
+          <h2 id="dayTitle">Día 1: Lunes</h2>
+          <p id="dayDate">Semana de la Feria de Innovación</p>
+        </div>
+        <div class="stats-bar">
+          <div class="stat-item">
+            <span>⚡ Energía:</span>
+            <span class="stat-value" id="statEnergy">75/100</span>
+          </div>
+          <div class="stat-item">
+            <span>💧 Hidratación:</span>
+            <span class="stat-value" id="statHydration">60/100</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene-container">
+        <div class="scene-visual" id="sceneVisual">
+          <div class="scene-emoji" id="sceneEmoji">🌅</div>
+          <div class="scene-title" id="sceneTitle">Despertando</div>
+          <div class="scene-time" id="sceneTime">6:30 AM</div>
+        </div>
+      </div>
+      
+      <div class="scene-content">
+        <div class="situation-text" id="situationText">Suena tu alarma...</div>
+        <div class="choices-container" id="choicesContainer"></div>
+        <div class="sumi-hint" id="sumiHint" style="display: none;">
+          💡 <strong>SUMI IA:</strong> <span id="sumiText"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div class="results-screen" id="resultsScreen">
+      <div class="results-header">
+        <h1>🎉 ¡Lo Hiciste!</h1>
+        <div class="alex-avatar" id="alexAvatar">😊</div>
+        <div class="alex-status" id="alexStatus">Llegaste a la feria con buena energía</div>
+      </div>
+
+      <div class="score-display">
+        <div>Tu Puntuación</div>
+        <div class="score-number" id="scoreNumber">0</div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="goBackToHome()">🏠 Volver</button>
+        <button class="btn btn-secondary" onclick="location.reload()">🔄 Jugar de Nuevo</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const gameState = {
+      currentDay: 1,
+      currentMoment: 0,
+      habits: {
+        energy: 75,
+        hydration: 60,
+        stress: 40
+      },
+      score: 0,
+      decisions: []
+    };
+
+    const decisionsDatabase = {
+      'day1-wake': [
+        { text: '😴 Dormir 30 min más', icons: '😴', effects: { energy: 5, stress: -5 }, sumi: '¿Dormir más te da energía o solo postergación? Recuerda: el tiempo es valioso antes de la feria' },
+        { text: '🏃 Ejercicios de estiramiento (15 min)', icons: '🏃', effects: { energy: 20, stress: -10 }, sumi: '✅ Excelente! El movimiento activa tu cuerpo y mente. ¿Cómo te sientes después?' },
+        { text: '📱 Ver redes sociales en la cama', icons: '📱', effects: { energy: -5, stress: 15 }, sumi: '⚠️ Las redes antes de empezar el día dispersan tu mente. ¿Qué pasa con tu concentración?' },
+        { text: '🧘 Meditación de 5 minutos', icons: '🧘', effects: { energy: 15, stress: -15 }, sumi: '✅ Meditación prepara tu mente. Estudios muestran que mejora el enfoque en 30%' }
+      ],
+      'day1-breakfast': [
+        { text: '🥣 Avena con plátano y leche', icons: '🥣', effects: { energy: 25, hydration: 10 }, sumi: '✅ Carbohidratos complejos = energía sostenida. Tu glucosa se mantendrá estable' },
+        { text: '🍞 Pan integral con huevo y queso', icons: '🍞', effects: { energy: 20, stress: -5 }, sumi: '✅ Proteína + carbohidratos = combinación perfecta para diabetes. Previene picos de glucosa' },
+        { text: '🥤 Gaseosa y galletas/donuts', icons: '🥤', effects: { energy: 10, stress: 20, hydration: -10 }, sumi: '⚠️ Azúcar rápida = pico de energía seguido de caída. ¿Cómo afectará tu concentración en 2 horas?' },
+        { text: '☕ Solo café sin desayunar', icons: '☕', effects: { energy: 5, stress: 10 }, sumi: '⚠️ Café sin comida → nerviosismo sin combustible real. ¿Aguantarás el día así?' }
+      ],
+      'day1-school': [
+        { text: '💧 Llevar botella de agua y beber cada hora', icons: '💧', effects: { hydration: 30, energy: 15 }, sumi: '✅ Deshidratación reduce concentración en 20%. El agua es tu mejor aliada en examen' },
+        { text: '🧠 Preguntar en clase si no entiendes', icons: '🧠', effects: { stress: -15, energy: 10 }, sumi: '✅ Preguntar reduce ansiedad y mejora aprendizaje. Los profesores respetan curiosidad' },
+        { text: '😰 Nervios: comprar una bebida energética', icons: '😰', effects: { energy: 8, stress: 15 }, sumi: '⚠️ Energéticos causan ansiedad sin resolver el problema. ¿Es temporal o creas dependencia?' },
+        { text: '👥 Hablar con compañeros sobre examen', icons: '👥', effects: { stress: 20, energy: -10 }, sumi: '⚠️ Comparar ansiedad aumenta estrés. Enfócate en ti mismo, no en otros' }
+      ],
+      'day1-lunch': [
+        { text: '🍲 Arroz integral, pollo asado, verduras', icons: '🍲', effects: { energy: 25, stress: -10 }, sumi: '✅ Comida balanceada = energía estable. Proteína + fibra = ¡perfecto para diabetes!' },
+        { text: '🍔 Hamburguesa de comida rápida + papas fritas', icons: '🍔', effects: { energy: 12, stress: -5, hydration: -15 }, sumi: '⚠️ Grasas + carbohidratos simples = digestión lenta. ¿Te dormirás en clase?' },
+        { text: '🥗 Ensalada con pollo y vinagreta', icons: '🥗', effects: { energy: 15, stress: -5 }, sumi: '✅ Ligero pero nutritivo. Mantiene energía sin somnolencia post-comida' },
+        { text: '🍕 Pizza x2 slices + gaseosa', icons: '🍕', effects: { energy: 10, stress: 10, hydration: -20 }, sumi: '⚠️ Muchos carbohidatos simples = bajón en 1.5 hrs. ¿Lo vale para la tarde de clases?' }
+      ],
+      'day1-afternoon': [
+        { text: '🚴 Ir al parque: caminar 30 min', icons: '🚴', effects: { energy: 18, stress: -25 }, sumi: '✅ El movimiento es medicina. Reduce ansiedad pre-examen naturalmente' },
+        { text: '📚 Estudiar en biblioteca (1.5 hrs)', icons: '📚', effects: { energy: 5, stress: -20 }, sumi: '✅ Estudiar sin presión = aprendizaje. ¿Sientes que controlas el material?' },
+        { text: '🎮 Jugar videojuegos 2 horas', icons: '🎮', effects: { energy: -5, stress: 5 }, sumi: '⚠️ Distracción en prepa para examen? ¿Es descanso genuino o procrastinación?' },
+        { text: '🛋️ Ver series acostado', icons: '🛋️', effects: { energy: 0, stress: 0 }, sumi: '→ Descanso pasivo. Recuerda: el ejercicio reduce más estrés que la TV' }
+      ],
+      'day1-night': [
+        { text: '😴 Dormir 8 horas (acostarse 10pm)', icons: '😴', effects: { energy: 30, stress: -20 }, sumi: '✅ 8 horas = recuperación óptima. Mañana llegarás fuerte a la feria' },
+        { text: '🎬 Ver series hasta las 11:30pm', icons: '🎬', effects: { energy: 15, stress: -5 }, sumi: '⚠️ Dormir 6.5 hrs afecta tu concentración. ¿Vale la pena perder claridad?' },
+        { text: '📚 Estudiar/revisar hasta las 12:30am', icons: '📚', effects: { energy: -10, stress: 15 }, sumi: '⚠️ ¡CRÍTICO! Dormir poco destruye memorización. Menos horas = menos retención. Contraproducente' },
+        { text: '📱 Redes sociales hasta dormir', icons: '📱', effects: { energy: 5, stress: 10 }, sumi: '⚠️ Luz azul de pantalla interrumpe sueño REM. Tu cerebro no se recupera bien' }
+      ],
+      'day2-wake': [
+        { text: '✨ Despertar con energía positiva', icons: '✨', effects: { energy: 20, stress: -15 }, sumi: '✅ Mentalidad positiva = resultados positivos. Científicamente comprobado' },
+        { text: '🏃 Ejercicios de yoga (10 min)', icons: '🏃', effects: { energy: 18, stress: -20 }, sumi: '✅ Yoga mejora flexibilidad mental y física. Te centra para el día' },
+        { text: '☕ Café fuerte sin comer', icons: '☕', effects: { energy: 8, stress: 12 }, sumi: '⚠️ Cafeína sin alimento = ansiedad pura. ¿Necesitas esto hoy?' },
+        { text: '😴 Dormir 30 min extra', icons: '😴', effects: { energy: 12, stress: -8 }, sumi: '✅ Recuperarte del estrés pre-examen es válido. Tu cuerpo lo necesita' }
+      ],
+      'day2-breakfast': [
+        { text: '🍎 Manzana, yogur y granola', icons: '🍎', effects: { energy: 22, hydration: 15 }, sumi: '✅ Probióticos + frutas = microbioma feliz. Afecta tu estado de ánimo' },
+        { text: '🥚 Huevos revueltos con pan integral', icons: '🥚', effects: { energy: 25, stress: -5 }, sumi: '✅ Colina en huevos = memoria. Perfecto cuando necesitas recordar cosas' },
+        { text: '🍪 Café con donut/medialuna', icons: '🍪', effects: { energy: 10, stress: 15 }, sumi: '⚠️ Pico-bajón de azúcar. ¿Necesitas ese estrés extra hoy?' },
+        { text: '💧 Solo agua y banana', icons: '💧', effects: { energy: 15, hydration: 20 }, sumi: '✅ Ligero pero efectivo. Potasio de la banana ayuda estabilidad emocional' }
+      ],
+      'day2-school': [
+        { text: '💧 Llevar 2 botellas de agua', icons: '💧', effects: { hydration: 35, energy: 12 }, sumi: '✅ Hidratación = claridad mental. Tus células cerebrales lo agradecerán' },
+        { text: '👥 Socializar entre clases', icons: '👥', effects: { stress: -18, energy: 8 }, sumi: '✅ Conexión social reduce ansiedad. Es medicina para tu bienestar' },
+        { text: '📱 Estar en redes durante clase', icons: '📱', effects: { stress: 12, energy: -15 }, sumi: '⚠️ Multitarea dispersa tu cerebro. ¿Qué pierde con cada notificación?' },
+        { text: '🎧 Escuchar música en recreo', icons: '🎧', effects: { stress: -12, energy: 10 }, sumi: '✅ Música reduce cortisol (estrés). 10 min son suficientes' }
+      ],
+      'day2-lunch': [
+        { text: '🍜 Sopa casera con verduras y pollo', icons: '🍜', effects: { energy: 24, hydration: 25 }, sumi: '✅ Caldo casero = confort + nutrientes. Literalmente "sopa reconfortante"' },
+        { text: '🌮 Tacos de pollo con salsa fresca', icons: '🌮', effects: { energy: 20, stress: -8 }, sumi: '✅ Comida tradicional balanceada. Divertido + saludable' },
+        { text: '🍟 Hamburguesa + papas + gaseosa', icons: '🍟', effects: { energy: 12, stress: -5, hydration: -20 }, sumi: '⚠️ Grasas trans + azúcar = inflamación. Sentirás pesadez' },
+        { text: '🥙 Sandwich integral con verduras', icons: '🥙', effects: { energy: 18, stress: -5 }, sumi: '✅ Integral mantiene glucosa estable. Estudios en diabéticos muestran mejor control' }
+      ],
+      'day2-afternoon': [
+        { text: '🚴 Andar en bicicleta 30 min', icons: '🚴', effects: { energy: 15, stress: -22 }, sumi: '✅ Cardio libera endorfinas. Son los "químicos felices" naturales' },
+        { text: '📖 Leer en un parque', icons: '📖', effects: { stress: -18, energy: 12 }, sumi: '✅ Lectura + naturaleza = descanso profundo. Recarga tu enfoque' },
+        { text: '🎮 Jugar videojuegos online 3 hrs', icons: '🎮', effects: { stress: 8, energy: -12 }, sumi: '⚠️ Mucho tiempo sin movimiento. Tu espalda lo dirá mañana' },
+        { text: '🧘 Sesión de yoga/meditación', icons: '🧘', effects: { stress: -25, energy: 18 }, sumi: '✅ Neurociencia: meditación cambia estructura cerebral. Es inversión en ti' }
+      ],
+      'day2-night': [
+        { text: '🍵 Té de manzanilla sin azúcar', icons: '🍵', effects: { energy: 20, stress: -20 }, sumi: '✅ Té caliente = ritual relajante. Apigenina en manzanilla = sueño profundo' },
+        { text: '⏰ Establecer rutina fija de sueño', icons: '⏰', effects: { energy: 28, stress: -18 }, sumi: '✅ Ritmo circadiano = reloj biológico. Consistencia = mejor recuperación' },
+        { text: '📱 Redes sociales + teléfono hasta dormir', icons: '📱', effects: { energy: 10, stress: 12 }, sumi: '⚠️ Redes = dopamina artificial. Tu cuerpo espera sueño, no estimulación' },
+        { text: '🎵 Música relajante mientras duermes', icons: '🎵', effects: { energy: 25, stress: -15 }, sumi: '✅ 60 BPM de música relaja sistema nervioso. Investigado científicamente' }
+      ],
+      'day3-wake': [
+        { text: '🌞 Exponer 10 min a luz solar', icons: '🌞', effects: { energy: 22, stress: -12 }, sumi: '✅ Luz natural regula serotonina. Sin luz = depresión. Con luz = energía' },
+        { text: '🤸 Yoga de 20 min', icons: '🤸', effects: { energy: 20, stress: -15 }, sumi: '✅ Flexibilidad física = flexibilidad mental. Ambas te ayudan ante presión' },
+        { text: '😴 Dormir hasta último momento', icons: '😴', effects: { energy: 8, stress: 12 }, sumi: '⚠️ Apurarse causa estrés de inicio. ¿Comienza el día en pánico?' },
+        { text: '🧘 Respiraciones profundas (5 min)', icons: '🧘', effects: { energy: 18, stress: -18 }, sumi: '✅ Respiración activa sistema parasimpático. Es "OFF" para el estrés' }
+      ],
+      'day3-breakfast': [
+        { text: '🥣 Avena con nueces y fruta', icons: '🥣', effects: { energy: 26, stress: -5 }, sumi: '✅ Omega-3 de nueces alimentan cerebro. Insulina baja = mejor control' },
+        { text: '🍌 Batido con plátano, proteína, leche', icons: '🍌', effects: { energy: 24, hydration: 20 }, sumi: '✅ Batido = absorción rápida. Potasio reduce presión arterial' },
+        { text: '🥐 Medialunas + jugo de naranja', icons: '🥐', effects: { energy: 12, stress: 8 }, sumi: '⚠️ Azúcar rápida = bajón en 2 hrs. ¿Lo vale?' },
+        { text: '🍞 Tostadas integrales con aguacate', icons: '🍞', effects: { energy: 22, stress: -8 }, sumi: '✅ Grasas saludables + fibra = saciedad hasta almuerzo' }
+      ],
+      'day3-school': [
+        { text: '🧠 Participar activamente en clase', icons: '🧠', effects: { stress: -20, energy: 15 }, sumi: '✅ Participación = aprendizaje. Tu cerebro se conecta más cuando hablas' },
+        { text: '💤 Estar cansado, no concentrarse', icons: '💤', effects: { stress: 15, energy: -20 }, sumi: '⚠️ Cansancio + falta de concentración = círculo vicioso. ¿Por qué dormiste poco?' },
+        { text: '💧 Beber agua entre clases', icons: '💧', effects: { hydration: 30, energy: 12 }, sumi: '✅ Agua es el combustible del cerebro. 30% de mejora cognitiva comprobada' },
+        { text: '👥 Ayudar a compañero con tarea', icons: '👥', effects: { stress: -15, energy: 18 }, sumi: '✅ Enseñar = aprender mejor. Tu generosidad retorna en paz mental' }
+      ],
+      'day3-lunch': [
+        { text: '🥘 Arroz integral, pollo, brócoli', icons: '🥘', effects: { energy: 28, stress: -8 }, sumi: '✅ Brócoli = sulforafano = protección cerebral. Investigado para diabetes' },
+        { text: '🍝 Pasta blanca con salsa dulce', icons: '🍝', effects: { energy: 14, stress: 5 }, sumi: '⚠️ Carbohidrato simple = pico rápido. Después caes. ¿Tarde concentrada?' },
+        { text: '🥙 Sandwich integral con verduras', icons: '🥙', effects: { energy: 20, stress: -5 }, sumi: '✅ Integral mantiene glucosa. Carga = energía sostenida 3-4 hrs' },
+        { text: '🍱 Lonchera casera (lo que mamá hizo)', icons: '🍱', effects: { energy: 25, stress: -12 }, sumi: '✅ Comida con amor = mejor sabor. Psicológicamente reduce ansiedad' }
+      ],
+      'day3-afternoon': [
+        { text: '⚽ Jugar fútbol con amigos', icons: '⚽', effects: { energy: 20, stress: -28 }, sumi: '✅ Deporte + amigos = máxima felicidad. Endorfinas + conexión social' },
+        { text: '🏊 Natación 30 min', icons: '🏊', effects: { energy: 22, stress: -25 }, sumi: '✅ Natación = ejercicio sin impacto. Perfecto para cualquier cuerpo' },
+        { text: '🛋️ Descansar en casa', icons: '🛋️', effects: { energy: 15, stress: -8 }, sumi: '→ Descanso es válido. Pero movimiento relaja más que estar quieto' },
+        { text: '📚 Estudiar extra para feria', icons: '📚', effects: { stress: -10, energy: 8 }, sumi: '✅ Preparación = confianza. Mientras estudies con gusto, no presión' }
+      ],
+      'day3-night': [
+        { text: '🍵 Té de manzanilla sin azúcar', icons: '🍵', effects: { energy: 26, stress: -22 }, sumi: '✅ Ritual caliente = mente que desacelera. Apigenina = sueño natural' },
+        { text: '⏰ Acostarse a la misma hora (rutina)', icons: '⏰', effects: { energy: 32, stress: -20 }, sumi: '✅ Consistencia = superpoder. Tu reloj biológico se adapta' },
+        { text: '🎵 Música tranquila + teléfono', icons: '🎵', effects: { energy: 18, stress: 8 }, sumi: '⚠️ Mezclar estimulación (teléfono) con relajación no funciona. Elige uno' },
+        { text: '📖 Leer un libro aburrido', icons: '📖', effects: { energy: 28, stress: -18 }, sumi: '✅ Lectura no-emocional = transición al sueño. Tu mente se desconecta' }
+      ],
+      'day4-wake': [
+        { text: '🌅 Meditación guiada 10 min', icons: '🌅', effects: { stress: -25, energy: 20 }, sumi: '✅ Última recta pre-feria: serenidad > energía. Controla nervios' },
+        { text: '🏃 Correr 20 min', icons: '🏃', effects: { energy: 25, stress: -20 }, sumi: '✅ Cardio acelera VO2. Tu cuerpo & mente están listos hoy' },
+        { text: '📱 Ver noticias/redes negativas', icons: '📱', effects: { stress: 20, energy: -8 }, sumi: '⚠️ Noticias negativas = estrés anticipatorio. ¿Necesitas esto antes de la feria?' },
+        { text: '☕ Café fuerte + galletas', icons: '☕', effects: { energy: 12, stress: 15 }, sumi: '⚠️ Cafeína antes de feria = ansiedad. ¿Es lo que necesitas?' }
+      ],
+      'day4-breakfast': [
+        { text: '🥗 Ensalada con huevo y aguacate', icons: '🥗', effects: { energy: 26, stress: -8 }, sumi: '✅ Grasas buenas = estabilidad hormonal. Aguacate = calma emocional' },
+        { text: '🍞 Pan integral con miel', icons: '🍞', effects: { energy: 20, stress: -5 }, sumi: '✅ Miel = glucosa lenta. Energía sin ansiedad' },
+        { text: '☕ Solo café sin desayunar', icons: '☕', effects: { energy: 8, stress: 18 }, sumi: '⚠️ Hoy necesitas ancla, no volatilidad. Come algo' },
+        { text: '🥣 Avena + frutos secos', icons: '🥣', effects: { energy: 27, stress: -10 }, sumi: '✅ Magnesio de frutos secos = nervios calmados. Perfecto para hoy' }
+      ],
+      'day4-school': [
+        { text: '🎯 Terminar trabajos pendientes', icons: '🎯', effects: { stress: -25, energy: 15 }, sumi: '✅ Completar = confianza. Tu mente necesita "checkmarks" ahora' },
+        { text: '💭 Pensar constantemente en la feria', icons: '💭', effects: { stress: 25, energy: -10 }, sumi: '⚠️ Rumiar aumenta ansiedad. ¿Cómo redireccionas tu mente?' },
+        { text: '💬 Hablar con profesor sobre proyecto', icons: '💬', effects: { stress: -18, energy: 15 }, sumi: '✅ Retroalimentación = tranquilidad. Sabes dónde estás' },
+        { text: '📚 Última revisión rápida', icons: '📚', effects: { stress: -12, energy: 12 }, sumi: '✅ Repaso ligero = confianza. No memorizar más, consolidar' }
+      ],
+      'day4-lunch': [
+        { text: '🍲 Sopa + pollo + verduras', icons: '🍲', effects: { energy: 26, hydration: 25 }, sumi: '✅ Caldo = calidez + nutrición. Comfort food es psicología' },
+        { text: '🍕 Pizza 2 slices', icons: '🍕', effects: { energy: 14, stress: 8 }, sumi: '⚠️ Carbohidrato simple = bajón. No ideal pre-presentación' },
+        { text: '🍱 Comida casera de mamá', icons: '🍱', effects: { energy: 28, stress: -15 }, sumi: '✅ Amor en comida = paz. Psicosomático comprobado' },
+        { text: '🥗 Ensalada ligera', icons: '🥗', effects: { energy: 18, stress: -8 }, sumi: '✅ Ligero pero nutritivo. No quieres pesadez hoy' }
+      ],
+      'day4-afternoon': [
+        { text: '🎨 Trabajar en presentación final', icons: '🎨', effects: { stress: -18, energy: 16 }, sumi: '✅ Crear reduce ansiedad. Canaliza energía en lo importante' },
+        { text: '🧘 Meditación/Yoga 20 min', icons: '🧘', effects: { stress: -28, energy: 18 }, sumi: '✅ Pre-feria = calma > energía. Necesitas nervios controlados' },
+        { text: '🎮 Jugar videojuegos 2 hrs', icons: '🎮', effects: { stress: 12, energy: -8 }, sumi: '⚠️ Distracción artificial. ¿Es descanso o huida del nerviosismo?' },
+        { text: '📖 Leer sobre tema de proyecto', icons: '📖', effects: { stress: -15, energy: 14 }, sumi: '✅ Lectura enfocada = confianza. Sabes tu tema' }
+      ],
+      'day4-night': [
+        { text: '😴 Dormir 9 horas (acostarse 8:30pm)', icons: '😴', effects: { energy: 35, stress: -25 }, sumi: '✅ ¡CRÍTICO! Mañana es tu día. 9 hrs = máxima recuperación' },
+        { text: '🎬 Ver película relajante', icons: '🎬', effects: { energy: 22, stress: -15 }, sumi: '✅ Cine = escape saludable. Asegura dormir antes de medianoche' },
+        { text: '📝 Revisar presentación hasta las 12am', icons: '📝', effects: { energy: 5, stress: 20 }, sumi: '⚠️ ¡CRÍTICO! Poco sueño = presentación mala. Contraproducente. Duerme' },
+        { text: '💬 Hablar por teléfono con amigos', icons: '💬', effects: { energy: 20, stress: -12 }, sumi: '✅ Apoyo social = fuerza. Pero acaba pronto para dormir bien' }
+      ],
+      'day5-wake': [
+        { text: '✨ Despertar con confianza y alegría', icons: '✨', effects: { energy: 35, stress: -30 }, sumi: '✅ HOY ES TU DÍA. Mentalidad = 80% del éxito. ¡VAMOS!' },
+        { text: '😰 Despertar nervioso y asustado', icons: '😰', effects: { energy: 12, stress: 35 }, sumi: '⚠️ Nervios = muestra que te importa. Canaliza a emoción positiva' },
+        { text: '💪 Afirmaciones: "Puedo hacerlo", "Estoy listo"', icons: '💪', effects: { energy: 32, stress: -25 }, sumi: '✅ Automotivación es real. Tu subconsciente lo cree si lo repites' },
+        { text: '🧘 Meditación de 10 min', icons: '🧘', effects: { energy: 28, stress: -28 }, sumi: '✅ Claridad mental. Calma el ruido, mantén el enfoque' }
+      ],
+      'day5-breakfast': [
+        { text: '💪 Desayuno completo (proteína+carbohidratos)', icons: '💪', effects: { energy: 32, stress: -8 }, sumi: '✅ Hoy necesitas COMBUSTIBLE. Desayuno = base de todo' },
+        { text: '🍌 Solo fruta y café', icons: '🍌', effects: { energy: 16, stress: 15 }, sumi: '⚠️ Nervios quitan apetito. Pero necesitas sustancia real hoy' },
+        { text: '😴 No tengo hambre, paso', icons: '😴', effects: { energy: 8, stress: 25 }, sumi: '⚠️ CRÍTICO: Sin comida = sin energía. Tu voz vacilará, mente se nubla' },
+        { text: '🥗 Desayuno ligero pero equilibrado', icons: '🥗', effects: { energy: 28, stress: -12 }, sumi: '✅ Si estómago nervioso: ligero pero NUTRITIVO. Proteína estabiliza' }
+      ],
+      'day5-school': [
+        { text: '🎤 Presentar con confianza y claridad', icons: '🎤', effects: { energy: 28, stress: -35 }, sumi: '✅ HICISTE EL TRABAJO. Ahora comparte tu pasión. ¡Brilla!' },
+        { text: '😰 Presentar nervioso, tartamudear', icons: '😰', effects: { energy: 8, stress: 25 }, sumi: '⚠️ Nerviosismo es normal. Pero recuerda: ellos QUIEREN que tengas éxito' },
+        { text: '💧 Beber agua durante presentación', icons: '💧', effects: { energy: 25, hydration: 30 }, sumi: '✅ Agua = tranquilizante natural. Hace pausas naturales, calma' },
+        { text: '👥 Hacer contacto visual, sonreír', icons: '👥', effects: { energy: 30, stress: -30 }, sumi: '✅ Lenguaje corporal = 70% de comunicación. Confianza atrae confianza' }
+      ],
+      'day5-lunch': [
+        { text: '🍽️ Celebrar con comida especial', icons: '🍽️', effects: { energy: 26, stress: -20 }, sumi: '✅ ¡LO HICISTE! Come algo delicioso. Te lo mereces' },
+        { text: '🤔 Reflexionar sobre lo aprendido', icons: '🤔', effects: { energy: 22, stress: -18 }, sumi: '✅ Reflexión = crecimiento. ¿Qué te sorprendió de ti mismo?' },
+        { text: '🎉 Solo celebrar sin pensar', icons: '🎉', effects: { energy: 20, stress: -10 }, sumi: '→ Diversión es válida. Pero reflexión consolida aprendizaje' },
+        { text: '😰 Pensar en qué salió mal', icons: '😰', effects: { energy: 10, stress: 20 }, sumi: '⚠️ Hoy es para celebrar. Análisis crítico viene después' }
+      ],
+      'day5-afternoon': [
+        { text: '📸 Documentar momentos bonitos', icons: '📸', effects: { energy: 24, stress: -15 }, sumi: '✅ Recuerdos = tesoros. Foto con mentores, proyecto, amigos' },
+        { text: '🌟 Recibir reconocimiento/premio', icons: '🌟', effects: { energy: 32, stress: -30 }, sumi: '✅✅ ¡GANASTE! Siente el reconocimiento. Te lo ganaste' },
+        { text: '😔 No ganaste pero aprendiste mucho', icons: '😔', effects: { energy: 18, stress: -8 }, sumi: '✅ Verdad fundamental: el viaje > el destino. Creciste 5 días' },
+        { text: '💪 Ayudar a otros en sus proyectos', icons: '💪', effects: { energy: 26, stress: -12 }, sumi: '✅ Enseñar = aprender mejor. Tu generosidad inspira' }
+      ],
+      'day5-night': [
+        { text: '🌟 Dormir en paz, orgulloso de ti', icons: '🌟', effects: { energy: 30, stress: -30 }, sumi: '✅ Orgullo bien ganado. Tu salud mental está en paz' },
+        { text: '🎊 Celebración con familia', icons: '🎊', effects: { energy: 32, stress: -28 }, sumi: '✅ Compartir alegría = multiplicarla. Familia es tu red' },
+        { text: '💭 Pensar "¿y si hubiera...?"', icons: '💭', effects: { energy: 12, stress: 18 }, sumi: '⚠️ Rumiación no ayuda. Ya hiciste tu mejor esfuerzo. Deja ir' },
+        { text: '📖 Escribir en diario lo aprendido', icons: '📖', effects: { energy: 28, stress: -25 }, sumi: '✅ Escritura = procesamiento. Consolida todo en sabiduría personal' }
+      ]
+    };
+
+    function startGame() {
+      document.getElementById('introScreen').classList.remove('active');
+      document.getElementById('gameScreen').classList.add('active');
+      loadDay();
+    }
+
+    function loadDay() {
+      const moments = ['wake', 'breakfast', 'school', 'lunch', 'afternoon', 'night'];
+      const key = `day${gameState.currentDay}-${moments[gameState.currentMoment]}`;
+      const decisions = decisionsDatabase[key];
+
+      if (!decisions) {
+        alert('Error: No hay decisiones para este momento');
+        return;
+      }
+
+      document.getElementById('dayTitle').textContent = `Día ${gameState.currentDay} de 5`;
+      
+      const container = document.getElementById('choicesContainer');
+      container.innerHTML = decisions.map((d, idx) => `
+        <button class="choice-btn" onclick="makeDecision(${idx})">
+          <span class="choice-icon">${d.icons}</span>
+          <span class="choice-text">${d.text}</span>
+        </button>
+      `).join('');
+
+      updateStats();
+    }
+
+    function makeDecision(idx) {
+      const moments = ['wake', 'breakfast', 'school', 'lunch', 'afternoon', 'night'];
+      const key = `day${gameState.currentDay}-${moments[gameState.currentMoment]}`;
+      const decision = decisionsDatabase[key][idx];
+
+      for (const [habit, effect] of Object.entries(decision.effects)) {
+        if (gameState.habits[habit] !== undefined) {
+          gameState.habits[habit] += effect;
+        }
+      }
+
+      gameState.score += 10;
+      gameState.decisions.push(decision.text);
+
+      document.getElementById('sumiText').textContent = decision.sumi;
+      document.getElementById('sumiHint').style.display = 'block';
+
+      setTimeout(() => advanceGameState(), 2000);
+    }
+
+    function advanceGameState() {
+      gameState.currentMoment++;
+
+      if (gameState.currentMoment === 6) {
+        gameState.currentMoment = 0;
+        gameState.currentDay++;
+
+        if (gameState.currentDay === 6) {
+          showResults();
+        } else {
+          loadDay();
+        }
+      } else {
+        loadDay();
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('statEnergy').textContent = `${Math.round(gameState.habits.energy)}/100`;
+      document.getElementById('statHydration').textContent = `${Math.round(gameState.habits.hydration)}/100`;
+    }
+
+    function showResults() {
+      document.getElementById('gameScreen').classList.remove('active');
+      document.getElementById('resultsScreen').classList.add('active');
+      document.getElementById('scoreNumber').textContent = Math.round(gameState.score / 30 * 100);
+    }
+
+    function goBackToHome() {
+      window.location.href = '/views/pages/minijuegos.html';
+    }
+  </script>
+</body>
+</html>

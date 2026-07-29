@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+﻿document.addEventListener("DOMContentLoaded", function () {
     const chatLog = document.getElementById('chatLog');
     const chatInput = document.getElementById('chatInput');
     const sendButton = document.getElementById('sendMessageBtn');
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
         appendMessage(message, 'user');
         chatInput.value = '';
 
-        fetch('/Sumaqvida/api/cha-gemini.php', {
+        fetch('/api/cha-gemini.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message })

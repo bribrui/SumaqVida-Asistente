@@ -1,0 +1,397 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Videos Educativos - SumaqVida</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9fb;
+      padding-top: 100px;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .videos-header {
+      background: linear-gradient(135deg, #e0356d 0%, #c0275a 100%);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(224, 53, 109, 0.3);
+      margin-bottom: 3rem;
+    }
+
+    .videos-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .videos-header p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 1000px;
+    }
+
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .video-card {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 24px rgba(224, 53, 109, 0.2);
+    }
+
+    .video-thumbnail {
+      background: linear-gradient(135deg, #e0356d 0%, #c0275a 100%);
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: white;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .video-thumbnail:hover {
+      background: linear-gradient(135deg, #c0275a 0%, #a0234d 100%);
+    }
+
+    .video-play-icon {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e0356d;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .video-card:hover .video-play-icon {
+      background: white;
+      transform: scale(1.1);
+    }
+
+    .video-card-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-card-meta {
+      font-size: 0.85rem;
+      color: #999;
+      margin-bottom: 0.5rem;
+    }
+
+    .video-card-meta span {
+      margin-right: 1rem;
+    }
+
+    .video-card h3 {
+      color: #e0356d;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .video-card p {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+    }
+
+    .video-card-link {
+      color: #e0356d;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .video-card-link:hover {
+      text-decoration: underline;
+    }
+
+    .video-duration {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state h2 {
+      color: #e0356d;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+      color: #999;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-primary-custom {
+      background: linear-gradient(135deg, #e0356d 0%, #c0275a 100%);
+      border: none;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary-custom:hover {
+      color: white;
+      text-decoration: none;
+      transform: scale(1.02);
+    }
+
+    .back-link {
+      margin-bottom: 2rem;
+    }
+
+    .back-link a {
+      color: #e0356d;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .videos-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .videos-grid {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding-top: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+    <header>
+    <div class="logo"><a href="/index.html">SumaqVida</a></div>
+    <nav class="desktop-menu">
+      <a href="/index.html">Inicio</a>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">IA</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluacion antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="/views/pages/minijuegos.html" class="dropdown-toggle">Comunidad</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/minijuegos.html">Minijuegos</a>
+          <a href="/Calendario/calendario.html">Calendario</a>
+          <a href="/Glosa/Glosario.html">Glosario</a>
+          <a href="/views/pages/blog.html">Blog</a>
+          <a href="/views/pages/videos.html">Videos</a>
+          <a href="/foro.html">Foro</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+      <a href="/views/pages/scanner.html">Escaner</a>
+      <a href="/views/pages/panel.html">Mi Panel</a>
+    </nav>
+    <div class="login-btn desktop-menu">
+      <span id="usuarioNombre" class="usuario-nombre" style="margin-right:16px;color:#e0356d;font-weight:500;"></span>
+      <a href="/views/pages/login.html">Iniciar sesion</a>
+    </div>
+    <div class="hamburger" onclick="toggleMobileMenu()">&#9776;</div>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="close-btn" onclick="toggleMobileMenu()">&times;</div>
+      <div class="menu-centrado">
+        <a href="/index.html">Inicio</a>
+        <details><summary>IA</summary>
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluacion antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </details>
+        <details><summary>Comunidad</summary>
+          <a href="/views/pages/minijuegos.html">Minijuegos</a>
+          <a href="/Calendario/calendario.html">Calendario</a>
+          <a href="/Glosa/Glosario.html">Glosario</a>
+          <a href="/views/pages/blog.html">Blog</a>
+          <a href="/views/pages/videos.html">Videos</a>
+          <a href="/foro.html">Foro</a>
+        </details>
+        <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+        <a href="/views/pages/scanner.html">Escaner</a>
+      </div>
+      <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesion</a>
+    </div>
+  </header>
+
+  <div class="videos-header">
+    <h1>🎥 Videos Educativos</h1>
+    <p>Tutoriales y guías en video para el control de la diabetes</p>
+  </div>
+
+  <div class="container">
+    <div class="back-link">
+      <a href="/views/pages/social.html"><i class="bi bi-arrow-left"></i> Volver a Social</a>
+    </div>
+
+    <div class="videos-grid" id="videos-container">
+      <!-- Los videos se cargarán aquí -->
+    </div>
+
+    <div id="empty-state" class="empty-state" style="display: none;">
+      <div class="empty-state-icon">🎬</div>
+      <h2>Videos en Construcción</h2>
+      <p>Estamos preparando tutoriales de calidad para ti. Vuelve pronto para ver nuestros videos educativos.</p>
+      <a href="/views/pages/social.html" class="btn-primary-custom">Volver a Social</a>
+    </div>
+  </div>
+
+  <script>
+    // Cargar header
+    
+
+    // Ejemplo de videos - puedes agregar más
+    const videos = [
+      {
+        id: 1,
+        titulo: "¿Cómo usar el medidor de glucosa?",
+        duracion: "5:32",
+        fecha: "Hace 2 meses",
+        categoria: "Tutorial",
+        descripcion: "Aprende paso a paso cómo usar correctamente un medidor de glucosa.",
+        icono: "🩺"
+      },
+      {
+        id: 2,
+        titulo: "Alimentos que debes evitar",
+        duracion: "7:15",
+        fecha: "Hace 1 mes",
+        categoria: "Nutrición",
+        descripcion: "Conoce cuáles son los alimentos que pueden afectar tus niveles de glucosa.",
+        icono: "🥗"
+      },
+      {
+        id: 3,
+        titulo: "Ejercicios seguros para diabéticos",
+        duracion: "10:45",
+        fecha: "Hace 3 semanas",
+        categoria: "Bienestar",
+        descripcion: "Descubre qué tipos de ejercicio puedes realizar de forma segura.",
+        icono: "🏃"
+      }
+    ];
+
+    // Renderizar videos
+    const container = document.getElementById('videos-container');
+    if (videos.length === 0) {
+      document.getElementById('empty-state').style.display = 'block';
+    } else {
+      videos.forEach(video => {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.innerHTML = `
+          <div class="video-thumbnail">
+            ${video.icono}
+            <div class="video-play-icon"><i class="bi bi-play-fill"></i></div>
+            <span class="video-duration">${video.duracion}</span>
+          </div>
+          <div class="video-card-content">
+            <div class="video-card-meta">
+              <span><i class="bi bi-calendar"></i> ${video.fecha}</span>
+              <span><i class="bi bi-tag"></i> ${video.categoria}</span>
+            </div>
+            <h3>${video.titulo}</h3>
+            <p>${video.descripcion}</p>
+            <a href="#" class="video-card-link">Ver video <i class="bi bi-arrow-right"></i></a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>

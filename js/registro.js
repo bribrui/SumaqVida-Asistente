@@ -1,4 +1,4 @@
-const form = document.getElementById('form-registro');
+﻿const form = document.getElementById('form-registro');
 const tabla = document.querySelector('#tabla-historial tbody');
 const metaDiaria = document.getElementById('metaDiaria');
 let registrosHoy = 0;
@@ -83,7 +83,7 @@ if (form && tabla) {
     formData.append('actividad', actividad);
     formData.append('observaciones', observaciones);
     formData.append('fecha', fecha);
-    fetch('/Sumaqvida/api/guardar_registro_diario.php', {
+    fetch('/api/guardar_registro_diario.php', {
       method: 'POST',
       body: formData
     })

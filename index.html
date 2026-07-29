@@ -1,57 +1,439 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charseat="UTF-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SumaqVida</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/app.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/app.js" defer></script>
 </head>
 <body>
 
-  <div id="include-header"></div>
-
-  <div class="banner">
-    <div class="banner-left">
-      <h1>Controla tu diabetes</h1>
-      <p>Registra, evalúa y mejora tus decisiones diarias con una herramienta inteligente y preventiva.</p>
-      <a href="#funcionalidades">Comenzar ahora</a>
+  <header>
+    <div class="logo">
+      <a href="/index.html">SumaqVida</a>
     </div>
-    <div class="banner-right">
-      <img src="/assets/img/banner-diabetes-3.png" alt="Control de diabetes">
+    <nav class="desktop-menu">
+      <a href="/index.html">Inicio</a>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">IA</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="/views/pages/minijuegos.html" class="dropdown-toggle">Comunidad</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/minijuegos.html">Minijuegos</a>
+          <a href="/Calendario/calendario.html">Calendario</a>
+          <a href="/Glosa/Glosario.html">Glosario</a>
+          <a href="/views/pages/blog.html">Blog</a>
+          <a href="/views/pages/videos.html">Videos</a>
+          <a href="/foro.html">Foro</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+      <a href="/views/pages/scanner.html">Escáner</a>
+      <a href="/views/pages/panel.html">Mi Panel</a>
+    </nav>
+    <div class="login-btn desktop-menu">
+      <span id="usuarioNombre" class="usuario-nombre" style="margin-right:16px;color:#e0356d;font-weight:500;"></span>
+      <a href="/views/pages/login.html">Iniciar sesión</a>
+    </div>
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="close-btn" onclick="toggleMobileMenu()">×</div>
+      <div class="menu-centrado">
+        <a href="/index.html">Inicio</a>
+        <details>
+          <summary>IA</summary>
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </details>
+        <details>
+          <summary>Comunidad</summary>
+          <a href="/views/pages/minijuegos.html">Minijuegos</a>
+          <a href="/Calendario/calendario.html">Calendario</a>
+          <a href="/Glosa/Glosario.html">Glosario</a>
+          <a href="/views/pages/blog.html">Blog</a>
+          <a href="/views/pages/videos.html">Videos</a>
+          <a href="/foro.html">Foro</a>
+        </details>
+        <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+        <a href="/views/pages/scanner.html">Escáner</a>
+      </div>
+      <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesión</a>
+    </div>
+  </header>
+
+  <div class="banner hero-section">
+    <div class="banner-left hero-copy">
+      <span class="pill">IA + Salud + Alfabetización digital</span>
+      <h1>Mejora tus decisiones de salud con IA, educación y datos confiables.</h1>
+      <p>SumaqVida es una iniciativa juvenil de impacto social que integra inteligencia artificial, educación digital y participación comunitaria para fortalecer la prevención de la diabetes. La plataforma acompaña a jóvenes, familias y comunidades mediante herramientas interactivas que permiten aprender sobre salud, identificar información confiable y desarrollar hábitos saludables.</p>
+      <div class="banner-actions">
+        <a href="#propuesta">Comenzar</a>
+      </div>
+      <div class="hero-badges" style="display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;">
+        <span style="background:#f0f8ff;color:#0066cc;padding:0.5rem 1rem;border-radius:2rem;font-size:0.85rem;font-weight:600;">🆓 100% Gratuito</span>
+        <span style="background:#f0f8ff;color:#0066cc;padding:0.5rem 1rem;border-radius:2rem;font-size:0.85rem;font-weight:600;">🤖 IA Responsable</span>
+        <span style="background:#f0f8ff;color:#0066cc;padding:0.5rem 1rem;border-radius:2rem;font-size:0.85rem;font-weight:600;">🌎 Acceso para todos</span>
+        <span style="background:#f0f8ff;color:#0066cc;padding:0.5rem 1rem;border-radius:2rem;font-size:0.85rem;font-weight:600;">❤️ Comunidad</span>
+      </div>
+    </div>
+    <div class="banner-right hero-visual">
+      <img src="assets/img/banner-diabetes-3.png" alt="Control de diabetes">
     </div>
   </div>
 
-  <section id="funcionalidades" class="funcionalidades">
-    <h2>- Funciones Principales -</h2>
-    <ul>
-      <li>✔ Registro de glucosa, insulina y alimentos.</li>
-      <li>✔ Evaluación preventiva antes de comer o aplicar insulina.</li>
-      <li>✔ Alertas automáticas sobre riesgos de hipoglucemia o hiperglucemia.</li>
-      <li>✔ Sugerencias personalizadas de acciones y alimentación.</li>
-      <li>✔ Historial y evolución de tu tratamiento.</li>
-    </ul>
+  <section class="capabilities-section" style="padding:2rem 2rem;">
+    <div class="section-heading" style="margin-bottom:2rem;">
+      <h2 style="margin:0;">¿Cómo transformamos vidas?</h2>
+    </div>
+    <div class="capabilities-grid">
+      <article class="capability-card">
+        <h3>🤖 IA Responsable</h3>
+        <p>La inteligencia artificial funciona como una herramienta educativa que ayuda a interpretar información, explicar conceptos de salud, detectar posibles señales de desinformación y promover decisiones responsables. No reemplaza a profesionales de salud, sino que facilita el aprendizaje y la prevención.</p>
+      </article>
+      <article class="capability-card">
+        <h3>📚 Educación</h3>
+        <p>Fortalece la alfabetización en salud mediante cursos, minijuegos educativos, simulaciones y recursos interactivos que permiten aprender tomando decisiones, resolviendo retos y analizando información relacionada con la diabetes y el bienestar.</p>
+      </article>
+      <article class="capability-card">
+        <h3>🤝 Comunidad</h3>
+        <p>Conecta pacientes, familias y profesionales para compartir experiencias y apoyo.</p>
+      </article>
+      <article class="capability-card">
+        <h3>📈 Impacto</h3>
+        <p>Promueve hábitos saludables y genera información para medir el cambio en la comunidad.</p>
+      </article>
+    </div>
+  </section>
+  <section id="propuesta" class="propuesta-section">
+    <div class="section-heading">
+      <h2>¿Qué problema resolvemos?</h2>
+    </div>
+    <div class="propuesta-content" style="background:#f9f9f9;padding:2rem;border-radius:1rem;margin-bottom:2rem;">
+      <p style="font-size:1.1rem;line-height:1.8;color:#333;margin-bottom:1.5rem;">
+        <strong>La diabetes representa uno de los principales desafíos de salud pública, pero muchas personas toman decisiones relacionadas con su bienestar basándose en información incompleta, contenido falso en internet o recomendaciones sin respaldo científico.
+
+Además, muchos jóvenes y familias no cuentan con herramientas educativas atractivas que les permitan comprender la prevención de la diabetes, mejorar su alimentación y desarrollar hábitos saludables.
+
+SumaqVida AI nace como una alternativa de solución frente a esta problemática, combinando inteligencia artificial responsable, educación interactiva y participación comunitaria para acercar información confiable de manera gratuita y accesible.</strong>
+      </p>
+      <p style="font-size:1rem;line-height:1.8;color:#666;margin-bottom:1.5rem;">
+        La desinformación, el desconocimiento sobre alimentación y la falta de acompañamiento dificultan el autocuidado y aumentan el riesgo de complicaciones.
+      </p>
+      <p style="font-size:1rem;line-height:1.8;color:#333;">
+        <strong>SumaqVida AI nace para integrar inteligencia artificial, educación y comunidad en una sola plataforma que facilite decisiones de salud más informadas.</strong>
+      </p>
+    </div>
+    <div style="background:#e8f4f8;padding:2rem;border-radius:1rem;text-align:center;border-left:4px solid #0066cc;">
+      <p style="font-size:0.9rem;color:#666;margin-bottom:2rem;font-weight:600;">Gráficos de impacto y análisis</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;">
+        <div style="background:white;border-radius:0.8rem;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+          <img src="assets/img/GRAFICO%20PROBLEMA.png" alt="Gráfico 1" style="width:100%;height:200px;object-fit:cover;">
+        </div>
+        <div style="background:white;border-radius:0.8rem;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+          <img src="assets/img/gRAFICO%20PROBLEMA%201.png" alt="Gráfico 2" style="width:100%;height:200px;object-fit:cover;">
+        </div>
+        <div style="background:white;border-radius:0.8rem;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+          <img src="assets/img/GRAFICO%20PROBLEMA%202.png" alt="Gráfico 3" style="width:100%;height:200px;object-fit:cover;">
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section id="sobre">
-    <h2>- ¿Qué es SumaqVida? -</h2>
-    <p>
-      SumaqVida es una plataforma web diseñada para personas con diabetes que desean prevenir crisis y tomar decisiones informadas. Desde el registro de tus niveles de glucosa hasta la evaluación automática antes de comer o usar insulina, te brinda una guía clara, sencilla y visual para mantenerte en control.
-    </p>
+  <!-- NUEVA SECCIÓN: Nuestra conexión con la comunidad -->
+  <section id="conexion-comunidad" style="width:100%;padding:4rem 2rem;background:linear-gradient(135deg,#f0f8ff 0%,#e3f2fd 100%);">
+    <div class="container" style="max-width:1000px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:2rem;">
+        <h2 style="color:#1a1a2e;font-size:2.5rem;font-weight:900;margin-bottom:1rem;">🌱 Nuestra conexión con la comunidad</h2>
+      </div>
+      <div style="background:white;padding:2.5rem;border-radius:1rem;border-left:4px solid #0066cc;box-shadow:0 4px 16px rgba(0,102,204,0.1);">
+        <p style="font-size:1.05rem;line-height:1.8;color:#333;margin-bottom:1.5rem;">
+          <strong>SumaqVida AI no fue creada únicamente desde la tecnología, sino desde la experiencia directa con la población.</strong>
+        </p>
+        <p style="font-size:1rem;line-height:1.8;color:#666;margin-bottom:1.5rem;">
+          Antes y durante el desarrollo de la plataforma se realizaron actividades educativas con niños, jóvenes y familias, incluyendo capacitaciones sobre prevención de diabetes, talleres de alimentación saludable, preparación de recetas y presentación de la herramienta digital.
+        </p>
+        <p style="font-size:1rem;line-height:1.8;color:#333;">
+          <strong>Estas experiencias permitieron conocer las necesidades reales de los participantes y adaptar la plataforma para que sea más cercana, comprensible e interactiva.</strong>
+        </p>
+      </div>
+    </div>
   </section>
 
-  <section id="faq" class="faq">
-    <h2>- Preguntas Frecuentes -</h2>
-    <ul>
-      <li><strong>¿Es gratuito el uso?</strong><br/>Sí, esta herramienta es gratuita y de libre acceso.</li>
-      <li><strong>¿Necesito conexión a Internet?</strong><br/>Sí, ya que trabaja desde el navegador.</li>
-      <li><strong>¿Es una herramienta médica?</strong><br/>No reemplaza atención médica. Es una ayuda preventiva y educativa.</li>
-      <li><strong>¿Puedo guardar mis registros?</strong><br/>Sí, en la siguiente versión se incluirá historial y exportación.</li>
-    </ul>
+  <section id="analysis" class="analysis-section" style="width:100%;padding:4rem 2rem 2rem 2rem;">
+    <div class="container" style="max-width:1200px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <p style="color:#e0356d;font-size:0.9rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem;">DONDE PUEDE APOYARTE LA IA</p>
+        <h2 style="color:#1a1a2e;font-size:3rem;font-weight:900;line-height:1.4;margin-bottom:1.5rem;background:linear-gradient(135deg,#1a1a2e 0%,#0066cc 50%,#1a1a2e 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-shadow:none;letter-spacing:-0.02em;">La IA es una ayuda dentro de una plataforma mucho más amplia.</h2>
+        <p style="color:#666;font-size:1.1rem;line-height:1.8;max-width:700px;margin:0 auto;">SumaqVida AI también ofrece seguimiento, educación, recetas y una comunidad activa. Estos son algunos casos prácticos en los que puedes usar el verificador.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="ia-responsable" class="ia-responsable-section" style="width:100%;padding:2rem 2rem 4rem 2rem;background:#f9f9f9;">
+    <div class="container" style="max-width:1000px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:2rem;">
+        <h2 style="color:#e0356d;font-size:2.2rem;font-weight:900;margin-bottom:1.5rem;">La IA al servicio de decisiones responsables</h2>
+      </div>
+      <div style="background:white;padding:2.5rem;border-radius:1rem;border-left:4px solid #e0356d;box-shadow:0 4px 16px rgba(224,53,109,0.1);">
+        <p style="font-size:1.1rem;line-height:1.8;color:#333;margin-bottom:1.5rem;">
+          <strong>La inteligencia artificial no reemplaza al profesional de salud.</strong>
+        </p>
+        <p style="font-size:1rem;line-height:1.8;color:#666;">
+          Su función es apoyar a las personas para interpretar información, detectar posibles riesgos y fomentar hábitos saludables. En SumaqVida AI, la IA es una herramienta de responsabilidad, no de automatización, promoviendo el uso consciente de la tecnología en beneficio de la salud comunitaria.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="respaldo-evidencia" class="evidence-section" style="width:100%;padding:4rem 2rem;">
+    <div class="container" style="max-width:1200px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <p style="color:#e0356d;font-size:0.9rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem;">RESPALDO POR EVIDENCIA</p>
+        <h2 style="color:#1a1a2e;font-size:2.5rem;font-weight:900;margin-bottom:3rem;">Información basada en guías y fuentes científicas</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:3rem;align-items:center;justify-items:center;">
+        <div style="text-align:center;">
+          <img src="assets/img/oms-logo.png" alt="Logo OMS" style="height:80px;margin-bottom:1rem;object-fit:contain;">
+          <p style="font-weight:700;color:#333;font-size:1.1rem;">OMS</p>
+        </div>
+        <div style="text-align:center;">
+          <img src="assets/img/ada-logo.png" alt="Logo ADA" style="height:80px;margin-bottom:1rem;object-fit:contain;">
+          <p style="font-weight:700;color:#333;font-size:1.1rem;">ADA</p>
+        </div>
+        <div style="text-align:center;">
+          <img src="assets/img/minsa-logo.png" alt="Logo MINSA" style="height:80px;margin-bottom:1rem;object-fit:contain;">
+          <p style="font-weight:700;color:#333;font-size:1.1rem;">MINSA</p>
+        </div>
+        <div style="text-align:center;">
+          <img src="assets/img/pubmed-logo.png" alt="Logo PubMed" style="height:80px;margin-bottom:1rem;object-fit:contain;">
+          <p style="font-weight:700;color:#333;font-size:1.1rem;">PubMed</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="access-section" style="width:100%;padding:5rem 2rem;">
+    <div class="container" style="max-width:1200px;margin:0 auto;">
+      <div style="background:#f0f8ff;padding:3.5rem 2.5rem;border-radius:1.5rem;position:relative;">
+        <!-- Badge verde en esquina superior derecha -->
+        <div style="position:absolute;top:-1.5rem;right:2rem;background:#10b981;color:white;padding:1.2rem 1.8rem;border-radius:2rem;font-weight:700;font-size:0.95rem;text-align:center;box-shadow:0 4px 12px rgba(16,185,129,0.3);">
+          <div style="font-size:1.3rem;">🟢</div>
+          <div>100% Gratuito</div>
+          <div style="font-size:0.8rem;margin-top:0.5rem;font-weight:500;line-height:1.4;">Sin publicidad invasiva<br>Sin pagos ocultos<br>Acceso abierto</div>
+        </div>
+        
+        <!-- Título centrado -->
+        <div style="text-align:center;margin-bottom:3rem;margin-top:1rem;">
+          <h2 style="color:#1a1a2e;font-size:2.8rem;font-weight:900;margin:0;">Acceso para todos</h2>
+        </div>
+        
+        <!-- Grid de 4 tarjetas (2x2 en desktop) -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;">
+          <div style="background:white;padding:2rem;border-radius:1rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.08);transition:transform 0.3s,box-shadow 0.3s;cursor:pointer;" class="access-card">
+            <div style="font-size:3.5rem;margin-bottom:1rem;">🆓</div>
+            <h3 style="color:#1a1a2e;font-size:1.3rem;font-weight:700;margin-bottom:0.5rem;">100% Gratuito</h3>
+            <p style="color:#666;line-height:1.6;font-size:0.95rem;">Todas las funciones de SumaqVida AI están disponibles sin costo. Creemos que el acceso a herramientas de educación y apoyo para la salud no debe depender de la capacidad económica de las personas.</p>
+          </div>
+          <div style="background:white;padding:2rem;border-radius:1rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.08);transition:transform 0.3s,box-shadow 0.3s;cursor:pointer;" class="access-card">
+            <div style="font-size:3.5rem;margin-bottom:1rem;">🌎</div>
+            <h3 style="color:#1a1a2e;font-size:1.3rem;font-weight:700;margin-bottom:0.5rem;">Accesible para todos</h3>
+            <p style="color:#666;line-height:1.6;font-size:0.95rem;">La plataforma está diseñada para que pacientes, familias, estudiantes, docentes, cuidadores y comunidades puedan utilizarla de manera sencilla, sin necesidad de conocimientos técnicos.</p>
+          </div>
+          <div style="background:white;padding:2rem;border-radius:1rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.08);transition:transform 0.3s,box-shadow 0.3s;cursor:pointer;" class="access-card">
+            <div style="font-size:3.5rem;margin-bottom:1rem;">❤️</div>
+            <h3 style="color:#1a1a2e;font-size:1.3rem;font-weight:700;margin-bottom:0.5rem;">Inclusión</h3>
+            <p style="color:#666;line-height:1.6;font-size:0.95rem;">SumaqVida AI promueve una experiencia accesible mediante un diseño intuitivo, lenguaje claro y herramientas pensadas para personas de diferentes edades y contextos.</p>
+          </div>
+          <div style="background:white;padding:2rem;border-radius:1rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.08);transition:transform 0.3s,box-shadow 0.3s;cursor:pointer;" class="access-card">
+            <div style="font-size:3.5rem;margin-bottom:1rem;">🤝</div>
+            <h3 style="color:#1a1a2e;font-size:1.3rem;font-weight:700;margin-bottom:0.5rem;">Compromiso social</h3>
+            <p style="color:#666;line-height:1.6;font-size:0.95rem;">Nuestro objetivo es reducir las barreras de acceso a información confiable sobre diabetes, fortaleciendo la educación, la prevención y el bienestar comunitario mediante tecnología e IA responsable.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección: Nuestra promesa -->
+  <section class="promise-section" style="width:100%;padding:4rem 2rem;background:linear-gradient(135deg,#0066cc 0%,#0099ff 100%);color:white;text-align:center;">
+    <div class="container" style="max-width:900px;margin:0 auto;">
+      <h2 style="font-size:2rem;margin-bottom:1.5rem;">Nuestra promesa</h2>
+      <p style="font-size:1.2rem;line-height:1.8;margin-bottom:1.5rem;font-weight:300;">
+        <strong>Creemos que ninguna persona debería pagar para acceder a información confiable que pueda mejorar su salud y su calidad de vida.</strong>
+      </p>
+      <p style="font-size:1rem;line-height:1.8;">
+        Por eso SumaqVida AI ofrece sus herramientas de manera gratuita, promoviendo la igualdad de oportunidades, la inclusión digital y el acceso equitativo al conocimiento.
+      </p>
+    </div>
+  </section>
+
+  <!-- Sección: ¿Qué hace diferente a SumaqVida AI? -->
+  <section class="why-different-section" style="width:100%;padding:4rem 2rem;">
+    <div class="container" style="max-width:1200px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <h2 style="color:#1a1a2e;font-size:2.5rem;margin-bottom:1rem;">🚀 ¿Qué hace diferente a SumaqVida AI?</h2>
+      </div>
+      <div style="background:#f9f9f9;padding:2.5rem;border-radius:1rem;margin-bottom:2rem;">
+        <p style="font-size:1.05rem;line-height:1.8;color:#333;margin-bottom:1.5rem;">
+          <strong>SumaqVida AI combina elementos que normalmente se encuentran separados:</strong>
+        </p>
+        <ul style="list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;color:#333;font-size:1rem;line-height:1.6;">
+          <li style="display:flex;align-items:flex-start;gap:0.8rem;">
+            <span style="font-size:1.3rem;flex-shrink:0;">🤖</span>
+            <span><strong>Inteligencia artificial responsable.</strong></span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:0.8rem;">
+            <span style="font-size:1.3rem;flex-shrink:0;">🎮</span>
+            <span><strong>Aprendizaje mediante videojuegos educativos.</strong></span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:0.8rem;">
+            <span style="font-size:1.3rem;flex-shrink:0;">📰</span>
+            <span><strong>Alfabetización mediática para combatir noticias falsas sobre salud.</strong></span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:0.8rem;">
+            <span style="font-size:1.3rem;flex-shrink:0;">🥗</span>
+            <span><strong>Educación nutricional práctica.</strong></span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:0.8rem;">
+            <span style="font-size:1.3rem;flex-shrink:0;">🤝</span>
+            <span><strong>Participación comunitaria.</strong></span>
+          </li>
+        </ul>
+        <p style="font-size:1rem;line-height:1.8;color:#666;margin-top:1.5rem;font-style:italic;">
+          De esta manera, transforma la educación tradicional en una experiencia activa donde los usuarios no solo reciben información, sino que analizan, experimentan y toman decisiones.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUEVA SECCIÓN: Evolución del proyecto -->
+  <section id="evolucion" style="width:100%;padding:4rem 2rem;background:#f0f8ff;">
+    <div class="container" style="max-width:1000px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:2rem;">
+        <h2 style="color:#1a1a2e;font-size:2.5rem;font-weight:900;margin-bottom:1rem;">🔄 Evolución del proyecto</h2>
+      </div>
+      <div style="background:white;padding:2.5rem;border-radius:1rem;border-left:4px solid #e0356d;box-shadow:0 4px 16px rgba(224,53,109,0.1);">
+        <p style="font-size:1.05rem;line-height:1.8;color:#333;margin-bottom:1.5rem;">
+          <strong>SumaqVida AI ha evolucionado a partir de la retroalimentación obtenida durante sus actividades comunitarias.</strong>
+        </p>
+        <p style="font-size:1rem;line-height:1.8;color:#666;margin-bottom:1.5rem;">
+          Inicialmente fue planteada como una herramienta informativa sobre diabetes; sin embargo, gracias a la participación de jóvenes y familias, incorporó nuevas funcionalidades como:
+        </p>
+        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:0.8rem;color:#333;font-size:0.95rem;line-height:1.6;">
+          <li style="display:flex;align-items:center;gap:0.8rem;">
+            <span style="font-size:1.2rem;">✨</span>
+            <span>Minijuegos educativos.</span>
+          </li>
+          <li style="display:flex;align-items:center;gap:0.8rem;">
+            <span style="font-size:1.2rem;">✨</span>
+            <span>Detector de información falsa.</span>
+          </li>
+          <li style="display:flex;align-items:center;gap:0.8rem;">
+            <span style="font-size:1.2rem;">✨</span>
+            <span>Herramientas de seguimiento de hábitos.</span>
+          </li>
+          <li style="display:flex;align-items:center;gap:0.8rem;">
+            <span style="font-size:1.2rem;">✨</span>
+            <span>Inteligencia artificial educativa.</span>
+          </li>
+          <li style="display:flex;align-items:center;gap:0.8rem;">
+            <span style="font-size:1.2rem;">✨</span>
+            <span>Recursos interactivos sobre nutrición y prevención.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUEVA SECCIÓN: Impacto generado -->
+  <section id="impacto-generado" style="width:100%;padding:4rem 2rem;">
+    <div class="container" style="max-width:1000px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:2rem;">
+        <h2 style="color:#1a1a2e;font-size:2.5rem;font-weight:900;margin-bottom:1rem;">❤️ Impacto generado</h2>
+      </div>
+      <div style="background:linear-gradient(135deg,#fff3e0 0%,#ffe0b2 100%);padding:2.5rem;border-radius:1rem;border-left:4px solid #ff9800;box-shadow:0 4px 16px rgba(255,152,0,0.1);">
+        <p style="font-size:1.05rem;line-height:1.8;color:#333;margin-bottom:1.5rem;">
+          <strong>SumaqVida AI busca reducir las barreras de acceso al conocimiento sobre diabetes mediante una plataforma gratuita e inclusiva.</strong>
+        </p>
+        <p style="font-size:1rem;line-height:1.8;color:#666;margin-bottom:1.5rem;">
+          A través de talleres educativos, actividades prácticas y encuestas de retroalimentación, la iniciativa ha permitido acercar información sobre alimentación saludable, prevención y uso responsable de herramientas digitales a diferentes grupos de la comunidad.
+        </p>
+        <p style="font-size:1rem;line-height:1.8;color:#333;">
+          <strong>El proyecto promueve que los jóvenes no sean únicamente receptores de información, sino agentes activos capaces de compartir conocimientos y generar cambios positivos en su entorno.</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frase final -->
+  <section class="final-message-section" style="width:100%;padding:4rem 2rem;text-align:center;background:#f9f9f9;">
+    <div class="container" style="max-width:900px;margin:0 auto;">
+      <h2 style="color:#0066cc;font-size:2rem;line-height:1.8;margin-bottom:1.5rem;">
+        La salud, la educación y el acceso a información confiable son derechos, no privilegios.
+      </h2>
+      <p style="color:#666;font-size:1.1rem;line-height:1.8;">
+        <strong>Por ello SumaqVida AI es una plataforma gratuita, inclusiva y diseñada para acompañar a las personas en la construcción de comunidades más saludables mediante el uso responsable de la inteligencia artificial.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- Estilos para animaciones -->
+  <style>
+    .access-card:hover, .why-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+  </style>
+
+  <section id="sobre" class="impact-section" style="width:100%;padding:4rem 2rem;">
+    <div class="container" style="max-width:1200px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <h2 style="color:#1a1a2e;font-size:2.8rem;font-weight:900;margin-bottom:1rem;">🌎 Mucho más que una aplicación: una iniciativa de transformación social</h2>
+      </div>
+      <div style="background:linear-gradient(135deg,#e0356d 0%,#e26a82 100%);padding:3rem;border-radius:1.5rem;box-shadow:0 8px 24px rgba(224,53,109,0.2);">
+        <div style="max-width:800px;margin:0 auto;text-align:center;">
+          <p style="color:white;font-size:1.05rem;line-height:1.8;margin-bottom:1.5rem;">
+            <strong>SumaqVida AI representa la unión entre tecnología, educación y comunidad.</strong>
+          </p>
+          <p style="color:white;font-size:1rem;line-height:1.8;margin-bottom:1.5rem;">
+            Su propósito no es reemplazar la atención médica, sino fortalecer la prevención, mejorar la alfabetización en salud y brindar herramientas gratuitas para que más personas puedan tomar decisiones informadas sobre su bienestar.
+          </p>
+          <p style="color:white;font-size:1rem;line-height:1.8;">
+            <strong>Porque una comunidad saludable comienza con personas informadas, participativas y capaces de transformar su realidad.</strong>
+          </p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <footer>
-    <p>© 2025 SumaqVida - Todos los derechos reservados</p>
+    <p>© 2025 SumaqVida AI - Plataforma de alfabetización mediática en salud</p>
   </footer>
 
   <!-- Chat SonqoInti flotante con historial tipo WhatsApp -->
@@ -201,7 +583,7 @@ sendButton.onclick = function() {
   loadingDiv.textContent = 'Cargando...';
   chatLog.appendChild(loadingDiv);
   chatLog.scrollTop = chatLog.scrollHeight;
-  fetch('/Sumaqvida/api/cha-gemini.php', {
+  fetch('/api/cha-gemini.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message: msg })

@@ -1,24 +1,40 @@
-<header>
+﻿<header>
   <div class="logo">
     <a href="/index.html">SumaqVida</a>
   </div>
 <nav class="desktop-menu">
-  <a href="/index.html#sobre">Nosotros</a>
+  <a href="/index.html">Inicio</a>
   <div class="dropdown">
-    <a href="#">Funciones</a>
+    <a href="#" class="dropdown-toggle">IA</a>
     <div class="dropdown-content">
       <a href="/views/pages/registro-diario.html">Registro diario</a>
       <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
       <a href="/views/pages/recetas.html">Recetas</a>
     </div>
   </div>
-  <a href="/Sumaqvida/foro.html">Foro</a>  
-  <a href="/Sumaqvida/Calendario/calendario.html">Calendario</a>
-  <a href="/Glosario/Glosario.html">Glosario</a>
-  <a href="/Sumaqvida/views/pages/blog.html">Blog</a>
-  <a href="/Sumaqvida/views/p ages/videos.html">Videos</a>
-  <a href="/Sumaqvida/index.html#faq">Preguntas</a>
-  <a href="/Sumaqvida/views/pages/panel.html">Mi Panel</a>
+  <div class="dropdown">
+    <a href="/views/pages/minijuegos.html" class="dropdown-toggle">Comunidad</a>
+    <div class="dropdown-content">
+      <a href="/views/pages/minijuegos.html">Minijuegos</a>
+      <a href="/Calendario/calendario.html">Calendario</a>
+      <a href="/Glosa/Glosario.html">Glosario</a>
+      <a href="/views/pages/blog.html">Blog</a>
+      <a href="/views/pages/videos.html">Videos</a>
+      <a href="/foro.html">Foro</a>
+    </div>
+  </div>
+  <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+  <a href="/views/pages/scanner.html">Escáner</a>
+  <a href="/views/pages/panel.html">Mi Panel</a>
 </nav>
   <div class="login-btn desktop-menu">
     <span id="usuarioNombre" class="usuario-nombre" style="margin-right:16px;color:#e0356d;font-weight:500;"></span>
@@ -34,22 +50,40 @@
   <div class="mobile-menu" id="mobileMenu">
     <div class="close-btn" onclick="toggleMobileMenu()">×</div>
     <div class="menu-centrado">
-      <a href="/index.html#sobre">Nosotros</a>
+      <a href="/index.html">Inicio</a>
       <details>
-        <summary>Funciones</summary>
+        <summary>IA</summary>
         <a href="/views/pages/registro-diario.html">Registro diario</a>
         <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
         <a href="/views/pages/recetas.html">Recetas</a>
       </details>
-      <a href="/Sumaqvida/Glosario.html">Glosario</a>
-      <a href="/index.html#faq">Preguntas</a>
+      <details>
+        <summary>Comunidad</summary>
+        <a href="/views/pages/minijuegos.html">Minijuegos</a>
+        <a href="/Calendario/calendario.html">Calendario</a>
+        <a href="/Glosa/Glosario.html">Glosario</a>
+        <a href="/views/pages/blog.html">Blog</a>
+        <a href="/views/pages/videos.html">Videos</a>
+        <a href="/foro.html">Foro</a>
+      </details>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+      <a href="/views/pages/scanner.html">Escáner</a>
     </div>
     <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesión</a>
   </div>
   
 </header>
 <script>
-  fetch('/Sumaqvida/api/usuario_perfil.php')
+  fetch('/api/usuario_perfil.php')
     .then(res => res.json())
     .then(data => {
       if (data.success && data.nombre) {

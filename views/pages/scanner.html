@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escáner de alimentos - SumaqVida</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9fb;
+      padding-top: 110px;
+      margin: 0;
+    }
+    .scanner-hero {
+      max-width: 900px;
+      margin: 0 auto 2rem;
+      padding: 2rem 1.5rem;
+      background: linear-gradient(135deg, #e0356d 0%, #c0275a 100%);
+      color: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(224, 53, 109, 0.25);
+      text-align: center;
+    }
+    .scanner-hero h1 {
+      margin-bottom: 0.5rem;
+      font-size: 2.4rem;
+    }
+    .scanner-hero p {
+      margin: 0;
+      font-size: 1.05rem;
+      opacity: 0.95;
+    }
+    .scanner-content {
+      max-width: 900px;
+      margin: 0 auto 3rem;
+      background: white;
+      border-radius: 1.2rem;
+      padding: 2rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+    .scanner-content h2 {
+      color: #e0356d;
+      margin-bottom: 1rem;
+    }
+    .scanner-content p {
+      color: #444;
+      line-height: 1.7;
+    }
+    .scanner-content ul {
+      margin: 1rem 0 0 1.2rem;
+      color: #444;
+      line-height: 1.7;
+    }
+    .scanner-content code {
+      background: #f3f3f3;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.35rem;
+    }
+  </style>
+</head>
+<body>
+    <header>
+    <div class="logo"><a href="/index.html">SumaqVida</a></div>
+    <nav class="desktop-menu">
+      <a href="/index.html">Inicio</a>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">IA</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluacion antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="/views/pages/minijuegos.html" class="dropdown-toggle">Comunidad</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/minijuegos.html">Minijuegos</a>
+          <a href="/Calendario/calendario.html">Calendario</a>
+          <a href="/Glosa/Glosario.html">Glosario</a>
+          <a href="/views/pages/blog.html">Blog</a>
+          <a href="/views/pages/videos.html">Videos</a>
+          <a href="/foro.html">Foro</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+      <a href="/views/pages/scanner.html">Escaner</a>
+      <a href="/views/pages/panel.html">Mi Panel</a>
+    </nav>
+    <div class="login-btn desktop-menu">
+      <span id="usuarioNombre" class="usuario-nombre" style="margin-right:16px;color:#e0356d;font-weight:500;"></span>
+      <a href="/views/pages/login.html">Iniciar sesion</a>
+    </div>
+    <div class="hamburger" onclick="toggleMobileMenu()">&#9776;</div>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="close-btn" onclick="toggleMobileMenu()">&times;</div>
+      <div class="menu-centrado">
+        <a href="/index.html">Inicio</a>
+        <details><summary>IA</summary>
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluacion antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </details>
+        <details><summary>Comunidad</summary>
+          <a href="/views/pages/minijuegos.html">Minijuegos</a>
+          <a href="/Calendario/calendario.html">Calendario</a>
+          <a href="/Glosa/Glosario.html">Glosario</a>
+          <a href="/views/pages/blog.html">Blog</a>
+          <a href="/views/pages/videos.html">Videos</a>
+          <a href="/foro.html">Foro</a>
+        </details>
+        <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+        <a href="/views/pages/scanner.html">Escaner</a>
+      </div>
+      <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesion</a>
+    </div>
+  </header>
+  <script src="/js/app.js"></script>
+
+  <section class="scanner-hero">
+    <h1>Escáner de Alimentos</h1>
+    <p>Aquí integraremos OpenAI para reconocer comidas y ayudarte a tomar decisiones de control.</p>
+  </section>
+
+  <section class="scanner-content">
+    <h2>Estado actual</h2>
+    <p>Sube una foto o escribe una breve descripción y pulsa "Analizar". Si proporcionas solo la descripción, la consulta se enviará a OpenAI.</p>
+
+    <form id="scannerForm">
+      <label for="description">Descripción (opcional):</label><br>
+      <textarea id="description" name="description" rows="3" style="width:100%" placeholder="Ej: ensalada con pollo, arroz integral y aguacate"></textarea>
+      <div style="height:12px"></div>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
+        <button id="startCamera" type="button" class="btn-primary-custom">Abrir cámara</button>
+        <button id="capturePhoto" type="button" class="btn-secondary-custom" disabled>Capturar foto</button>
+        <button id="clearPhoto" type="button" class="btn-secondary-custom" disabled>Borrar foto</button>
+      </div>
+      <div id="cameraArea" style="display:none; margin-bottom:1rem;">
+        <video id="cameraVideo" autoplay playsinline style="width:100%; max-width:100%; border:1px solid #ccc; border-radius:0.75rem;"></video>
+      </div>
+      <div id="photoPreview" style="display:none; margin-bottom:1rem;"></div>
+      <label for="image">Foto (opcional):</label><br>
+      <input type="file" id="image" name="image" accept="image/*"><br><br>
+      <button type="submit" class="btn-primary-custom">Analizar</button>
+    </form>
+
+    <div id="scannerResult" style="margin-top:1.2rem"></div>
+
+    <h2>Notas</h2>
+    <ul>
+      <li>1. Necesitas una API key de OpenAI configurada en el servidor como la variable de entorno <code>OPENAI_API_KEY</code>.</li>
+      <li>2. Si subes imagen, por ahora se guarda en <code>/uploads/</code>. Para reconocimiento automático se requiere un modelo con visión y ajustar el backend para enviar la imagen al modelo vision-capable.</li>
+      <li>3. Nunca pegues tu API key directamente en el frontend. Revoca claves expuestas y usa variables de entorno.</li>
+    </ul>
+  </section>
+  <script>
+    const form = document.getElementById('scannerForm');
+    const resultEl = document.getElementById('scannerResult');
+    const startCameraBtn = document.getElementById('startCamera');
+    const capturePhotoBtn = document.getElementById('capturePhoto');
+    const clearPhotoBtn = document.getElementById('clearPhoto');
+    const cameraArea = document.getElementById('cameraArea');
+    const cameraVideo = document.getElementById('cameraVideo');
+    const photoPreview = document.getElementById('photoPreview');
+    const imageInput = document.getElementById('image');
+
+    let cameraStream = null;
+    let capturedBlob = null;
+
+    async function startCamera() {
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+        cameraVideo.srcObject = cameraStream;
+        cameraArea.style.display = 'block';
+        capturePhotoBtn.disabled = false;
+        clearPhotoBtn.disabled = false;
+        resultEl.innerHTML = '';
+      } catch (err) {
+        resultEl.innerHTML = '<pre style="color:red">No se pudo acceder a la cámara: ' + err.message + '</pre>';
+      }
+    }
+
+    function stopCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+      }
+      cameraVideo.srcObject = null;
+      cameraArea.style.display = 'none';
+      capturePhotoBtn.disabled = true;
+    }
+
+    function showPhotoPreview(blob) {
+      const url = URL.createObjectURL(blob);
+      photoPreview.style.display = 'block';
+      photoPreview.innerHTML = '<div><strong>Foto capturada:</strong></div><img src="' + url + '" alt="Foto capturada" style="width:100%; max-width:100%; border-radius:0.75rem; border:1px solid #ccc; margin-top:0.5rem;" />';
+    }
+
+    capturePhotoBtn.addEventListener('click', () => {
+      if (!cameraStream) {
+        resultEl.innerHTML = '<pre style="color:red">Activa primero la cámara.</pre>';
+        return;
+      }
+      const videoTrack = cameraStream.getVideoTracks()[0];
+      const settings = videoTrack.getSettings();
+      const width = settings.width || cameraVideo.videoWidth || 640;
+      const height = settings.height || cameraVideo.videoHeight || 480;
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(cameraVideo, 0, 0, width, height);
+      canvas.toBlob((blob) => {
+        if (blob) {
+          capturedBlob = blob;
+          showPhotoPreview(blob);
+          resultEl.innerHTML = '<div style="color:green">Foto capturada. Ahora envía el formulario.</div>';
+        }
+      }, 'image/jpeg', 0.85);
+    });
+
+    clearPhotoBtn.addEventListener('click', () => {
+      capturedBlob = null;
+      photoPreview.innerHTML = '';
+      photoPreview.style.display = 'none';
+      imageInput.value = '';
+      resultEl.innerHTML = '';
+    });
+
+    startCameraBtn.addEventListener('click', startCamera);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      resultEl.innerHTML = 'Analizando...';
+      const fd = new FormData();
+      const desc = document.getElementById('description').value.trim();
+      const file = imageInput.files[0];
+      if (desc) fd.append('description', desc);
+      if (capturedBlob) {
+        fd.append('image', capturedBlob, 'scan.jpg');
+      } else if (file) {
+        fd.append('image', file);
+      }
+
+      try {
+        const res = await fetch('/api/escaneo_alimentos.php', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (!data.success) {
+          resultEl.innerHTML = '<pre style="color:red">' + (data.error || JSON.stringify(data)) + '</pre>';
+          return;
+        }
+        let out = '';
+        if (data.image_path) {
+          out += '<div><strong>Imagen guardada:</strong> <a href="' + data.image_path + '" target="_blank">' + data.image_path + '</a></div>';
+        }
+        if (data.parsed) {
+          out += '<h3>Resultado estructurado</h3><pre>' + JSON.stringify(data.parsed, null, 2) + '</pre>';
+        }
+        if (data.assistant_text) {
+          out += '<h3>Respuesta del modelo</h3><pre>' + data.assistant_text + '</pre>';
+        } else if (data.message) {
+          out += '<div>' + data.message + '</div>';
+        } else {
+          out += '<div>Listo.</div>';
+        }
+        resultEl.innerHTML = out;
+      } catch (err) {
+        resultEl.innerHTML = '<pre style="color:red">Error: ' + err + '</pre>';
+      }
+    });
+  </script>
+</body>
+</html>

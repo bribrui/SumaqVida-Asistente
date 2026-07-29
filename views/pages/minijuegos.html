@@ -1,0 +1,1185 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minijuegos - SumaqVida</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding-top: 100px;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .minijuegos-header {
+      background: linear-gradient(135deg, #e0356d 0%, #c0275a 100%);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(224, 53, 109, 0.3);
+      margin-bottom: 3rem;
+    }
+
+    .minijuegos-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .minijuegos-header p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin-bottom: 4rem;
+    }
+
+    /* Games Styles */
+    .games-header {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .games-header h2 {
+      color: #10b981;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .games-header p {
+      color: #666;
+      margin: 0;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .game-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem 1.5rem;
+      border-radius: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .game-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .game-card-icon {
+      font-size: 2.5rem;
+    }
+
+    .game-card-title {
+      font-size: 0.95rem;
+    }
+
+    .game-content {
+      padding: 2rem;
+      background: white;
+      border-radius: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .game-question {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    .game-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .game-btn {
+      padding: 0.8rem 1rem;
+      border: 2px solid #e0356d;
+      background: white;
+      color: #e0356d;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .game-btn:hover {
+      background: #e0356d;
+      color: white;
+      transform: scale(1.02);
+    }
+
+    .game-result {
+      background: #f0f0f0;
+      padding: 1.5rem;
+      border-radius: 0.8rem;
+      margin-top: 1.5rem;
+      border-left: 4px solid #10b981;
+    }
+
+    .game-score {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #10b981;
+      margin: 1rem 0;
+    }
+
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .food-item {
+      background: #f0f0f0;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      cursor: grab;
+      text-align: center;
+      font-weight: 600;
+      border: 2px dashed #e0356d;
+      transition: all 0.3s ease;
+    }
+
+    .food-item:hover {
+      background: #fff3cd;
+      transform: scale(1.05);
+    }
+
+    .plate-zone {
+      background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+      padding: 2rem;
+      border-radius: 0.8rem;
+      min-height: 200px;
+      border: 3px dashed #e0356d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .plate-item {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 1rem;
+      max-width: 800px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+
+    @media (max-width: 768px) {
+      .minijuegos-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .games-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+
+      body {
+        padding-top: 80px;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+    <header>
+    <div class="logo"><a href="/index.html">SumaqVida</a></div>
+    <nav class="desktop-menu">
+      <a href="/index.html">Inicio</a>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">IA</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluacion antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="/views/pages/minijuegos.html" class="dropdown-toggle">Comunidad</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/minijuegos.html">Minijuegos</a>
+          <a href="/Calendario/calendario.html">Calendario</a>
+          <a href="/Glosa/Glosario.html">Glosario</a>
+          <a href="/views/pages/blog.html">Blog</a>
+          <a href="/views/pages/videos.html">Videos</a>
+          <a href="/foro.html">Foro</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+      <a href="/views/pages/scanner.html">Escaner</a>
+      <a href="/views/pages/panel.html">Mi Panel</a>
+    </nav>
+    <div class="login-btn desktop-menu">
+      <span id="usuarioNombre" class="usuario-nombre" style="margin-right:16px;color:#e0356d;font-weight:500;"></span>
+      <a href="/views/pages/login.html">Iniciar sesion</a>
+    </div>
+    <div class="hamburger" onclick="toggleMobileMenu()">&#9776;</div>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="close-btn" onclick="toggleMobileMenu()">&times;</div>
+      <div class="menu-centrado">
+        <a href="/index.html">Inicio</a>
+        <details><summary>IA</summary>
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluacion antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </details>
+        <details><summary>Comunidad</summary>
+          <a href="/views/pages/minijuegos.html">Minijuegos</a>
+          <a href="/Calendario/calendario.html">Calendario</a>
+          <a href="/Glosa/Glosario.html">Glosario</a>
+          <a href="/views/pages/blog.html">Blog</a>
+          <a href="/views/pages/videos.html">Videos</a>
+          <a href="/foro.html">Foro</a>
+        </details>
+        <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+        <a href="/views/pages/scanner.html">Escaner</a>
+      </div>
+      <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesion</a>
+    </div>
+  </header>
+
+  <div class="minijuegos-header">
+    <h1>🎮 Minijuegos Educativos</h1>
+    <p>Desafía tu conocimiento sobre diabetes con nuestros juegos interactivos</p>
+  </div>
+
+  <div class="container">
+    <div class="games-header">
+      <h2>¡Juega y Aprende!</h2>
+      <p>Pon a prueba tus conocimientos sobre diabetes de forma divertida</p>
+    </div>
+
+    <div class="games-grid" id="gamesGrid">
+      <!-- Los juegos se generarán dinámicamente con JavaScript -->
+    </div>
+  </div>
+
+  <!-- Modal para minijuegos -->
+  <div id="gamesModal" class="modal-overlay">
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+
+  <script>
+    // Cargar header
+    
+
+    // Esperar a que el DOM esté listo
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(initializeGames, 100);
+    });
+
+    // Si ya está listo, ejecutar inmediatamente
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => setTimeout(initializeGames, 100));
+    } else {
+      setTimeout(initializeGames, 100);
+    }
+
+    // ============== MINIJUEGOS ==============
+    const gamesData = {
+      detectorFakeNews: {
+        titulo: "🔍 Detector de Fake News",
+        descripcion: "¿Es información confiable o falsa? Decide sabiamente.",
+        preguntas: [
+          {
+            afirmacion: "La canela cura completamente la diabetes.",
+            respuesta: false,
+            explicacion: "❌ FALSO: La canela puede ayudar con el control glucémico pero NO cura la diabetes. Siempre requiere tratamiento médico."
+          },
+          {
+            afirmacion: "Las personas con diabetes nunca pueden comer frutas.",
+            respuesta: false,
+            explicacion: "❌ FALSO: Pueden comer frutas enteras en porciones controladas. Son fuentes importantes de vitaminas y fibra."
+          },
+          {
+            afirmacion: "El azúcar de coco es mejor que el azúcar blanco para diabéticos.",
+            respuesta: false,
+            explicacion: "❌ FALSO: Ambos elevan la glucosa de forma similar. El cuerpo los procesa como azúcar."
+          },
+          {
+            afirmacion: "El control de la glucosa previene complicaciones de la diabetes.",
+            respuesta: true,
+            explicacion: "✅ VERDADERO: Según ADA/OMS, un buen control glucémico previene hasta 80% de complicaciones."
+          },
+          {
+            afirmacion: "La diabetes tipo 1 es causada solo por comer dulces.",
+            respuesta: false,
+            explicacion: "❌ FALSO: DM1 es autoinmune. DM2 es multifactorial (genética, obesidad, inactividad)."
+          }
+        ]
+      },
+
+      platoInteligente: {
+        titulo: "🥘 El Plato Inteligente",
+        descripcion: "Arma un plato saludable. Arrastra los alimentos.",
+        alimentos: [
+          { nombre: "🥦 Brócoli", tipo: "verdura" },
+          { nombre: "🥬 Espinaca", tipo: "verdura" },
+          { nombre: "🍗 Pollo", tipo: "proteina" },
+          { nombre: "🐟 Pescado", tipo: "proteina" },
+          { nombre: "🍚 Arroz integral", tipo: "carbohidrato" },
+          { nombre: "🥔 Papa", tipo: "carbohidrato" },
+          { nombre: "🍎 Manzana", tipo: "fruta" },
+          { nombre: "🍓 Fresa", tipo: "fruta" }
+        ]
+      },
+
+      queHarias: {
+        titulo: "❓ ¿Qué harías?",
+        descripcion: "Situaciones reales. Toma la mejor decisión.",
+        escenarios: [
+          {
+            situacion: "Son las 2 PM. Tienes hambre y baja energía.",
+            opciones: [
+              { texto: "A) Comer un caramelo rápidamente", correcta: false, explicacion: "Sube rápido pero baja después. Mejor opción: comer equilibrado." },
+              { texto: "B) Comer pollo con arroz integral y verduras", correcta: true, explicacion: "✅ Balance perfecto: proteína + carbohidrato complejo + fibra." },
+              { texto: "C) Saltarse la comida", correcta: false, explicacion: "Causa hipoglucemia. Mantén horarios regulares." }
+            ]
+          },
+          {
+            situacion: "Tu glucosa está baja (hipoglucemia). ¿Qué haces?",
+            opciones: [
+              { texto: "A) Beber agua y esperar", correcta: false, explicacion: "Necesitas glucosa rápida: jugo, caramelo o tableta de glucosa." },
+              { texto: "B) Tomar jugo o comer caramelo INMEDIATAMENTE", correcta: true, explicacion: "✅ Correcto. Trata la hipoglucemia con carbohidratos simples rápidamente." },
+              { texto: "C) Ir al hospital", correcta: false, explicacion: "Exagerado. Solo si no mejora en 15 min." }
+            ]
+          },
+          {
+            situacion: "Estás en una fiesta. Hay postres azucarados.",
+            opciones: [
+              { texto: "A) No comer nada, frustración total", correcta: false, explicacion: "Puedes disfrutar con moderación. Come una porción pequeña." },
+              { texto: "B) Comer un postre pequeño + actividad física después", correcta: true, explicacion: "✅ Balance: disfruta sin culpa y compensa con ejercicio." },
+              { texto: "C) Comer todo lo que quieras", correcta: false, explicacion: "Riesgo de picos de glucosa peligrosos." }
+            ]
+          }
+        ]
+      },
+
+      memoriaGame: {
+        titulo: "🧠 Memoria Saludable",
+        descripcion: "Emparejar alimentos con beneficios.",
+        pares: [
+          { id: 1, alimento: "🥑 Palta", beneficio: "Grasas saludables" },
+          { id: 2, alimento: "🥗 Espinaca", beneficio: "Magnesio y fibra" },
+          { id: 3, alimento: "🐟 Pescado", beneficio: "Omega-3 cardio" },
+          { id: 4, alimento: "🥜 Almendras", beneficio: "Proteína y grasas" },
+          { id: 5, alimento: "🥕 Zanahoria", beneficio: "Beta-caroteno" },
+          { id: 6, alimento: "🥚 Huevo", beneficio: "Proteína completa" }
+        ]
+      },
+
+      triviaInteligente: {
+        titulo: "🎯 Trivia Inteligente",
+        descripcion: "Preguntas rápidas. Gana puntos.",
+        preguntas: [
+          {
+            pregunta: "¿Cuántas veces al día se recomienda medir la glucosa?",
+            opciones: ["1 vez", "2-4 veces", "Solo 1 vez al mes"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Cuál es el objetivo típico de HbA1c?",
+            opciones: ["Menor de 5%", "Menor de 7%", "Mayor de 8%"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Cuántos minutos de ejercicio se recomiendan por semana?",
+            opciones: ["30 minutos", "75 minutos", "150 minutos"],
+            respuesta: 2
+          },
+          {
+            pregunta: "¿Qué tipo de carbohidrato es mejor?",
+            opciones: ["Simples", "Complejos", "Ultraprocesados"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿La miel es mejor que el azúcar para diabéticos?",
+            opciones: ["Sí, mucho", "No, se procesan igual", "Depende"],
+            respuesta: 1
+          }
+        ]
+      },
+
+      supermercado: {
+        titulo: "🛒 Supermercado Saludable",
+        descripcion: "Presupuesto: $20. Elige productos saludables.",
+        productos: [
+          { nombre: "🥦 Brócoli", precio: 2, azucar: 0, fibra: 3, grasas: 0 },
+          { nombre: "🍫 Chocolate", precio: 3, azucar: 20, fibra: 0, grasas: 10 },
+          { nombre: "🐟 Salmón", precio: 8, azucar: 0, fibra: 0, grasas: 10 },
+          { nombre: "🥤 Refresco", precio: 2, azucar: 40, fibra: 0, grasas: 0 },
+          { nombre: "🥕 Zanahoria", precio: 1.5, azucar: 5, fibra: 3, grasas: 0 },
+          { nombre: "🍎 Manzana", precio: 2, azucar: 15, fibra: 4, grasas: 0 },
+          { nombre: "🥜 Almendras", precio: 4, azucar: 3, fibra: 3, grasas: 14 },
+          { nombre: "🍪 Galletas", precio: 2.5, azucar: 15, fibra: 0, grasas: 5 }
+        ]
+      },
+
+      misionComunidad: {
+        titulo: "👥 Misión Comunidad",
+        descripcion: "Ayuda a personajes. Desarrolla empatía.",
+        personajes: [
+          {
+            nombre: "👵 Rosa",
+            problema: "Acaba de diagnosticarle diabetes y está asustada.",
+            opciones: [
+              { accion: "Animarla diciendo que la diabetes se puede controlar con buenos hábitos", puntos: 100 },
+              { accion: "Decirle que es el final de su vida", puntos: 0 },
+              { accion: "Ignorarla", puntos: 0 }
+            ]
+          },
+          {
+            nombre: "👦 Pedro",
+            problema: "No sabe qué comer para controlar su glucosa.",
+            opciones: [
+              { accion: "Enseñarle el Método del Plato (1/2 verduras, 1/4 proteína, 1/4 carbohidratos)", puntos: 100 },
+              { accion: "Decirle que coma solo verduras", puntos: 30 },
+              { accion: "Recomendarle no comer nada de carbohidratos", puntos: 0 }
+            ]
+          },
+          {
+            nombre: "👨 Luis",
+            problema: "Cree que la miel 'natural' no sube la glucosa.",
+            opciones: [
+              { accion: "Explicarle que la miel y el azúcar se procesan igual en el cuerpo", puntos: 100 },
+              { accion: "Estar de acuerdo con él", puntos: 0 },
+              { accion: "Ignorarlo", puntos: 0 }
+            ]
+          }
+        ]
+      }
+    };
+
+    function initializeGames() {
+      const gamesGrid = document.getElementById('gamesGrid');
+      console.log('initializeGames llamado', gamesGrid); // Debug
+      
+      if (!gamesGrid) {
+        console.error('ERROR: No se encontró elemento gamesGrid');
+        return;
+      }
+      
+      const games = [
+        { key: 'hospitalIA', icon: '🏥', title: 'Hospital IA - Centro de Evaluación', bg: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)', external: '/views/pages/hospital-ia.html' },
+        { key: 'detectorFakeNews', icon: '🔍', title: 'Detector de Fake News', bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', external: '/views/pages/detector-fake-news.html' },
+        { key: 'platoInteligente', icon: '🍽️', title: 'Plato Inteligente', bg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', external: '/views/pages/plato-inteligente.html' },
+        { key: 'misionAlimenta', icon: '🚀', title: 'Misión: Alimenta tu Futuro', bg: 'linear-gradient(135deg, #ffd89b 0%, #19547b 100%)', external: '/views/pages/mision-alimenta-futuro.html' },
+        { key: 'codigoDiabetes', icon: '💉', title: 'Código Diabetes', bg: 'linear-gradient(135deg, #ff6b6b 0%, #d32f2f 100%)', external: '/views/pages/codigo-diabetes.html' },
+        { key: 'supermercado', icon: '🛒', title: 'Supermercado Inteligente', bg: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)', external: '/views/pages/supermercado-inteligente.html' },
+        { key: 'decisionesTransforman', icon: '🎮', title: 'Decisiones que Transforman', bg: 'linear-gradient(135deg, #a8e6cf 0%, #56ab2f 100%)', external: '/views/pages/decisiones-transforman.html' }
+      ];
+
+      gamesGrid.innerHTML = games.map(game => {
+        if (game.external) {
+          return `
+            <a href="${game.external}" style="text-decoration: none;">
+              <div class="game-card" style="background: ${game.bg}; cursor: pointer;">
+                <div class="game-card-icon">${game.icon}</div>
+                <div class="game-card-title">${game.title}</div>
+              </div>
+            </a>
+          `;
+        }
+        return `
+          <div class="game-card" onclick="playGame('${game.key}')" style="background: ${game.bg};">
+            <div class="game-card-icon">${game.icon}</div>
+            <div class="game-card-title">${game.title}</div>
+          </div>
+        `;
+      }).join('');
+      
+      console.log('Juegos inicializados correctamente'); // Debug
+    }
+
+    // Renderizar grid de juegos
+    function renderGames() {
+      initializeGames();
+    }
+
+    function playGame(gameType) {
+      const modal = document.getElementById('gamesModal');
+      const content = document.getElementById('modalContent');
+      let gameHtml = '<button class="modal-close" onclick="closeGames()">×</button>';
+      
+      if (gameType === 'detectorFakeNews') {
+        gameHtml += playFakeNewsGame();
+      } else if (gameType === 'platoInteligente') {
+        gameHtml += playPlatoGame();
+      } else if (gameType === 'misionAlimenta') {
+        gameHtml += playMisionAlimentaGame();
+      } else if (gameType === 'queHarias') {
+        gameHtml += playQueHarasGame();
+      } else if (gameType === 'memoriaGame') {
+        gameHtml += playMemoriaGame();
+      } else if (gameType === 'triviaInteligente') {
+        gameHtml += playTriviaGame();
+      } else if (gameType === 'supermercado') {
+        gameHtml += playSupermarketGame();
+      } else if (gameType === 'misionComunidad') {
+        gameHtml += playMisionGame();
+      }
+      
+      content.innerHTML = gameHtml;
+      modal.classList.add('active');
+    }
+
+    function closeGames() {
+      document.getElementById('gamesModal').classList.remove('active');
+    }
+
+    function playMisionAlimentaGame() {
+      return `
+        <style>
+          .mision-container { height: calc(100vh - 120px); overflow: hidden; border-radius: 8px; }
+          .mision-container iframe { width: 100%; height: 100%; border: none; }
+        </style>
+        <div class="mision-container">
+          <iframe src="/views/pages/mision-alimenta-futuro.html" onload="this.style.display='block';"></iframe>
+        </div>
+      `;
+    }
+
+    function playFakeNewsGame() {
+      let html = `<h2 style="color:#667eea;margin-bottom:1rem;">🔍 Detector de Fake News</h2><div id="fakeNewsContainer"></div>`;
+      const container = document.createElement('div');
+      container.innerHTML = html;
+      const fakeNewsContainer = container.querySelector('#fakeNewsContainer');
+      
+      const data = gamesData.detectorFakeNews;
+      let currentQuestion = 0;
+      let score = 0;
+
+      function showQuestion() {
+        if (currentQuestion >= data.preguntas.length) {
+          fakeNewsContainer.innerHTML = `
+            <div class="game-result">
+              <h3>¡Juego Completado!</h3>
+              <div class="game-score">${score}/${data.preguntas.length} correcto</div>
+              <p>Porcentaje: ${Math.round((score/data.preguntas.length)*100)}%</p>
+              <button class="game-btn" onclick="initializeGames(); closeGames()" style="width:100%;margin-top:1rem;">Volver</button>
+            </div>
+          `;
+          return;
+        }
+
+        const q = data.preguntas[currentQuestion];
+        fakeNewsContainer.innerHTML = `
+          <div class="game-content">
+            <div class="game-question">"${q.afirmacion}"</div>
+            <div class="game-options">
+              <button class="game-btn" onclick="checkFakeNews(true)">✅ VERDADERO</button>
+              <button class="game-btn" onclick="checkFakeNews(false)">❌ FALSO</button>
+            </div>
+          </div>
+        `;
+      }
+
+      window.checkFakeNews = (answer) => {
+        const q = data.preguntas[currentQuestion];
+        if (answer === q.respuesta) {
+          score++;
+        }
+        fakeNewsContainer.innerHTML = `
+          <div class="game-content">
+            <div style="background: ${answer === q.respuesta ? '#d4edda' : '#f8d7da'}; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+              ${answer === q.respuesta ? '✅ ¡Correcto!' : '❌ Incorrecto'}
+            </div>
+            <p>${q.explicacion}</p>
+            <button class="game-btn" style="width:100%;margin-top:1.5rem;" onclick="showFakeNewsQuestion()">Siguiente →</button>
+          </div>
+        `;
+      };
+
+      window.showFakeNewsQuestion = () => {
+        currentQuestion++;
+        showQuestion();
+      };
+
+      showQuestion();
+      return container.innerHTML;
+    }
+
+    function playPlatoGame() {
+      let html = `
+        <h2 style="color:#f5576c;margin-bottom:1rem;">🥘 El Plato Inteligente</h2>
+        <p style="margin-bottom:1rem;">Arrastra alimentos para formar un plato equilibrado.</p>
+        <div style="margin-bottom:1.5rem;">
+          <strong>Tu Plato:</strong>
+          <div class="plate-zone" id="plateZone">Arrastra aquí los alimentos</div>
+        </div>
+        <div>
+          <strong>Alimentos disponibles:</strong>
+          <div class="food-grid" id="foodGrid"></div>
+        </div>
+        <button class="game-btn" style="width:100%;margin-top:1rem;" onclick="checkPlate()">Verificar Plato</button>
+      `;
+
+      setTimeout(() => {
+        const foodGrid = document.getElementById('foodGrid');
+        if (foodGrid) {
+          gamesData.platoInteligente.alimentos.forEach(food => {
+            const div = document.createElement('div');
+            div.className = 'food-item';
+            div.draggable = true;
+            div.textContent = food.nombre;
+            div.dataset.tipo = food.tipo;
+            div.addEventListener('dragstart', (e) => {
+              e.dataTransfer.setData('text/plain', food.nombre + '|' + food.tipo);
+            });
+            foodGrid.appendChild(div);
+          });
+        }
+
+        const plateZone = document.getElementById('plateZone');
+        if (plateZone) {
+          plateZone.addEventListener('dragover', (e) => e.preventDefault());
+          plateZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('text/plain');
+            const [nombre, tipo] = data.split('|');
+            
+            const item = document.createElement('div');
+            item.className = 'plate-item';
+            item.textContent = nombre;
+            item.dataset.tipo = tipo;
+            plateZone.appendChild(item);
+          });
+        }
+      }, 100);
+
+      return html;
+    }
+
+    window.checkPlate = () => {
+      const plateZone = document.getElementById('plateZone');
+      const items = plateZone.querySelectorAll('.plate-item');
+      const tipos = {};
+
+      items.forEach(item => {
+        const tipo = item.dataset.tipo;
+        tipos[tipo] = (tipos[tipo] || 0) + 1;
+      });
+
+      const tieneVerdura = tipos['verdura'] >= 1;
+      const tieneProteina = tipos['proteina'] >= 1;
+      const tieneCarbohidrato = tipos['carbohidrato'] >= 1;
+      const tieneFruta = tipos['fruta'] >= 1;
+
+      const content = document.getElementById('modalContent');
+      if (tieneVerdura && tieneProteina && tieneCarbohidrato && tieneFruta) {
+        content.innerHTML = `
+          <button class="modal-close" onclick="closeGames()">×</button>
+          <div class="game-result">
+            <h3>🎉 ¡Plato Perfecto!</h3>
+            <p>Incluiste todos los grupos de alimentos necesarios:</p>
+            <ul style="text-align:left;">
+              <li>✅ Verduras: ${tipos['verdura']} porción</li>
+              <li>✅ Proteína: ${tipos['proteina']} porción</li>
+              <li>✅ Carbohidratos: ${tipos['carbohidrato']} porción</li>
+              <li>✅ Fruta: ${tipos['fruta']} porción</li>
+            </ul>
+            <p style="margin-top:1.5rem;"><strong>Resultado:</strong> Este plato sigue el Método del Plato de la ADA. ¡Excelente!</p>
+            <button class="game-btn" onclick="initializeGames(); closeGames()" style="width:100%;margin-top:1rem;">Volver al Menú</button>
+          </div>
+        `;
+      } else {
+        content.innerHTML = `
+          <button class="modal-close" onclick="closeGames()">×</button>
+          <div class="game-result">
+            <h3>⚠️ Plato Incompleto</h3>
+            <p>Te faltan grupos de alimentos:</p>
+            <ul style="text-align:left;">
+              <li>${tieneVerdura ? '✅' : '❌'} Verduras (1/2 plato)</li>
+              <li>${tieneProteina ? '✅' : '❌'} Proteína (1/4 plato)</li>
+              <li>${tieneCarbohidrato ? '✅' : '❌'} Carbohidratos (1/4 plato)</li>
+              <li>${tieneFruta ? '✅' : '❌'} Fruta (porción extra)</li>
+            </ul>
+            <p style="margin-top:1.5rem;"><strong>Recuerda:</strong> Un plato saludable debe tener todos los grupos.</p>
+            <button class="game-btn" onclick="playGame('platoInteligente')" style="width:100%;margin-top:1rem;">Intentar de Nuevo</button>
+          </div>
+        `;
+      }
+    };
+
+    function playQueHarasGame() {
+      let html = `<h2 style="color:#00f2fe;margin-bottom:1rem;">❓ ¿Qué harías?</h2><div id="queHarasContainer"></div>`;
+      const container = document.createElement('div');
+      container.innerHTML = html;
+      const queHarasContainer = container.querySelector('#queHarasContainer');
+      
+      const data = gamesData.queHarias;
+      let currentScenario = 0;
+
+      function showScenario() {
+        if (currentScenario >= data.escenarios.length) {
+          queHarasContainer.innerHTML = `
+            <div class="game-result">
+              <h3>¡Has terminado las situaciones!</h3>
+              <p>Espero que hayas aprendido a tomar mejores decisiones.</p>
+              <button class="game-btn" onclick="initializeGames(); closeGames()" style="width:100%;margin-top:1rem;">Volver</button>
+            </div>
+          `;
+          return;
+        }
+
+        const s = data.escenarios[currentScenario];
+        let optionsHtml = '';
+        s.opciones.forEach((opt, idx) => {
+          optionsHtml += `<button class="game-btn" onclick="checkQueHaras(${idx})">${opt.texto}</button>`;
+        });
+
+        queHarasContainer.innerHTML = `
+          <div class="game-content">
+            <div class="game-question">${s.situacion}</div>
+            <div class="game-options">${optionsHtml}</div>
+          </div>
+        `;
+      }
+
+      window.checkQueHaras = (optionIdx) => {
+        const s = data.escenarios[currentScenario];
+        const opt = s.opciones[optionIdx];
+        queHarasContainer.innerHTML = `
+          <div class="game-content">
+            <div style="background: ${opt.correcta ? '#d4edda' : '#fff3cd'}; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+              ${opt.correcta ? '✅ ¡Excelente decisión!' : '⚠️ Podrías mejorar'}
+            </div>
+            <p>${opt.explicacion}</p>
+            <button class="game-btn" style="width:100%;margin-top:1.5rem;" onclick="showQueHarasScenario()">Siguiente Situación →</button>
+          </div>
+        `;
+      };
+
+      window.showQueHarasScenario = () => {
+        currentScenario++;
+        showScenario();
+      };
+
+      showScenario();
+      return container.innerHTML;
+    }
+
+    function playMemoriaGame() {
+      let html = `<h2 style="color:#38f9d7;margin-bottom:1rem;">🧠 Memoria Saludable</h2><p style="margin-bottom:1.5rem;">Empareja alimentos con sus beneficios.</p><div id="memoriaContainer"></div>`;
+      const container = document.createElement('div');
+      container.innerHTML = html;
+      const memoriaContainer = container.querySelector('#memoriaContainer');
+      
+      const data = gamesData.memoriaGame;
+      let flipped = [];
+      let matches = 0;
+      let attempts = 0;
+
+      const items = [];
+      data.pares.forEach(par => {
+        items.push({ id: par.id, text: par.alimento, type: 'alimento' });
+        items.push({ id: par.id, text: par.beneficio, type: 'beneficio' });
+      });
+
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+
+      function renderCards() {
+        let html = '<div class="food-grid" style="margin-bottom:1.5rem;">';
+        items.forEach((item, idx) => {
+          const isFlipped = flipped.some(f => f.index === idx);
+          const isMatched = flipped.some(f => f.index === idx && f.matched);
+          html += `
+            <div class="food-item" onclick="flipMemoriaCard(${idx})" style="cursor:pointer;background:${isMatched ? '#d4edda' : isFlipped ? '#fff' : '#f0f0f0'};opacity:${isMatched ? '0.5' : '1'};">
+              ${isFlipped || isMatched ? item.text : '?'}
+            </div>
+          `;
+        });
+        html += '</div>';
+        html += `<div style="margin-bottom:1rem;"><strong>Intentos:</strong> ${attempts} | <strong>Pares encontrados:</strong> ${matches}/${data.pares.length}</div>`;
+        memoriaContainer.innerHTML = html;
+
+        if (matches === data.pares.length) {
+          memoriaContainer.innerHTML += `
+            <div class="game-result">
+              <h3>🎉 ¡Todos los pares encontrados!</h3>
+              <p>Lo completaste en ${attempts} intentos.</p>
+              <button class="game-btn" onclick="initializeGames(); closeGames()" style="width:100%;">Volver al Menú</button>
+            </div>
+          `;
+        }
+      }
+
+      window.flipMemoriaCard = (index) => {
+        if (flipped.some(f => f.index === index) || flipped.length >= 2) return;
+
+        flipped.push({ index, id: items[index].id, matched: false });
+
+        if (flipped.length === 2) {
+          attempts++;
+          if (flipped[0].id === flipped[1].id) {
+            flipped[0].matched = true;
+            flipped[1].matched = true;
+            matches++;
+            setTimeout(() => {
+              flipped = [];
+              renderCards();
+            }, 500);
+          } else {
+            setTimeout(() => {
+              flipped = [];
+              renderCards();
+            }, 800);
+          }
+        }
+
+        renderCards();
+      };
+
+      renderCards();
+      return container.innerHTML;
+    }
+
+    function playTriviaGame() {
+      let html = `<h2 style="color:#fee140;margin-bottom:1rem;">🎯 Trivia Inteligente</h2><div id="triviaContainer"></div>`;
+      const container = document.createElement('div');
+      container.innerHTML = html;
+      const triviaContainer = container.querySelector('#triviaContainer');
+      
+      const data = gamesData.triviaInteligente;
+      let currentQuestion = 0;
+      let score = 0;
+
+      function showQuestion() {
+        if (currentQuestion >= data.preguntas.length) {
+          triviaContainer.innerHTML = `
+            <div class="game-result">
+              <h3>¡Trivia Completada!</h3>
+              <div class="game-score">${score}/${data.preguntas.length} correcto</div>
+              <p>Porcentaje: <strong>${Math.round((score/data.preguntas.length)*100)}%</strong></p>
+              ${score >= 4 ? '🏆 ¡Excelente conocimiento!' : '📚 Sigue aprendiendo'}
+              <button class="game-btn" onclick="initializeGames(); closeGames()" style="width:100%;margin-top:1.5rem;">Volver</button>
+            </div>
+          `;
+          return;
+        }
+
+        const q = data.preguntas[currentQuestion];
+        let optionsHtml = '';
+        q.opciones.forEach((opt, idx) => {
+          optionsHtml += `<button class="game-btn" onclick="checkTrivia(${idx})">${opt}</button>`;
+        });
+
+        triviaContainer.innerHTML = `
+          <div class="game-content">
+            <div class="game-question">Pregunta ${currentQuestion + 1}/${data.preguntas.length}</div>
+            <p style="font-size:1rem;margin-bottom:1.5rem;">${q.pregunta}</p>
+            <div class="game-options">${optionsHtml}</div>
+          </div>
+        `;
+      }
+
+      window.checkTrivia = (optionIdx) => {
+        const q = data.preguntas[currentQuestion];
+        if (optionIdx === q.respuesta) {
+          score++;
+        }
+        triviaContainer.innerHTML = `
+          <div class="game-content">
+            <div style="background: ${optionIdx === q.respuesta ? '#d4edda' : '#f8d7da'}; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+              ${optionIdx === q.respuesta ? '✅ ¡Correcto!' : '❌ Incorrecto'}
+            </div>
+            <p><strong>Respuesta correcta:</strong> ${q.opciones[q.respuesta]}</p>
+            <button class="game-btn" style="width:100%;margin-top:1.5rem;" onclick="showTriviaQuestion()">Siguiente →</button>
+          </div>
+        `;
+      };
+
+      window.showTriviaQuestion = () => {
+        currentQuestion++;
+        showQuestion();
+      };
+
+      showQuestion();
+      return container.innerHTML;
+    }
+
+    function playSupermarketGame() {
+      let html = `
+        <h2 style="color:#30cfd0;margin-bottom:1rem;">🛒 Supermercado Saludable</h2>
+        <p>Presupuesto: <strong>$20</strong></p>
+        <div style="background:#fff3cd;padding:1rem;border-radius:0.5rem;margin-bottom:1.5rem;">
+          <strong>Tu carrito:</strong> $<span id="totalSpent">0</span> / Productos: <span id="productCount">0</span>
+        </div>
+        <div class="food-grid" id="supermarketGrid"></div>
+        <button class="game-btn" style="width:100%;margin-top:1rem;" onclick="checkSupermarket()">Verificar Compra</button>
+      `;
+
+      setTimeout(() => {
+        const grid = document.getElementById('supermarketGrid');
+        if (grid) {
+          grid.innerHTML = '';
+          let cart = [];
+
+          gamesData.supermercado.productos.forEach((prod, idx) => {
+            const div = document.createElement('div');
+            div.className = 'food-item';
+            div.style.cursor = 'pointer';
+            div.innerHTML = `<div>${prod.nombre}</div><div style="font-size:0.8rem;color:#e0356d;">$${prod.precio}</div>`;
+            div.onclick = () => {
+              const total = cart.reduce((sum, p) => sum + p.precio, 0);
+              if (total + prod.precio <= 20) {
+                cart.push(prod);
+                document.getElementById('totalSpent').textContent = (total + prod.precio).toFixed(2);
+                document.getElementById('productCount').textContent = cart.length;
+                div.style.opacity = '0.5';
+                div.style.pointerEvents = 'none';
+
+                window.currentCart = cart;
+              } else {
+                alert('¡Presupuesto insuficiente!');
+              }
+            };
+            grid.appendChild(div);
+          });
+        }
+      }, 50);
+
+      return html;
+    };
+
+    window.checkSupermarket = () => {
+      const cart = window.currentCart || [];
+      const content = document.getElementById('modalContent');
+
+      let totalAzucar = 0, totalFibra = 0, totalGrasas = 0;
+      let productDetails = '';
+
+      cart.forEach(prod => {
+        totalAzucar += prod.azucar;
+        totalFibra += prod.fibra;
+        totalGrasas += prod.grasas;
+        productDetails += `<li>${prod.nombre}: Azúcar ${prod.azucar}g, Fibra ${prod.fibra}g, Grasas ${prod.grasas}g</li>`;
+      });
+
+      let score = 0;
+      let feedback = '';
+
+      if (totalFibra > 5) {
+        score += 30;
+        feedback += '✅ Buena cantidad de fibra.<br>';
+      } else {
+        feedback += '❌ Poca fibra. Agrega más verduras o cereales integrales.<br>';
+      }
+
+      if (totalAzucar < 30) {
+        score += 30;
+        feedback += '✅ Bajo en azúcar.<br>';
+      } else {
+        feedback += '❌ Demasiado azúcar. Evita refrescos y dulces.<br>';
+      }
+
+      if (totalGrasas < 20) {
+        score += 20;
+        feedback += '✅ Grasas controladas.<br>';
+      } else {
+        feedback += '⚠️ Grasas altas. Considera reducirlas.<br>';
+      }
+
+      if (cart.length >= 4) {
+        score += 20;
+        feedback += '✅ Variedad de productos.<br>';
+      }
+
+      content.innerHTML = `
+        <button class="modal-close" onclick="closeGames()">×</button>
+        <div class="game-result">
+          <h3>📊 Análisis de tu Compra</h3>
+          <div class="game-score">${score}/100 puntos</div>
+          <div style="text-align:left;margin:1.5rem 0;">
+            <strong>Productos:</strong>
+            <ul>${productDetails || '<li>Sin productos</li>'}</ul>
+          </div>
+          <div style="background:#f0f0f0;padding:1rem;border-radius:0.5rem;margin:1rem 0;text-align:left;">
+            <strong>Totales:</strong><br>
+            🍬 Azúcar: ${totalAzucar}g (Recomendado: <25g)<br>
+            🌾 Fibra: ${totalFibra}g (Recomendado: >5g)<br>
+            🧈 Grasas: ${totalGrasas}g (Recomendado: <20g)
+          </div>
+          <div style="background:#fff3cd;padding:1rem;border-radius:0.5rem;margin:1rem 0;text-align:left;">
+            ${feedback}
+          </div>
+          <button class="game-btn" onclick="initializeGames(); closeGames()" style="width:100%;margin-top:1rem;">Volver al Menú</button>
+        </div>
+      `;
+    };
+
+    function playMisionGame() {
+      let html = `<h2 style="color:#fed6e3;margin-bottom:1rem;">👥 Misión Comunidad</h2><div id="misionContainer"></div>`;
+      const container = document.createElement('div');
+      container.innerHTML = html;
+      const misionContainer = container.querySelector('#misionContainer');
+      
+      const data = gamesData.misionComunidad;
+      let currentCharacter = 0;
+      let totalScore = 0;
+
+      function showCharacter() {
+        if (currentCharacter >= data.personajes.length) {
+          misionContainer.innerHTML = `
+            <div class="game-result">
+              <h3>¡Misión Completada!</h3>
+              <div class="game-score">${totalScore} puntos totales</div>
+              <p>Demostraste empatía y conocimiento sobre diabetes. ¡Excelente!</p>
+              <button class="game-btn" onclick="initializeGames(); closeGames()" style="width:100%;margin-top:1rem;">Volver</button>
+            </div>
+          `;
+          return;
+        }
+
+        const p = data.personajes[currentCharacter];
+        let optionsHtml = '';
+        p.opciones.forEach((opt, idx) => {
+          optionsHtml += `<button class="game-btn" onclick="checkMision(${idx})">${opt.accion}</button>`;
+        });
+
+        misionContainer.innerHTML = `
+          <div class="game-content">
+            <h3>${p.nombre}</h3>
+            <p><strong>Problema:</strong> ${p.problema}</p>
+            <p style="margin-top:1.5rem;margin-bottom:1rem;"><strong>¿Qué haces?</strong></p>
+            <div class="game-options">${optionsHtml}</div>
+          </div>
+        `;
+      }
+
+      window.checkMision = (optionIdx) => {
+        const p = data.personajes[currentCharacter];
+        const opt = p.opciones[optionIdx];
+        totalScore += opt.puntos;
+
+        misionContainer.innerHTML = `
+          <div class="game-content">
+            <div style="background: ${opt.puntos === 100 ? '#d4edda' : '#fff3cd'}; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+              ${opt.puntos === 100 ? '✅ ¡Acción perfecta!' : opt.puntos === 30 ? '⚠️ Parcialmente correcto' : '❌ No fue la mejor opción'}
+            </div>
+            <p>+${opt.puntos} puntos</p>
+            <button class="game-btn" style="width:100%;margin-top:1.5rem;" onclick="showMisionCharacter()">Siguiente Personaje →</button>
+          </div>
+        `;
+      };
+
+      window.showMisionCharacter = () => {
+        currentCharacter++;
+        showCharacter();
+      };
+
+      showCharacter();
+      return container.innerHTML;
+    }
+
+    // Cerrar modal al hacer clic fuera
+    document.getElementById('gamesModal').addEventListener('click', (e) => {
+      if (e.target.id === 'gamesModal') closeGames();
+    });
+  </script>
+</body>
+</html>

@@ -39,14 +39,25 @@
         method: 'POST',
         body: formData
       })
-      .then(res => res.json())
+      .then(async res => {
+        const text = await res.text();
+        try {
+          return JSON.parse(text);
+        } catch (error) {
+          throw new Error(text || 'Respuesta inesperada del servidor.');
+        }
+      })
       .then(data => {
         if (data.success) {
           alert('¡Registro exitoso!');
-          window.location.href = '/Sumaqvida/login.html';
+          window.location.href = '/Sumaqvida/login.php';
         } else {
           alert('Error: ' + (data.error || 'No se pudo registrar'));
         }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('No se pudo completar el registro: ' + err.message);
       });
     };
   </script>

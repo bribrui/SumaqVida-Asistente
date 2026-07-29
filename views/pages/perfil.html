@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -50,7 +50,7 @@
   </div>
   <script>
     let datosPerfil = {};
-    fetch('/Sumaqvida/api/usuario_perfil.php')
+    fetch('/api/usuario_perfil.php')
       .then(res => res.json())
       .then(data => {
         const cont = document.getElementById('perfilDatos');
@@ -79,7 +79,7 @@
       const formData = new FormData();
       formData.append('peso', peso);
       formData.append('talla', talla);
-      fetch('/Sumaqvida/api/actualizar_perfil.php', {
+      fetch('/api/actualizar_perfil.php', {
         method: 'POST',
         body: formData
       })
@@ -95,7 +95,7 @@
       });
     };
     // Mostrar últimos registros diarios
-    fetch('/Sumaqvida/api/obtener_registros_diarios.php')
+    fetch('/api/obtener_registros_diarios.php')
       .then(res => res.json())
       .then(data => {
         const tbody = document.getElementById('tablaRegistrosPerfil');

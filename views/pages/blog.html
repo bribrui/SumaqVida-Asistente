@@ -1,0 +1,750 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog - SumaqVida</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9fb;
+      padding-top: 100px;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .blog-header {
+      background: linear-gradient(135deg, #e0356d 0%, #c0275a 100%);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(224, 53, 109, 0.3);
+      margin-bottom: 3rem;
+    }
+
+    .blog-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .blog-header p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 1100px;
+    }
+
+    .blog-posts {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .blog-card {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 24px rgba(224, 53, 109, 0.2);
+    }
+
+    .blog-card-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #f0f0f0;
+    }
+
+    .blog-card-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-card-meta {
+      font-size: 0.85rem;
+      color: #999;
+      margin-bottom: 0.8rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .difficulty-badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .difficulty-easy {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .difficulty-medium {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .difficulty-hard {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .difficulty-advanced {
+      background: #e7ccff;
+      color: #5a189a;
+    }
+
+    .blog-card h3 {
+      color: #e0356d;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .blog-card p {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+    }
+
+    .blog-card-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .btn-learn {
+      flex: 1;
+      background: #e0356d;
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .btn-learn:hover {
+      background: #c0275a;
+      transform: scale(1.02);
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 1rem;
+      max-width: 700px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .quiz-section {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 0.8rem;
+      margin-top: 1.5rem;
+    }
+
+    .quiz-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #e0356d;
+      margin-bottom: 1rem;
+    }
+
+    .quiz-question {
+      margin-bottom: 1.2rem;
+    }
+
+    .quiz-question label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .quiz-question input[type="radio"],
+    .quiz-question input[type="checkbox"] {
+      margin-right: 0.5rem;
+    }
+
+    .quiz-question div {
+      margin-left: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-submit-quiz {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .btn-submit-quiz:hover {
+      background: #059669;
+    }
+
+    .quiz-feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      display: none;
+      font-weight: 600;
+    }
+
+    .quiz-feedback.correct {
+      background: #d4edda;
+      color: #155724;
+      display: block;
+    }
+
+    .quiz-feedback.incorrect {
+      background: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .blog-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .blog-posts {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding-top: 80px;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+    <header>
+    <div class="logo"><a href="/index.html">SumaqVida</a></div>
+    <nav class="desktop-menu">
+      <a href="/index.html">Inicio</a>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">IA</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluacion antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="/views/pages/minijuegos.html" class="dropdown-toggle">Comunidad</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/minijuegos.html">Minijuegos</a>
+          <a href="/Calendario/calendario.html">Calendario</a>
+          <a href="/Glosa/Glosario.html">Glosario</a>
+          <a href="/views/pages/blog.html">Blog</a>
+          <a href="/views/pages/videos.html">Videos</a>
+          <a href="/foro.html">Foro</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+      <a href="/views/pages/scanner.html">Escaner</a>
+      <a href="/views/pages/panel.html">Mi Panel</a>
+    </nav>
+    <div class="login-btn desktop-menu">
+      <span id="usuarioNombre" class="usuario-nombre" style="margin-right:16px;color:#e0356d;font-weight:500;"></span>
+      <a href="/views/pages/login.html">Iniciar sesion</a>
+    </div>
+    <div class="hamburger" onclick="toggleMobileMenu()">&#9776;</div>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="close-btn" onclick="toggleMobileMenu()">&times;</div>
+      <div class="menu-centrado">
+        <a href="/index.html">Inicio</a>
+        <details><summary>IA</summary>
+          <a href="/views/pages/registro-diario.html">Registro diario</a>
+          <a href="/views/pages/evaluacion.html">Evaluacion antes de comer</a>
+          <a href="/views/pages/recetas.html">Recetas</a>
+        </details>
+        <details><summary>Comunidad</summary>
+          <a href="/views/pages/minijuegos.html">Minijuegos</a>
+          <a href="/Calendario/calendario.html">Calendario</a>
+          <a href="/Glosa/Glosario.html">Glosario</a>
+          <a href="/views/pages/blog.html">Blog</a>
+          <a href="/views/pages/videos.html">Videos</a>
+          <a href="/foro.html">Foro</a>
+        </details>
+        <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Impacto</a>
+        <div class="dropdown-content">
+          <a href="/views/pages/impacto.html#evolucion">Evolucion del proyecto</a>
+          <a href="/views/pages/impacto.html#conexion-comunidad">Participacion comunitaria</a>
+          <a href="/index.html#sobre">Red SumaqVida</a>
+          <a href="/views/pages/impacto.html#impacto-generado">Resultados e impacto</a>
+          <a href="/index.html#sobre">Trabajo colaborativo</a>
+        </div>
+      </div>
+        <a href="/views/pages/scanner.html">Escaner</a>
+      </div>
+      <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesion</a>
+    </div>
+  </header>
+
+  <div class="blog-header">
+    <h1>📝 Blog & Artículos</h1>
+    <p>Aprende sobre nutrición, diabetes y salud integral</p>
+  </div>
+
+  <div class="container">
+    <div class="blog-posts" id="blog-container"></div>
+  </div>
+
+  <!-- Modal para artículos y cuestionarios -->
+  <div id="articleModal" class="modal-overlay">
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+
+  <script>
+    // Cargar header
+    
+
+    const articulos = [
+      {
+        id: 1,
+        titulo: "Guía Nutricional para la Diabetes: Mitos, Verdades y Alimentos Clave",
+        tiempoLectura: "4 minutos",
+        dificultad: "Fácil",
+        imagen: "/assets/img/ensalada-frutos-rojos-con-granola.jpg",
+        resumen: "Aprende a equilibrar nutrientes para evitar picos de glucosa",
+        contenido: "<h4>🍽️ ¿Qué puede comer una persona con diabetes?</h4><p>Tener diabetes <strong>no significa someterse a una dieta estricta ni dejar de disfrutar la comida</strong>. La clave radica en aprender a equilibrar los nutrientes para evitar picos bruscos de glucosa en la sangre.</p><p>Según la <strong>Asociación Americana de Diabetes (ADA)</strong> y el <strong>MINSA</strong>, una de las herramientas más efectivas es el <strong>\"Método del Plato\"</strong>:</p><ul><li><strong>🥗 1/2 Plato - Verduras no estancadas (Fibra):</strong> Espinaca, brócoli, tomate, lechuga, pepino, zanahoria y vainitas. Aportan volumen y saciedad sin elevar la glucosa.</li><li><strong>🍗 1/4 Plato - Proteínas de alto valor biológico:</strong> Pollo sin piel, pescado, huevo, pavo y legumbres (lentejas, garbanzos). Ayudan a reparar tejidos y ralentizar la digestión.</li><li><strong>🌾 1/4 Plato - Carbohidratos de lenta absorción:</strong> Avena, arroz integral, quinua, camote o papa sancochada (preferiblemente fríos para generar almidón resistente).</li><li><strong>🥑 Grasas saludables (en moderación):</strong> Palta (aguacate), frutos secos (nueces, almendras) y aceite de oliva virgen extra.</li></ul><blockquote style='border-left:4px solid #e0356d;padding:1rem;background:#f9f9f9;margin:1rem 0;'><strong>Recomendación clave:</strong> La <strong>OMS</strong> enfatiza que el consumo de agua simple debe reemplazar completamente a las bebidas azucaradas, jugos envasados y gaseosas.</blockquote><h5>Pautas de Estilo de Vida</h5><ul><li>✅ Mantén horarios regulares de comida para evitar hipoglucemias o picos de hiperglucemia.</li><li>✅ Controla las porciones utilizando el Método del Plato.</li><li>✅ Prioriza alimentos en su estado natural frente a los ultraprocesados.</li><li>✅ Consulta siempre a un profesional de la salud o nutricionista colegiado para un plan individualizado.</li></ul>",
+        quiz: [
+          {
+            pregunta: "¿Qué porcentaje del plato debe ser verduras?",
+            opciones: ["1/4", "1/2", "3/4"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Cuál es la mejor fuente de carbohidratos para diabéticos?",
+            opciones: ["Arroz blanco", "Arroz integral", "Pan blanco"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Qué bebida es recomendada para reemplazar refrescos?",
+            opciones: ["Jugo natural", "Agua simple", "Bebidas light"],
+            respuesta: 1
+          }
+        ]
+      },
+      {
+        id: 2,
+        titulo: "Los 10 mejores alimentos para controlar la glucosa",
+        tiempoLectura: "3 minutos",
+        dificultad: "Fácil",
+        imagen: "/assets/img/pescado-brocoli.jpg",
+        resumen: "Descubre alimentos con bajo índice glucémico validados por expertos",
+        contenido: "<p>Estos alimentos destacan por su <strong>bajo índice glucémico (IG)</strong> y su alto contenido de fibra, omega-3 o proteínas, propiedades validadas por la ADA para el control metabólico.</p><table style='width:100%;border-collapse:collapse;margin:1.5rem 0;'><tr style='background:#f0f8ff;'><th style='border:1px solid #ddd;padding:10px;text-align:left;'>Alimento</th><th style='border:1px solid #ddd;padding:10px;text-align:left;'>Beneficio Principal</th></tr><tr><td style='border:1px solid #ddd;padding:10px;'>🥦 Brócoli</td><td style='border:1px solid #ddd;padding:10px;'>Contiene <em>sulforafano</em>, un compuesto antioxidante que protege los vasos sanguíneos.</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'>🥑 Palta (Aguacate)</td><td style='border:1px solid #ddd;padding:10px;'>Rica en grasas monoinsaturadas que mejoran la sensibilidad a la insulina.</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'>🥣 Avena integral</td><td style='border:1px solid #ddd;padding:10px;'>Aporta <em>betaglucanos</em>, un tipo de fibra soluble que frena la absorción rápida de glucosa.</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'>🐟 Pescados azules</td><td style='border:1px solid #ddd;padding:10px;'>Caballa, jurel, bonito o salmón; ricos en Omega-3 para la salud cardiovascular.</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'>🥜 Almendras y nueces</td><td style='border:1px solid #ddd;padding:10px;'>Snacks de bajo impacto glucémico que aportan saciedad y grasas buenas.</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'>🥬 Espinaca y hojas verdes</td><td style='border:1px solid #ddd;padding:10px;'>Mínimo impacto en la glucosa y ricas en magnesio.</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'>🥚 Huevo</td><td style='border:1px solid #ddd;padding:10px;'>Proteína pura de alta calidad que favorece el control del apetito.</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'>🫘 Lentejas y frijoles</td><td style='border:1px solid #ddd;padding:10px;'>Combinación perfecta de fibra y proteína vegetal.</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'>🍓 Fresas y frutos rojos</td><td style='border:1px solid #ddd;padding:10px;'>Altos en antioxidantes y con menor carga glucémica que otras frutas.</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'>🌾 Quinua</td><td style='border:1px solid #ddd;padding:10px;'>Pseudo-cereal andino con aminoácidos esenciales y fibra digestiva.</td></tr></table>",
+        quiz: [
+          {
+            pregunta: "¿Qué componente del brócoli protege los vasos sanguíneos?",
+            opciones: ["Fibra", "Sulforafano", "Vitamina C"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Cuál es el tipo de grasa en la palta?",
+            opciones: ["Trans", "Saturada", "Monoinsaturada"],
+            respuesta: 2
+          },
+          {
+            pregunta: "¿Qué compuesto tiene la avena que frena la glucosa?",
+            opciones: ["Proteína", "Betaglucanos", "Almidón"],
+            respuesta: 1
+          }
+        ]
+      },
+      {
+        id: 3,
+        titulo: "Frutas e Índice Glucémico: ¿Cómo consumirlas?",
+        tiempoLectura: "3 minutos",
+        dificultad: "Fácil",
+        imagen: "/assets/img/ensalada-frutos-rojos-con-granola.jpg",
+        resumen: "Aprende cuáles frutas son seguras y en qué cantidad",
+        contenido: "<p>Las frutas son fuentes indispensables de vitaminas, minerales y agua. La <strong>OMS</strong> recomienda su consumo diario, pero en el contexto de la diabetes es crucial diferenciar la <strong>forma de consumo</strong> y la <strong>carga glucémica</strong>.</p><h5>🍓 Frutas de menor impacto glucémico (Recomendadas)</h5><p>Pueden consumirse con mayor frecuencia en porciones controladas (1 unidad mediana o 1 taza):</p><ul><li>Fresas, arándanos y frambuesas</li><li>Manzana y pera (siempre con cáscara)</li><li>Melón, kiwi, durazno y naranja entera</li></ul><h5>🍌 Frutas que requieren mayor control de porción</h5><p>No están prohibidas, pero se absorben más rápido debido a su concentración de fructosa o estado de maduración:</p><ul><li>Plátano (especialmente si está muy maduro)</li><li>Uvas, mango, piña y chirimoya</li></ul><blockquote style='border-left:4px solid #e0356d;padding:1rem;background:#f9f9f9;margin:1rem 0;'><strong>💡 Regla de oro del MINSA y ADA:</strong> <strong>Consume la fruta entera y fresca, nunca en jugos ni extractos.</strong> Al licuar la fruta, se destruye la matriz de fibra y la fructosa se absorbe a la misma velocidad que un refresco azucarado.</blockquote>",
+        quiz: [
+          {
+            pregunta: "¿Qué sucede cuando licúas una fruta?",
+            opciones: ["Aumenta la fibra", "Se destruye la matriz de fibra", "Aumenta vitaminas"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Cuál es la mejor forma de consumir fruta?",
+            opciones: ["En jugo", "Entera y fresca", "Deshidratada"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Qué fruta tiene menor carga glucémica?",
+            opciones: ["Plátano", "Fresa", "Mango"],
+            respuesta: 1
+          }
+        ]
+      },
+      {
+        id: 4,
+        titulo: "Cómo leer etiquetas nutricionales (Criterios OMS/MINSA)",
+        tiempoLectura: "3 minutos",
+        dificultad: "Medio",
+        imagen: "/assets/img/portada-1024x629.jpg",
+        resumen: "Aprende a interpretar información en empaques de alimentos",
+        contenido: "<p>Aprender a interpretar el etiquetado es clave para no caer en la publicidad engañosa del mercado. En países como Perú, los <strong>Octógonos de Advertencia del MINSA</strong> facilitan la identificación rápida de productos críticos.</p><div style='background:#f0f0f0;padding:1.5rem;border-radius:0.5rem;margin:1.5rem 0;font-family:monospace;'><strong>1. TAMAÑO DE LA PORCIÓN</strong><br>Verifica cuántas porciones hay en el envase.<br><br><strong>2. AZÚCARES AÑADIDOS</strong><br>Evita productos donde el azúcar sea uno de los primeros 3 ingredientes.<br><br><strong>3. FIBRA DIETÉTICA</strong><br>Busca productos con ≥ 3g a 5g por porción.<br><br><strong>4. GRASAS SATURADAS Y TRANS</strong><br>Elige 0g de grasas trans y bajo en saturadas.</div><h5>⚠️ Cuidado con las trampas publicitarias:</h5><ul><li><strong>\"Sin azúcar añadida\":</strong> Puede contener azúcares propios del alimento en altas concentraciones (como jugos concentrados).</li><li><strong>\"Light\":</strong> Significa que reduce un 25% o 30% de algún ingrediente respecto al original, pero no implica que sea libre de carbohidratos o calorías.</li><li><strong>\"Apto para diabéticos\":</strong> Término desaconsejado por la ADA; suelen contener polioles (alcoholes de azúcar) que en exceso causan malestar gastrointestinal.</li></ul>",
+        quiz: [
+          {
+            pregunta: "¿Qué significa 'Light' en un producto?",
+            opciones: ["Sin calorías", "Reduce 25-30% vs original", "Saludable"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Cuántos gramos de fibra debe tener una porción?",
+            opciones: ["1g", "3-5g", "10g"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Dónde debe aparecer el azúcar en la lista de ingredientes?",
+            opciones: ["Primer lugar", "Primeros 3", "No importa"],
+            respuesta: 1
+          }
+        ]
+      },
+      {
+        id: 5,
+        titulo: "Mitos y Verdades sobre la Diabetes según la Ciencia",
+        tiempoLectura: "3 minutos",
+        dificultad: "Medio",
+        imagen: "/assets/img/smoothie-verde.jpg",
+        resumen: "Desmiente creencias comunes sobre la diabetes",
+        contenido: "<h5>❌ Mito 1: Las personas con diabetes deben eliminar los carbohidratos por completo.</h5><p><strong>✅ Verdad:</strong> La <strong>ADA</strong> señala que los carbohidratos son la principal fuente de energía. Lo correcto es elegir carbohidratos complejos (ricos en fibra) y controlar su cantidad, no eliminarlos.</p><h5>❌ Mito 2: La miel, la panela o el azúcar de coco son \"saludables\" y no suben la glucosa.</h5><p><strong>✅ Verdad:</strong> A nivel metabólico, el cuerpo procesa la miel, la panela y el azúcar blanca de forma muy similar. Todos se convierten en glucosa y elevan los niveles en sangre.</p><h5>❌ Mito 3: Comer demasiados dulces es la única causa de la diabetes.</h5><p><strong>✅ Verdad:</strong> La <strong>OMS</strong> explica que la Diabetes Tipo 1 es autoinmune, mientras que la Diabetes Tipo 2 es multifactorial: intervienen la genética, la obesidad, la inactividad física, la edad y los patrones alimentarios globales.</p><h5>❌ Mito 4: Las personas con diabetes no pueden comer ningún tipo de fruta.</h5><p><strong>✅ Verdad:</strong> Las frutas son aliadas de la salud cardiovascular. La clave es comerlas enteras, respetando las porciones y acompañándolas con proteína o grasas saludables (como un puñado de frutos secos) para aplanar la curva de glucosa.</p><h5>❌ Mito 5: Si la glucosa se normaliza, la diabetes se ha \"curado\".</h5><p><strong>✅ Verdad:</strong> La diabetes se <em>remite</em> o se <em>controla</em>, pero no se cura. Lograr niveles normales de glucosa significa que el tratamiento, la alimentación y el ejercicio están funcionando correctamente.</p><blockquote style='border-left:4px solid #e0356d;padding:1rem;background:#f9f9f9;margin:1.5rem 0;'><strong>Nota de responsabilidad:</strong> Esta información tiene fines educacionales basados en las guías vigentes de la OMS, ADA y MINSA. No reemplaza la consulta, diagnóstico ni tratamiento de un médico endocrinólogo o un nutricionista clínico.</blockquote>",
+        quiz: [
+          {
+            pregunta: "¿Son los carbohidratos completamente prohibidos en diabetes?",
+            opciones: ["Sí, todos", "No, complejos controlados", "Solo refinados"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿La miel y el azúcar blanca se procesan igual en el cuerpo?",
+            opciones: ["No, muy diferente", "Sí, similar", "La miel es mejor"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Es la diabetes Tipo 2 causada solo por comer dulces?",
+            opciones: ["Sí", "No, es multifactorial", "Solo en obesos"],
+            respuesta: 1
+          }
+        ]
+      },
+      {
+        id: 6,
+        titulo: "¿Cómo influyen los carbohidratos en la glucosa?",
+        tiempoLectura: "7 minutos",
+        dificultad: "Medio",
+        imagen: "/assets/img/chaufa-de-quinua-im.webp",
+        resumen: "Aprende el papel de los carbohidratos y cómo elegirlos correctamente",
+        contenido: "<h4>Introducción</h4><p>Cuando una persona recibe el diagnóstico de diabetes, una de las primeras dudas que suele surgir es si debe dejar de consumir carbohidratos. Sin embargo, esta idea es incorrecta.</p><p>Los carbohidratos son la <strong>principal fuente de energía para el cuerpo humano</strong>. El cerebro, los músculos y muchos órganos dependen de la glucosa obtenida a partir de ellos. El problema no está en consumir carbohidratos, sino en <strong>elegir el tipo adecuado, controlar las porciones y mantener una alimentación equilibrada</strong>.</p><h4>¿Qué son los carbohidratos?</h4><p>Los carbohidratos son uno de los tres macronutrientes principales, junto con las proteínas y las grasas. Cuando una persona consume alimentos ricos en carbohidratos, el sistema digestivo los descompone hasta convertirlos en glucosa. Esta glucosa pasa al torrente sanguíneo y es utilizada por las células para producir energía.</p><p>Para que la glucosa pueda ingresar a las células es necesaria la acción de la <strong>insulina</strong>. En las personas con diabetes este proceso no funciona correctamente.</p><h4>Tipos de carbohidratos</h4><h5>Carbohidratos simples</h5><p>Son aquellos que el cuerpo absorbe rápidamente, produciendo <strong>aumentos bruscos de glucosa en la sangre</strong>.</p><ul><li>Azúcar blanca</li><li>Dulces, gaseosas, pasteles</li><li>Caramelos</li><li>Jugos industrializados</li></ul><p>Aportan mucha energía en poco tiempo, pero contienen pocos nutrientes y poca fibra.</p><h5>Carbohidratos complejos</h5><p>Contienen mayor cantidad de <strong>fibra, vitaminas y minerales</strong>. El cuerpo tarda más tiempo en digerirlos, por lo que la glucosa aumenta de forma lenta y estable.</p><ul><li>Avena, Quinua, Arroz integral</li><li>Camote, Papa con cáscara</li><li>Lentejas, Garbanzos, Frijoles</li></ul><p>Estos alimentos ayudan a mantener la saciedad y favorecen un mejor control glucémico.</p><h4>¿Qué papel cumple la fibra?</h4><p>La fibra es uno de los componentes más importantes. Cuando un alimento contiene fibra, <strong>la digestión es más lenta y la glucosa pasa gradualmente a la sangre</strong>, evitando aumentos repentinos.</p><p><strong>Beneficios de la fibra:</strong></p><ul><li>✔ Mejora la digestión</li><li>✔ Favorece la salud intestinal</li><li>✔ Ayuda a controlar el colesterol</li><li>✔ Produce mayor sensación de saciedad</li></ul><h4>¿Cómo combinar correctamente los alimentos?</h4><p><strong>❌ Solo comer arroz blanco:</strong> provoca un aumento rápido de glucosa.</p><p><strong>✅ Combinación correcta:</strong> Arroz integral + pollo + ensalada + agua</p><p>Esta combinación contiene proteínas, fibra y carbohidratos complejos que ayudan a que la glucosa aumente gradualmente.</p><h4>Errores frecuentes</h4><ul><li>❌ Saltarse comidas</li><li>❌ Eliminar completamente los carbohidratos</li><li>❌ Consumir grandes cantidades de frutas en una sola comida</li><li>❌ Pensar que todos los alimentos \"integrales\" son saludables</li><li>❌ Beber jugos en lugar de comer la fruta entera</li></ul><h4>Recomendaciones prácticas</h4><ul><li>🥗 Consumir verduras en cada comida</li><li>🌾 Elegir cereales integrales</li><li>🍎 Preferir frutas enteras</li><li>💧 Beber suficiente agua</li><li>🏃 Realizar actividad física regularmente</li><li>🥜 Incluir proteínas y grasas saludables en cada comida</li></ul><h4>Conclusión</h4><p>Los carbohidratos <strong>no son enemigos de las personas con diabetes</strong>. Lo importante es aprender a reconocer cuáles son más saludables, controlar las porciones y mantener una alimentación equilibrada.</p>",
+        quiz: [
+          {
+            pregunta: "¿Qué tipo de carbohidrato eleva más rápido la glucosa?",
+            opciones: ["Complejos", "Simples", "Integrales"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Cuál contiene mayor cantidad de fibra?",
+            opciones: ["Gaseosa", "Arroz integral", "Caramelo"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Qué ayuda a retrasar la absorción de glucosa?",
+            opciones: ["Fibra", "Azúcar", "Sal"],
+            respuesta: 0
+          }
+        ]
+      },
+      {
+        id: 7,
+        titulo: "¿Cómo funciona la insulina en el organismo?",
+        tiempoLectura: "8 minutos",
+        dificultad: "Avanzado",
+        imagen: "/assets/img/pancreas-insulina.jpg",
+        resumen: "Entiende el rol de la insulina y cómo afecta el control de la glucosa",
+        contenido: "<h4>Introducción</h4><p>Cada vez que comemos, nuestro cuerpo obtiene nutrientes que necesita para producir energía. Uno de los más importantes es la glucosa, un tipo de azúcar que proviene principalmente de los carbohidratos presentes en alimentos como el arroz, el pan, las frutas, la papa o la avena. Sin embargo, para que esta glucosa pueda ser utilizada por las células, el organismo necesita una hormona muy especial: la insulina.</p><p>La insulina actúa como una <strong>\"llave\" que permite que la glucosa entre en las células</strong> para convertirse en energía. Cuando este mecanismo falla, la glucosa permanece circulando en la sangre y sus niveles aumentan, lo que puede provocar diabetes y diversas complicaciones si no se controla adecuadamente.</p><p>Comprender cómo funciona la insulina ayuda a entender por qué algunas personas necesitan medicamentos, por qué es importante controlar la alimentación y cómo los hábitos saludables pueden mejorar la calidad de vida.</p><h4>¿Qué es la insulina?</h4><p>La insulina es una hormona producida por las <strong>células beta del páncreas</strong>, un órgano ubicado detrás del estómago.</p><p>Su función principal es <strong>regular la cantidad de glucosa que circula en la sangre</strong>. Después de cada comida, los niveles de glucosa aumentan de forma natural. Como respuesta, el páncreas libera insulina para permitir que esa glucosa ingrese a las células, donde será utilizada como fuente de energía o almacenada para ser usada más adelante.</p><p>Sin insulina, las células no pueden aprovechar correctamente la glucosa y el organismo comienza a presentar problemas en distintos órganos.</p><h4>¿Qué ocurre después de comer?</h4><p>Cuando una persona consume alimentos que contienen carbohidratos, estos pasan por el sistema digestivo y se transforman en glucosa.</p><p><strong>Posteriormente ocurre el siguiente proceso:</strong></p><ol style='margin-left:1.5rem;'><li>La glucosa pasa al torrente sanguíneo.</li><li>El páncreas detecta el aumento de glucosa.</li><li>Libera insulina hacia la sangre.</li><li>La insulina se une a receptores ubicados en la superficie de las células.</li><li>Las células permiten el ingreso de la glucosa.</li><li>La glucosa se utiliza para producir energía o se almacena para el futuro.</li></ol><p>Gracias a este mecanismo, los niveles de glucosa permanecen dentro de valores saludables.</p><h4>¿Qué sucede cuando hay diabetes?</h4><p>En las personas con diabetes, este sistema deja de funcionar correctamente.</p><p><strong>Existen dos tipos principales:</strong></p><h5>Diabetes tipo 1</h5><p>En la diabetes tipo 1, el <strong>sistema inmunológico destruye las células beta del páncreas</strong>, responsables de producir insulina.</p><p>Como consecuencia, el organismo deja de fabricar esta hormona y la persona necesita administrarse insulina todos los días para sobrevivir.</p><p>Generalmente aparece durante la infancia, la adolescencia o la juventud, aunque también puede desarrollarse en adultos.</p><h5>Diabetes tipo 2</h5><p>La diabetes tipo 2 es la más frecuente.</p><p>En este caso, el páncreas continúa produciendo insulina, pero <strong>las células del organismo dejan de responder correctamente a ella</strong>. Este fenómeno recibe el nombre de <strong>resistencia a la insulina</strong>.</p><p>Al principio, el páncreas intenta compensar produciendo mayores cantidades de insulina. Sin embargo, con el paso del tiempo ya no puede mantener ese esfuerzo y los niveles de glucosa comienzan a elevarse.</p><p>Este tipo de diabetes suele relacionarse con factores como el sobrepeso, el sedentarismo, una alimentación poco saludable y antecedentes familiares.</p><h4>¿Qué es la resistencia a la insulina?</h4><p>Imagina que la insulina es una llave y cada célula es una puerta.</p><p>En una persona sana, la llave abre fácilmente la puerta y la glucosa entra sin dificultad.</p><p>En cambio, cuando existe resistencia a la insulina, <strong>la cerradura comienza a funcionar mal</strong>. La llave sigue existiendo, pero necesita hacer mucho más esfuerzo para abrir la puerta.</p><p>Con el tiempo, el páncreas se desgasta intentando producir más insulina, hasta que ya no logra mantener niveles adecuados de glucosa.</p><p>Por ello, <strong>detectar la resistencia a la insulina de manera temprana</strong> puede ayudar a prevenir el desarrollo de diabetes tipo 2.</p><h4>Factores que afectan el funcionamiento de la insulina</h4><p>Diversos hábitos pueden mejorar o empeorar la acción de esta hormona.</p><h5>✅ Factores que favorecen un buen funcionamiento</h5><ul><li>Mantener un peso saludable.</li><li>Realizar actividad física de forma regular.</li><li>Consumir alimentos ricos en fibra.</li><li>Dormir entre siete y nueve horas diarias.</li><li>Reducir el consumo de bebidas azucaradas.</li><li>Controlar el estrés.</li></ul><h5>❌ Factores que dificultan su acción</h5><ul><li>Sedentarismo.</li><li>Obesidad.</li><li>Alimentación rica en azúcares y ultraprocesados.</li><li>Falta de sueño.</li><li>Estrés constante.</li><li>Tabaquismo.</li></ul><p><strong>Adoptar hábitos saludables puede aumentar la sensibilidad a la insulina y mejorar el control de la glucosa.</strong></p><h4>¿Por qué algunas personas necesitan inyectarse insulina?</h4><p>No todas las personas con diabetes requieren insulina.</p><p>Las personas con <strong>diabetes tipo 1</strong> la necesitan porque su organismo ya no la produce.</p><p>En la <strong>diabetes tipo 2</strong>, algunas personas logran controlar la enfermedad mediante alimentación saludable, actividad física y medicamentos orales. Sin embargo, cuando el páncreas deja de producir suficiente insulina, el médico puede indicar el uso de inyecciones para mantener un adecuado control glucémico.</p><p><strong>Es importante recordar que utilizar insulina no significa que la enfermedad haya empeorado</strong>, sino que es parte del tratamiento más adecuado para cada paciente.</p><h4>¿Qué ocurre si la glucosa permanece elevada durante mucho tiempo?</h4><p>Cuando la glucosa permanece alta durante meses o años, puede afectar diferentes órganos del cuerpo.</p><p><strong>Entre las principales complicaciones se encuentran:</strong></p><ul><li>Daño en los ojos (retinopatía diabética).</li><li>Enfermedad renal (nefropatía diabética).</li><li>Daño en los nervios (neuropatía diabética).</li><li>Mayor riesgo de infarto y accidente cerebrovascular.</li><li>Problemas de cicatrización y lesiones en los pies.</li></ul><p>La buena noticia es que <strong>muchas de estas complicaciones pueden prevenirse</strong> con un adecuado control médico y hábitos saludables.</p><h4>Recomendaciones para cuidar la acción de la insulina</h4><ul><li>Mantén una alimentación equilibrada y rica en verduras, frutas y cereales integrales.</li><li>Realiza al menos 150 minutos de actividad física moderada por semana.</li><li>Evita el consumo frecuente de bebidas azucaradas y alimentos ultraprocesados.</li><li>Controla periódicamente tu glucosa según las indicaciones de tu profesional de salud.</li><li>No suspendas ningún tratamiento sin consultar a un médico.</li></ul><h4>Conclusión</h4><p>La insulina es una hormona indispensable para que el organismo utilice la glucosa como fuente de energía. Cuando su producción disminuye o las células dejan de responder correctamente a ella, aparecen alteraciones que pueden conducir al desarrollo de la diabetes.</p><p>Comprender cómo funciona este proceso permite tomar decisiones informadas sobre la alimentación, el ejercicio y el tratamiento médico. <strong>La educación en salud es una herramienta poderosa para prevenir complicaciones y mejorar la calidad de vida</strong> de millones de personas.</p><blockquote style='border-left:4px solid #e0356d;padding:1rem;background:#f9f9f9;margin:1.5rem 0;'><strong>📌 Dato curioso:</strong> ¿Sabías que una persona sana produce aproximadamente entre 30 y 50 unidades de insulina al día? La cantidad varía según la alimentación, la actividad física y las necesidades de cada organismo.</blockquote>",
+        quiz: [
+          {
+            pregunta: "¿Dónde se produce la insulina?",
+            opciones: ["En el hígado", "En el páncreas", "En el estómago", "En los riñones"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Qué función principal cumple la insulina?",
+            opciones: ["Eliminar el azúcar del cuerpo.", "Permitir que la glucosa entre en las células para producir energía.", "Aumentar el colesterol.", "Reducir la presión arterial."],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Qué ocurre en la diabetes tipo 2?",
+            opciones: ["El cuerpo deja de producir glucosa.", "Las células responden menos a la insulina y aparece resistencia.", "Los riñones producen demasiada insulina.", "El cuerpo deja de absorber proteínas."],
+            respuesta: 1
+          }
+        ]
+      },
+      {
+        id: 8,
+        titulo: "¿Qué es la hemoglobina glicosilada (HbA1c) y por qué es tan importante?",
+        tiempoLectura: "8 minutos",
+        dificultad: "Avanzado",
+        imagen: "/assets/img/hemoglobina-analisis.jpg",
+        resumen: "Entiende el marcador más importante para el seguimiento de la diabetes",
+        contenido: "<h4>Introducción</h4><p>Cuando una persona vive con diabetes, medir la glucosa con un glucómetro ayuda a conocer cómo se encuentra en ese momento. Sin embargo, esa medición solo muestra una <strong>\"fotografía\" del instante</strong>. Para saber cómo ha sido el control de la glucosa durante un período más largo, los profesionales de la salud utilizan un examen llamado <strong>hemoglobina glicosilada</strong>, también conocido como <strong>HbA1c</strong>.</p><p>Este análisis es uno de los más importantes para evaluar el tratamiento de la diabetes, ya que <strong>permite conocer el promedio de glucosa en sangre durante los últimos dos o tres meses</strong>.</p><h4>¿Qué es la hemoglobina?</h4><p>La hemoglobina es una proteína que se encuentra en los glóbulos rojos y tiene la función de <strong>transportar oxígeno</strong> desde los pulmones hacia todos los tejidos del cuerpo.</p><p>Cuando existe glucosa circulando en la sangre, una parte de ella se une naturalmente a la hemoglobina. <strong>Cuanta más glucosa haya durante un período prolongado, mayor será la cantidad de hemoglobina \"glicosilada\"</strong>.</p><p>Como los glóbulos rojos viven aproximadamente <strong>120 días</strong>, el examen refleja el promedio de glucosa de ese tiempo.</p><h4>¿Cómo se realiza el examen?</h4><p>La HbA1c se obtiene mediante <strong>una muestra de sangre</strong> y no requiere medir la glucosa varias veces al día.</p><p>Generalmente se recomienda realizar este examen cada <strong>tres o seis meses</strong>, dependiendo de las indicaciones del médico y del control que tenga el paciente.</p><h4>¿Cómo interpretar los resultados?</h4><p>Los valores pueden variar según cada persona, pero de manera general:</p><ul><li><strong>Menor de 5.7%:</strong> rango esperado en personas sin diabetes.</li><li><strong>Entre 5.7% y 6.4%:</strong> indica un mayor riesgo de desarrollar diabetes (prediabetes).</li><li><strong>Igual o superior a 6.5%:</strong> puede ser compatible con diabetes, siempre bajo evaluación médica.</li></ul><p>Para muchas personas con diabetes, el objetivo suele ser mantener una <strong>HbA1c inferior al 7%</strong>, aunque esto puede cambiar según la edad, el tratamiento y otras condiciones de salud.</p><h4>¿Por qué es tan importante?</h4><p>Una HbA1c elevada durante varios meses aumenta el riesgo de sufrir complicaciones como:</p><ul><li>Daño en la retina.</li><li>Enfermedad renal.</li><li>Lesiones en los nervios.</li><li>Problemas cardiovasculares.</li></ul><p><strong>Mantener este valor dentro de los objetivos recomendados ayuda a reducir considerablemente estos riesgos.</strong></p><h4>¿Cómo mejorar la HbA1c?</h4><ul><li>Mantener una alimentación equilibrada.</li><li>Realizar actividad física regularmente.</li><li>Tomar correctamente los medicamentos.</li><li>Controlar periódicamente la glucosa.</li><li>Asistir a los controles médicos.</li></ul><h4>Conclusión</h4><p>La HbA1c es mucho más que un análisis de laboratorio. Es una herramienta que permite conocer cómo ha sido el control de la diabetes durante los últimos meses y ayuda a tomar decisiones para prevenir complicaciones y mejorar la calidad de vida.</p>",
+        quiz: [
+          {
+            pregunta: "¿Cuánto tiempo refleja la HbA1c de glucosa en sangre?",
+            opciones: ["Últimos 7 días", "Últimos 2-3 meses", "Última medición"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Cuál es el objetivo típico de HbA1c para personas con diabetes?",
+            opciones: ["Menor de 5%", "Inferior al 7%", "Menor de 6%"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Qué rango de HbA1c indica prediabetes?",
+            opciones: ["Menor de 5.7%", "Entre 5.7% y 6.4%", "Superior a 6.5%"],
+            respuesta: 1
+          }
+        ]
+      },
+      {
+        id: 9,
+        titulo: "Complicaciones de la Diabetes: Anatomía, Prevención y Manejo Clínico",
+        tiempoLectura: "6 minutos",
+        dificultad: "Avanzado",
+        imagen: "/assets/img/complicaciones-diabetes.jpg",
+        resumen: "Conoce las complicaciones prevenibles y cómo proteger tus órganos",
+        contenido: "<h4>🩺 Introducción</h4><p>La diabetes mellitus es una condición metabólica de alto impacto sistémico. Si bien un manejo adecuado permite mantener una excelente calidad de vida, la <strong>hiperglucemia crónica</strong> (niveles elevados de azúcar en sangre mantenidos en el tiempo) actúa como un factor tóxico para el sistema vascular y nervioso.</p><p>Las complicaciones no aparecen de forma intempestiva; son el resultado de procesos patológicos progresivos que, según la <strong>ADA</strong> y la <strong>OMS</strong>, <strong>son prevenibles o desacelerables hasta en un 80%</strong> cuando se detectan a tiempo y se mantiene un control metabólico estricto.</p><h4>🔬 ¿Por qué ocurren las complicaciones vascular y nerviosa?</h4><p>El exceso de glucosa en el torrente sanguíneo desencadena dos mecanismos destructivos principales:</p><ul><li><strong>Estrés oxidativo e inflamación endotelial:</strong> Daña las paredes internas de los vasos sanguíneos, favoreciendo el endurecimiento de las arterias (arterioesclerosis).</li><li><strong>Glucosilación avanzada:</strong> Las moléculas de azúcar se unen a las proteínas de los tejidos, alterando su estructura y limitando la microcirculación de nutrientes a los nervios y órganos clave.</li></ul><p>Clínicamente, las complicaciones se dividen en dos grandes grupos: <strong>microvasculares</strong> (daño a vasos pequeños) y <strong>macrovasculares</strong> (daño a grandes arterias).</p><h4>👁️ 1. Complicaciones Microvasculares</h4><h5>🔲 Retinopatía Diabética (Ojos)</h5><p>Es una de las principales causas de ceguera irreversible en adultos a nivel mundial. La glucosa elevada debilita los microvasos de la retina, provocando fugas de fluido o proliferación de vasos anómalos y frágiles.</p><ul><li><strong>Evolución:</strong> Suele ser <strong>asintomática</strong> en sus fases iniciales (no produce dolor ni pérdida de visión inmediata).</li><li><strong>Tamizaje (ADA/MINSA):</strong> Evaluación anual mediante <strong>examen de fondo de ojo con pupila dilatada</strong> desde el diagnóstico en Diabetes Tipo 2.</li></ul><h5>🔲 Nefropatía Diabética (Riñones)</h5><p>Los riñones poseen millones de pequeñas unidades filtrantes llamadas <em>glomérulos</em>. La hiperglucemia daña estos filtros, permitiendo que la proteína (albúmina) se escape a la orina y reduciendo la capacidad del cuerpo para eliminar toxinas.</p><ul><li><strong>Consecuencia:</strong> Es la causa principal de Enfermedad Renal Crónica (ERC) e insuficiencia renal terminal.</li><li><strong>Tamizaje:</strong> Análisis anual de <strong>microalbuminuria en orina</strong> y estimación de la tasa de filtración glomerular (TFG) mediante análisis de sangre.</li></ul><h5>🔲 Neuropatía Diabética (Sistema Nervioso)</h5><p>Afecta a más del 50% de las personas con diabetes de larga evolución. El daño metabólico deteriora las fibras nerviosas, impidiendo la correcta transmisión de señales.</p><ul><li><strong>Sintomatología habitual:</strong> Hormigueo (<em>parestesias</em>), ardor nocturno, hipersensibilidad al roce o, por el contrario, <strong>pérdida total de la sensibilidad al dolor y la temperatura</strong>.</li></ul><h4>👣 2. El Pie Diabético: Una Urgencia Prevenible</h4><p>El <strong>Pie Diabético</strong> es el resultado de la combinación de la <em>neuropatía</em> (falta de sensibilidad) con la <em>enfermedad vascular periférica</em> (mala circulación). Al no sentir dolor, una pequeña rozadura, ampolla o uñero puede evolucionar rápidamente hacia una úlcera e infección severa.</p><div style='background:#f0f8ff;padding:1.5rem;border-left:4px solid #e0356d;border-radius:0.5rem;margin:1.5rem 0;'><strong>PROTOCOLO DIARIO DE CUIDADO DEL PIE</strong><br><br>🔍 <strong>INSPECCIÓN:</strong> Revisa la planta del pie y entre los dedos usando un espejo diariamente.<br>🧼 <strong>HIGIENE:</strong> Lava con agua tibia y seca minuciosamente sin frotar bruscamente.<br>👟 <strong>CALZADO:</strong> Inspecciona el interior del zapato antes de ponerlo. Usa calzado holgado, sin costuras internas.<br>🚫 <strong>PRECAUCIÓN:</strong> Nunca camines descalzo ni uses callicidas químicos o guadañas/hojas de afeitar.</div><h4>🫀 3. Complicaciones Macrovasculares</h4><p>Las complicaciones en grandes arterias son las responsables de la mayor tasa de morbimortalidad según la OMS.</p><ul><li><strong>Enfermedad Arterial Coronaria:</strong> Eleva significativamente el riesgo de <strong>Infarto Agudo de Miocardio</strong>.</li><li><strong>Accidente Cerebrovascular (ACV):</strong> Obstrucción de vasos cerebrales por trombos o placas de ateroma.</li><li><strong>Enfermedad Arterial Periférica:</strong> Reducción del flujo sanguíneo a las extremidades inferiores, ralentizando la cicatrización.</li></ul><p><strong>Factor Multiplicador:</strong> La combinación de diabetes con <strong>hipertensión arterial, dislipidemia (colesterol elevado) y tabaquismo</strong> triplica el riesgo cardiovascular global.</p><h4>🛡️ Pilares de Prevención Estratégica (Criterios ADA / OMS / MINSA)</h4><p>Para prevenir o detener el avance de las complicaciones, la evidencia científica exige el control integral de los llamados <strong>\"Objetivos ABC\"</strong>:</p><div style='background:#fff3cd;padding:1.5rem;border-radius:0.5rem;margin:1.5rem 0;'><strong>A:</strong> HbA1c &lt; 7.0% (personalizable) - Medición cada 3 a 6 meses<br><strong>B:</strong> Blood Pressure (Presión Arterial) &lt; 130/80 mmHg - Monitoreo continuo y bajo sodio<br><strong>C:</strong> Cholesterol (LDL o \"malo\") &lt; 70 mg/dL - Alimentación, ejercicio y estatinas si aplica</div><h5>Medidas Complementarias Fundamentales:</h5><ul><li><strong>Cese Total del Tabaquismo:</strong> El cigarrillo potencia el daño vascular de la glucosa, acelerando el pie diabético y el infarto.</li><li><strong>Prescripción de Ejercicio:</strong> Mínimo <strong>150 minutos a la semana</strong> de actividad aeróbica moderada a intensa combinada con ejercicios de fuerza.</li><li><strong>Vacunación al Día:</strong> La ADA y el MINSA recomiendan la vacunación contra la influenza, neumococo y hepatitis B para evitar descompensaciones metabólicas por infecciones.</li></ul><h4>📌 Conclusión</h4><p>Las complicaciones de la diabetes <strong>no son inevitables</strong>. Son el resultado de una exposición prolongada a parámetros fuera de rango. Gracias a los avances en la medicina, el autocuidado informado y el monitoreo médico periódico, es totalmente factible vivir con diabetes manteniendo órganos sanos y un estilo de vida pleno.</p><blockquote style='border-left:4px solid #e0356d;padding:1rem;background:#f9f9f9;margin:1.5rem 0;'><strong>Aviso de responsabilidad:</strong> <em>Este contenido es estrictamente educativo e informativo, respaldado por las guías vigentes de la OMS, ADA y MINSA. No sustituye la evaluación, diagnóstico ni tratamiento de un endocrinólogo o médico especialista.</em></blockquote>",
+        quiz: [
+          {
+            pregunta: "¿Cuál es el porcentaje de prevención de complicaciones con control adecuado?",
+            opciones: ["30%", "50%", "Hasta 80%"],
+            respuesta: 2
+          },
+          {
+            pregunta: "¿Cuál es el objetivo de presión arterial recomendado?",
+            opciones: ["Menor de 140/90", "Menor de 130/80", "Menor de 120/70"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Qué combinación triplica el riesgo cardiovascular?",
+            opciones: ["Diabetes + edad avanzada", "Diabetes + hipertensión + tabaquismo", "Diabetes + sobrepeso"],
+            respuesta: 1
+          }
+        ]
+      },
+      {
+        id: 10,
+        titulo: "Monitoreo Continuo de Glucosa (MCG) y Tecnologías Emergentes en el Manejo Metabólico Integrado",
+        tiempoLectura: "8 minutos",
+        dificultad: "Avanzado",
+        imagen: "/assets/img/sensor-glucosa.jpg",
+        resumen: "Descubre las tecnologías que revolucionan el manejo de la diabetes",
+        contenido: "<h4>🔬 Introducción y Marcadores Metabólicos</h4><p>Durante décadas, el control glucémico se ha evaluado mediante la <strong>hemoglobina glicosilada (HbA₁c)</strong> y la <strong>automotorización de la glucemia capilar (SMBG)</strong>. Sin embargo, la HbA₁c presenta limitaciones estructurales: refleja un promedio ponderado de los últimos 90 días, ocultando la <strong>variabilidad glucémica (VG)</strong>, las excursiones hiperglucémicas postprandiales y los episodios de hipoglucemia asintomática.</p><p>El <strong>Monitoreo Continuo de Glucosa (MCG)</strong> —en sus modalidades en tiempo real (rtCGM) e intermitente (isCGM)— representa un cambio de paradigma bioelectrónico. Al medir la concentración de glucosa en el <strong>fluido intersticial (ISF)</strong> a través de sensores enzimáticos de amperometría (basados en glucosa oxidasa), el MCG permite mapear la dinámica metabólica continua y calcular métricas estandarizadas en el <strong>Perfil Ambulatorio de Glucosa (AGP)</strong>.</p><h4>🧬 Fisiología del Fluido Intersticial y el Fenómeno del Lag Time</h4><p>Es fundamental comprender que la concentración de glucosa en el ISF no es idéntica en tiempo real a la glucosa plasmática arterial o capilar. Existe una dinámica de transporte transvascular regulada por gradientes de difusión y perfusión tisular.</p><div style='background:#f0f0f0;padding:1.5rem;border-radius:0.5rem;margin:1.5rem 0;text-align:center;font-family:monospace;'><strong>DINÁMICA DE TRANSPORTE Y LAG TIME</strong><br><br>Capilar Sanguíneo  ──(Difusión)──>  Fluido Intersticial<br>[Glucosa]                       [Glucosa]<br><br>Desfase temporal: <strong>5 a 15 minutos</strong></div><h5>Fisiología del Desfase:</h5><ul><li>El tiempo que tarda la glucosa en difundir desde el compartimento intravascular al espacio intersticial genera un desfasaje fisiológico (<strong>lag time</strong>) de <strong>5 a 15 minutos</strong>.</li><li><strong>Relevancia clínica:</strong> En estados de <strong>alta variabilidad glucémica</strong> (p. ej., rápida caída post-ejercicio o ascenso postprandial brusco), el sensor intersticial puede subestimar o sobreestimar la glucosa plasmática real. En estas situaciones cinéticas, la confirmación mediante punción capilar sigue siendo la norma de oro (<em>gold standard</em>).</li></ul><h4>📊 Métricas del Perfil Ambulatorio de Glucosa (AGP) y Consenso ADA/EASD</h4><p>El análisis de datos del MCG ha desplazado el foco exclusivo de la HbA₁c hacia la evaluación de la variabilidad y el tiempo en metas metabólicas, estandarizado por el Consenso Internacional (<em>American Diabetes Association</em> y <em>European Association for the Study of Diabetes</em>):</p><div style='background:#f0f8ff;padding:1.5rem;border-radius:0.5rem;margin:1.5rem 0;overflow-x:auto;'><table style='width:100%;border-collapse:collapse;'><tr style='background:#e0356d;color:white;'><th style='border:1px solid #ddd;padding:10px;text-align:left;'>Parámetro / Métrica</th><th style='border:1px solid #ddd;padding:10px;text-align:left;'>Definición Criterio Clínico</th><th style='border:1px solid #ddd;padding:10px;text-align:left;'>Objetivo Estándar</th></tr><tr><td style='border:1px solid #ddd;padding:10px;'><strong>Tiempo en Rango (TIR)</strong></td><td style='border:1px solid #ddd;padding:10px;'>Porcentaje de lecturas entre 70 y 180 mg/dL</td><td style='border:1px solid #ddd;padding:10px;'><strong>> 70%</strong> del tiempo</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'><strong>Tiempo por Debajo del Rango (TBR)</strong></td><td style='border:1px solid #ddd;padding:10px;'>Porcentaje de lecturas < 70 mg/dL</td><td style='border:1px solid #ddd;padding:10px;'><strong>< 4%</strong> (< 1% para < 54 mg/dL)</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'><strong>Tiempo por Encima del Rango (TAR)</strong></td><td style='border:1px solid #ddd;padding:10px;'>Porcentaje de lecturas > 180 mg/dL</td><td style='border:1px solid #ddd;padding:10px;'><strong>< 25%</strong> (< 5% para > 250 mg/dL)</td></tr><tr><td style='border:1px solid #ddd;padding:10px;'><strong>Coeficiente de Variación (%CV)</strong></td><td style='border:1px solid #ddd;padding:10px;'>Desviación Estándar / Glucosa Promedio × 100</td><td style='border:1px solid #ddd;padding:10px;'><strong>≤ 36%</strong> (estabilidad glucémica)</td></tr></table></div><h4>🎯 Indicaciones Clínicas de Alta Precisión</h4><p>De acuerdo con las guías <em>Standards of Care</em> de la ADA y las directrices clínicas de endocrinología del MINSA, el uso de rtCGM/isCGM está clínicamente indicado en:</p><ol><li><strong>Diabetes Mellitus Tipo 1 (DM1):</strong> Indicación de primera línea desde el diagnóstico para la optimización de esquemas basal-bolus (<em>MDI</em>) o sistemas de infusión continua de insulina (<em>CSII</em>).</li><li><strong>Diabetes Mellitus Tipo 2 (DM2) Intensificada:</strong> Pacientes bajo esquemas insulínicos complejos que no alcanzan objetivos de HbA₁c o presentan variabilidad extrema.</li><li><strong>Síndrome de Inconciencia de Hipoglucemia:</strong> Pérdida de la respuesta autonómica simpática a la hipoglucemia (ausencia de síntomas adrenérgicos).</li><li><strong>Diabetes Gestacional (DMG):</strong> Para mitigar la macrosomía fetal y complicaciones perinatales asociadas a excursiones postprandiales no detectadas en glucometrías puntuales.</li></ol><h4>💡 ¿Sabías que...? La Bioinformática e Inteligencia Artificial en la Ecosfera SumaqVida</h4><p>El avance del control metabólico ha convergido con la <strong>salud digital (eHealth)</strong> y la <strong>medicina de precisión</strong>, transformando la gestión de la diabetes mediante herramientas computacionales avanzadas:</p><ul><li>🤖 <strong>Modelos Predictivos mediante Aprendizaje Profundo (<em>Deep Learning</em>):</strong> Redes neuronales recurrentes (LSTM) procesan las series temporales de datos del MCG junto con la variabilidad de frecuencia cardíaca (HRV) para <strong>predecir episodios de hipoglucemia severa con 30 a 60 minutos de anticipación</strong>, permitiendo intervenciones preventivas antes del fallo autonómico.</li><li>🔄 <strong>Sistemas de Asa Cerrada Híbrida (<em>Hybrid Closed-Loop / Páncreas Artificial</em>):</strong> Integración de sensores rtCGM con algoritmos de control adaptativo (MPC - <em>Model Predictive Control</em>) que modulan de forma autónoma la tasa de infusión basal de insulina en bombas CSII, respondiendo en tiempo real a las fluctuaciones del ISF.</li><li>📊 <strong>Analítica Integrada de Macrodatos (<em>Big Data Analytics</em>):</strong> Plataformas como <strong>SumaqVida</strong> aprovechan la visión computacional y el procesamiento de lenguaje natural (NLP) para correlacionar macronutrientes consumidos (vía análisis fotométrico del plato) con las curvas de respuesta glucémica individuales, refinando el cálculo del <strong>Ratio Insulina/Carbohidrato (ICR)</strong> y el <strong>Factor de Sensibilidad a la Insulina (ISF)</strong>.</li><li>📡 <strong>Biointerfaz Transdérmica Invasiva Mínima:</strong> El desarrollo de microsensores fotónicos y electroquímicos de última generación busca eliminar la necesidad de calibración capilar, ofreciendo coeficientes MARD (<em>Mean Absolute Relative Difference</em>) inferiores al 8%, garantizando la máxima precisión analítica disponible.</li></ul><blockquote style='border-left:4px solid #e0356d;padding:1rem;background:#f9f9f9;margin:1.5rem 0;'><strong>Aviso de responsabilidad:</strong> <em>Este documento posee fines estrictamente académicos e informativos basados en las guías vigentes de la ADA, EASD y MINSA. Las decisiones de ajuste terapéutico en esquemas insulínicos deben ser supervisadas por un médico especialista en Endocrinología.</em></blockquote>",
+        quiz: [
+          {
+            pregunta: "¿Cuál es el desfase temporal (lag time) del fluido intersticial?",
+            opciones: ["1-5 minutos", "5-15 minutos", "15-30 minutos"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿Cuál es el objetivo de Tiempo en Rango (TIR)?",
+            opciones: ["Mayor al 50%", "Mayor al 70%", "Mayor al 90%"],
+            respuesta: 1
+          },
+          {
+            pregunta: "¿En cuál tipo de diabetes el MCG es indicación de primera línea?",
+            opciones: ["DM2 leve", "DM1 (Diabetes Tipo 1)", "Solo en gestacional"],
+            respuesta: 1
+          }
+        ]
+      }
+    ];
+    const container = document.getElementById('blog-container');
+    articulos.forEach((articulo, index) => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      
+      let dificultadClass = 'difficulty-medium';  
+      if (articulo.dificultad === 'Fácil') dificultadClass = 'difficulty-easy';
+      else if (articulo.dificultad === 'Avanzado') dificultadClass = 'difficulty-advanced';
+      
+      card.innerHTML = `
+        <img src="${articulo.imagen}" alt="${articulo.titulo}" class="blog-card-image">
+        <div class="blog-card-content">
+          <div class="blog-card-meta">
+            <div class="meta-item">
+              <i class="bi bi-clock"></i> ${articulo.tiempoLectura}
+            </div>
+            <span class="difficulty-badge ${dificultadClass}">${articulo.dificultad}</span>
+          </div>
+          <h3>${articulo.titulo}</h3>
+          <p>${articulo.resumen}</p>
+          <div class="blog-card-actions">
+            <button class="btn-learn" onclick="openArticle(${index})">Lo aprendí & Quiz</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    // Funciones para modal
+    function openArticle(index) {
+      const articulo = articulos[index];
+      const modal = document.getElementById('articleModal');
+      const content = document.getElementById('modalContent');
+      
+      let quizHtml = '<div class="quiz-section"><div class="quiz-title">📚 Mini Cuestionario (3 preguntas)</div>';
+      articulo.quiz.forEach((q, i) => {
+        quizHtml += `
+          <div class="quiz-question">
+            <label><strong>Pregunta ${i+1}:</strong> ${q.pregunta}</label>
+            <div>
+              ${q.opciones.map((opt, j) => `
+                <div>
+                  <input type="radio" name="q${i}" value="${j}" id="q${i}_${j}">
+                  <label for="q${i}_${j}" style="display:inline;margin:0;">${opt}</label>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      });
+      quizHtml += `<button class="btn-submit-quiz" onclick="checkQuiz(${index})">Verificar Respuestas</button>
+                  <div id="feedback-${index}" class="quiz-feedback"></div>
+                  </div>`;
+      
+      content.innerHTML = `
+        <button class="modal-close" onclick="closeArticle()">×</button>
+        <h2 style="color:#e0356d;margin-bottom:1rem;">${articulo.titulo}</h2>
+        <div style="color:#999;margin-bottom:1rem;"><i class="bi bi-clock"></i> ${articulo.tiempoLectura} | Dificultad: ${articulo.dificultad}</div>
+        <div style="color:#333;line-height:1.8;">
+          ${articulo.contenido}
+        </div>
+        ${quizHtml}
+      `;
+      
+      modal.classList.add('active');
+    }
+
+    function closeArticle() {
+      document.getElementById('articleModal').classList.remove('active');
+    }
+
+    function checkQuiz(index) {
+      const articulo = articulos[index];
+      let correctas = 0;
+      let feedback = document.getElementById(`feedback-${index}`);
+      
+      articulo.quiz.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (selected && parseInt(selected.value) === q.respuesta) {
+          correctas++;
+        }
+      });
+      
+      feedback.className = correctas >= 2 ? 'quiz-feedback correct' : 'quiz-feedback incorrect';
+      feedback.textContent = correctas >= 2 
+        ? `✅ ¡Excelente! Obtuviste ${correctas}/${articulo.quiz.length} respuestas correctas` 
+        : `📝 Puedes mejorar. Obtuviste ${correctas}/${articulo.quiz.length} respuestas correctas`;
+    }
+
+    // Cerrar modal al hacer clic fuera
+    document.getElementById('articleModal').addEventListener('click', (e) => {
+      if (e.target.id === 'articleModal') closeArticle();
+    });
+  </script>
+</body>
+</html>
+        descripcion: "¿Es información confiable o falsa? Decide sabiamente.",
+        preguntas: [
+          {

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -238,54 +238,9 @@
   </style>
 </head>
 <body>
-  <!-- Menú principal igual al header -->
-  <header>
-    <div class="logo">
-      <a href="/index.html">SumaqVida</a>
-    </div>
-    <nav class="desktop-menu">
-      <a href="/index.html#sobre">Nosotros</a>
-      <div class="dropdown">
-        <a href="#">Funciones</a>
-        <div class="dropdown-content">
-          <a href="/views/pages/registro-diario.html">Registro diario</a>
-          <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
-          <a href="/views/pages/recetas.html">Recetas</a>
-        </div>
-      </div>
-      <a href="/Sumaqvida/foro.html">Foro</a>  
-      <a href="/Sumaqvida/Calendario/calendario.html">Calendario</a>
-      <a href="/Sumaqvida/views/pages/glosario.html">Glosario</a>
-      <a href="/Sumaqvida/views/pages/blog.html">Blog</a>
-      <a href="/Sumaqvida/views/pages/videos.html">Videos</a>
-      <a href="/Sumaqvida/index.html#faq">Preguntas</a>
-    </nav>
-    <div class="login-btn desktop-menu">
-      <a href="/views/pages/login.html">Iniciar sesión</a>
-    </div>
-    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-    <div class="mobile-menu" id="mobileMenu">
-      <div class="close-btn" onclick="toggleMobileMenu()">×</div>
-      <div class="menu-centrado">
-        <a href="/index.html#sobre">Nosotros</a>
-        <details>
-          <summary>Funciones</summary>
-          <a href="/views/pages/registro-diario.html">Registro diario</a>
-          <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
-          <a href="/views/pages/recetas.html">Recetas</a>
-        </details>
-        <a href="/index.html#faq">Preguntas</a>
-      </div>
-      <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesión</a>
-    </div>
-  </header>
-
-<script>
-function toggleMobileMenu() {
-  var menu = document.getElementById('mobileMenu');
-  menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-}
-</script>
+  <div id="include-header"></div>
+  <script src="/js/app.js"></script>
+  <div class="foro-header">
     <i class="bi bi-chat-dots"></i> <b>Foro SumaqVida</b>
     <div style="font-size:1rem;margin-top:0.5rem;">
       Comparte tus experiencias, dudas, recetas y tips. ¡Tu voz ayuda a la comunidad!
@@ -342,7 +297,7 @@ function toggleMobileMenu() {
   </div>
   <script>
 function cargarPosts() {
-  fetch('/Sumaqvida/api/foro.php?action=get_posts')
+  fetch('/api/foro.php?action=get_posts')
     .then(res => res.json())
     .then(posts => {
       const contenedor = document.getElementById('foroList');
@@ -445,7 +400,7 @@ function publicarPost(user, content, media_type, media_url, hashtags, receta_url
   formData.append('hashtags', hashtags);
   formData.append('receta_url', receta_url);
 
-  fetch('/Sumaqvida/api/foro.php?action=add_post', {
+  fetch('/api/foro.php?action=add_post', {
     method: 'POST',
     body: formData
   })
@@ -462,7 +417,7 @@ function comentar(post_id, user, text) {
   formData.append('user', user);
   formData.append('text', text);
 
-  fetch('/Sumaqvida/api/foro.php?action=add_comment', {
+  fetch('/api/foro.php?action=add_comment', {
     method: 'POST',
     body: formData
   })
@@ -479,7 +434,7 @@ function reaccionar(post_id, reaction) {
   formData.append('user', user);
   formData.append('reaction', reaction);
 
-  fetch('/Sumaqvida/api/foro.php?action=add_reaction', {
+  fetch('/api/foro.php?action=add_reaction', {
     method: 'POST',
     body: formData
   })
@@ -496,7 +451,7 @@ function calificar(post_id, stars) {
   formData.append('user', user);
   formData.append('stars', stars);
 
-  fetch('/Sumaqvida/api/foro.php?action=add_star', {
+  fetch('/api/foro.php?action=add_star', {
     method: 'POST',
     body: formData
   })

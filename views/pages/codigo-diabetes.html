@@ -1,0 +1,1029 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💉 Código Diabetes - SumaqVida</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ============== INTRO SCREEN ============== */
+    .intro-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .intro-screen.hidden {
+      display: none;
+    }
+
+    .intro-content {
+      text-align: center;
+      color: white;
+      max-width: 700px;
+    }
+
+    .intro-content h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .intro-content p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.95;
+      line-height: 1.6;
+    }
+
+    .warning-box {
+      background: rgba(255, 193, 7, 0.2);
+      border-left: 4px solid #ffc107;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      margin: 2rem 0;
+      text-align: left;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .case-card {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: white;
+    }
+
+    .case-card:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-5px);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    .case-card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .case-card-name {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    /* ============== GAME SCREEN ============== */
+    .game-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+
+    .game-screen.hidden {
+      display: none;
+    }
+
+    .game-header {
+      background: rgba(102, 126, 234, 0.9);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .timer-bar {
+      width: 300px;
+      height: 30px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .timer-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #51cf66 0%, #ffc107 70%, #ff6b6b 100%);
+      width: 100%;
+      transition: width 0.5s linear;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .game-content {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    /* Scene Area */
+    .scene-area {
+      background: linear-gradient(135deg, #2d3561 0%, #1a1a2e 100%);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .scene-title {
+      color: white;
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .patient-display {
+      font-size: 6rem;
+      margin: 2rem 0;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .patient-name {
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .situation-text {
+      color: #e0e0e0;
+      font-size: 1rem;
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      max-width: 500px;
+    }
+
+    .dialog-box {
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(102, 126, 234, 0.5);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      color: #e0e0e0;
+      margin-bottom: 1.5rem;
+      max-width: 500px;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: rgba(0,0,0,0.5);
+      border-left: 1px solid rgba(255,255,255,0.1);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      overflow-y: auto;
+    }
+
+    .sidebar-title {
+      color: #667eea;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .observation-item {
+      background: rgba(102, 126, 234, 0.2);
+      border-left: 3px solid #667eea;
+      padding: 0.8rem;
+      border-radius: 0.3rem;
+      color: #e0e0e0;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .observation-item.warning {
+      border-left-color: #ff6b6b;
+      background: rgba(255, 107, 107, 0.2);
+    }
+
+    .observation-item.success {
+      border-left-color: #51cf66;
+      background: rgba(81, 207, 102, 0.2);
+    }
+
+    /* Actions */
+    .actions-section {
+      margin-top: auto;
+    }
+
+    .action-btn {
+      width: 100%;
+      padding: 0.8rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      color: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .action-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .modal-title {
+      color: #333;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .modal-text {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      background: #d32f2f;
+      transform: scale(1.1);
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #ddd;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #ccc;
+    }
+
+    /* Results Screen */
+    .results-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 2rem 1rem;
+    }
+
+    .results-screen.active {
+      display: flex;
+    }
+
+    .results-container {
+      background: white;
+      border-radius: 2rem;
+      padding: 3rem;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .results-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .results-header h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .score-display {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .score-number {
+      font-size: 4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-section {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .timeline-item {
+      padding: 1rem;
+      border-left: 4px solid #667eea;
+      background: white;
+      margin-bottom: 1rem;
+      border-radius: 0.3rem;
+    }
+
+    .timeline-time {
+      color: #667eea;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .timeline-action {
+      color: #333;
+      margin-top: 0.3rem;
+    }
+
+    .diagnosis-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .diagnosis-title {
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .diagnosis-text {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+      .game-content {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        max-height: 200px;
+      }
+
+      .intro-content h1 {
+        font-size: 2rem;
+      }
+
+      .cases-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .results-container {
+        padding: 1.5rem;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- INTRO SCREEN -->
+  <div class="intro-screen" id="introScreen">
+    <div class="intro-content">
+      <h1>💉 Código Diabetes</h1>
+      <p>Eres un voluntario en una feria de salud. Varios visitantes comienzan a presentar síntomas preocupantes.</p>
+      <p>Tu misión es observar, investigar y tomar decisiones correctas para estabilizar a cada paciente.</p>
+      
+      <div class="warning-box">
+        ⚠️ <strong>AVISO IMPORTANTE:</strong> Este es un juego educativo. En una emergencia real, sigue las indicaciones de profesionales de salud y de los servicios de emergencia de tu localidad. Este juego no reemplaza la atención médica profesional.
+      </div>
+
+      <p style="margin-top: 2rem; font-size: 1rem; font-weight: 600;">Elige un caso para comenzar:</p>
+      <div class="cases-grid" id="casesGrid"></div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div class="game-screen hidden" id="gameScreen">
+    <div class="game-header">
+      <div>
+        <div style="color: white; font-size: 0.9rem; margin-bottom: 0.3rem;">⏱️ TIEMPO RESTANTE</div>
+        <div class="timer-bar">
+          <div class="timer-fill" id="timerFill"></div>
+        </div>
+      </div>
+      <div style="text-align: right;">
+        <div style="color: white; font-size: 0.9rem;">Caso: <span id="caseNumber"></span></div>
+        <div style="color: #ffc107; font-size: 1.2rem; font-weight: 700;" id="timerText">120s</div>
+      </div>
+    </div>
+
+    <div class="game-content">
+      <div class="scene-area">
+        <div class="scene-title" id="sceneTitle"></div>
+        <div class="patient-display" id="patientEmoji"></div>
+        <div class="patient-name" id="patientName"></div>
+        <div style="background: rgba(255,193,7,0.2); border: 2px solid #ffc107; padding: 1rem; border-radius: 0.8rem; margin-bottom: 1.5rem; max-width: 500px;">
+          <div style="color: #ffc107; font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem;">⚠️ SÍNTOMAS VISIBLES:</div>
+          <div id="visibleSymptoms" style="color: #e0e0e0; font-size: 0.95rem;"></div>
+        </div>
+        <div class="dialog-box" id="dialogBox"></div>
+      </div>
+
+      <div class="sidebar">
+        <div>
+          <div class="sidebar-title">📋 Observaciones</div>
+          <div id="observationsList"></div>
+        </div>
+        
+        <div class="actions-section">
+          <div class="sidebar-title">🔍 Acciones Disponibles</div>
+          <div id="actionsList"></div>
+          
+          <button class="action-btn" onclick="askSumi()" style="margin-top: 1rem; background: #ffc107; color: #333;">
+            💡 Pedir Ayuda a SUMI
+          </button>
+          
+          <button class="action-btn" onclick="makeDecision()" style="background: #51cf66;">
+            ✅ Tomar Decisión
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMI MODAL -->
+  <div class="modal-overlay" id="sumiModal">
+    <div class="modal-content" style="position: relative;">
+      <button class="modal-close" onclick="closeSumiModal()">×</button>
+      <div class="modal-title">💡 SUMI IA</div>
+      <div class="modal-text" id="sumiMessage"></div>
+      <div class="modal-buttons">
+        <button class="btn btn-primary" onclick="closeSumiModal()">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECISION MODAL -->
+  <div class="modal-overlay" id="decisionModal">
+    <div class="modal-content" style="position: relative;">
+      <button class="modal-close" onclick="closeDecisionModal()">×</button>
+      <div class="modal-title">¿Qué harás?</div>
+      <div id="decisionsContainer"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-container">
+      <div class="results-header">
+        <h1>🎉 Caso Completado</h1>
+      </div>
+
+      <div class="score-display">
+        <div class="score-number" id="scoreNumber">0</div>
+        <div>Puntuación Total</div>
+      </div>
+
+      <div class="timeline-section">
+        <div class="sidebar-title" style="color: #667eea; margin-bottom: 1.5rem;">📍 Línea de Tiempo</div>
+        <div id="timelineContainer"></div>
+      </div>
+
+      <div class="diagnosis-section">
+        <div class="diagnosis-title" id="diagnosisTitle"></div>
+        <div class="diagnosis-text" id="diagnosisText"></div>
+      </div>
+
+      <div class="button-group">
+        <button class="btn btn-primary" onclick="goBackToCases()">Siguiente Caso</button>
+        <button class="btn btn-secondary" onclick="goHome()">Volver al Inicio</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============== GAME STATE ==============
+    const gameState = {
+      currentCase: null,
+      timeRemaining: 120,
+      observations: [],
+      decisions: [],
+      score: 0,
+      timerId: null
+    };
+
+    // ============== CASES DATABASE ==============
+    const cases = [
+      {
+        id: 1,
+        name: 'Compañero en la Feria',
+        emoji: '😰',
+        situation: 'Tu compañero de colegio está sentado en una silla y comienza a sudar mucho. Dice que siente mucho hambre.',
+        visibleSymptoms: '😰 Sudando | Temblando | Pálido',
+        hints: [
+          { text: 'Preguntar: ¿Cuándo fue tu último medicamento?', revealed: false, correct: true, response: '💬 "No me puse insulina esta mañana, olvidé tomar mi medicamento"' },
+          { text: 'Revisar mochila', revealed: false, correct: true, response: '🎒 Encontraste: glucómetro (marca 45 mg/dL ⚠️), insulina, pero NO comida dulce' },
+          { text: 'Preguntar: ¿Cuándo comiste por última vez?', revealed: false, correct: true, response: '💬 "Desayuné hace 6 horas, pero estuve jugando fútbol sin parar"' },
+          { text: 'Observar y hablar sobre lo que vemos', revealed: false, correct: true, response: '👀 Observas: Está muy sudoroso, sus manos tiemblan, no puede concentrarse' }
+        ],
+        correctDiagnosis: 'hipoglucemia',
+        correctAction: 'sugar',
+        diagnosis: 'HIPOGLUCEMIA - Glucosa Baja',
+        explanation: 'ANÁLISIS: No tomó medicamento + ejercicio intenso sin comer = glucosa cayó dramáticamente. Síntomas: sudor frío, temblor, hambre intensa, nerviosismo. Glucómetro: 45 mg/dL (peligroso).\n\n✅ ACCIÓN CORRECTA: Darle algo dulce INMEDIATAMENTE (jugo, caramelo, gaseosa).\n\n❌ ERRORES COMUNES: Aplicar insulina empeora todo. Esperar es peligroso.'
+      },
+      {
+        id: 2,
+        name: 'Deportista Desmayada',
+        emoji: '😵',
+        situation: 'Una atleta acaba de terminar un entrenamiento intenso. Está mareada, pálida y dice sentir mucho cansancio.',
+        visibleSymptoms: '😵 Mareada | Pálida | Cansada',
+        hints: [
+          { text: 'Preguntar: ¿Tomaste tu medicamento hoy?', revealed: false, correct: true, response: '💬 "Sí, tomé insulina esta mañana, pero entrené 2 horas sin parar"' },
+          { text: 'Revisar pulsera médica', revealed: false, correct: true, response: '⌚ PULSERA MÉDICA: "Diabética - tipo 1"' },
+          { text: 'Preguntar: ¿Comiste algo antes de entrenar?', revealed: false, correct: true, response: '💬 "Solo tomé agua. Quería perder peso para la competencia"' },
+          { text: 'Buscar glucómetro en su bolsa', revealed: false, correct: true, response: '🎒 Glucómetro: 52 mg/dL ⚠️⚠️ CRÍTICO' }
+        ],
+        correctDiagnosis: 'hipoglucemia',
+        correctAction: 'sugar',
+        diagnosis: 'HIPOGLUCEMIA SEVERA - Crisis por Ejercicio',
+        explanation: 'ANÁLISIS: Insulina + ejercicio intenso + sin comida = caída peligrosa de glucosa. Atletas con diabetes necesitan carbohidratos antes de ejercicio.\n\nSíntomas: mareos, palidez, fatiga. Glucómetro: 52 mg/dL (EMERGENCIA).\n\n✅ ACCIÓN CORRECTA: Azúcar INMEDIATA + acostarse + llamar emergencias.\n\n❌ ERROR: Ignorar síntomas puede causar desmayo total.'
+      },
+      {
+        id: 3,
+        name: 'Adulto Mayor Deshidratado',
+        emoji: '👴',
+        situation: 'Un señor mayor está muy rojo, dice tener una sed increíble y se ve confundido. Está respirando rápidamente.',
+        visibleSymptoms: '👴 Muy rojo | Confundido | Sed extrema',
+        hints: [
+          { text: 'Preguntar: ¿Cuánto tiempo llevas en el sol?', revealed: false, correct: true, response: '💬 "Llevo aquí 4 horas, es muy calor pero no pensé que..."' },
+          { text: 'Observar su piel y labios', revealed: false, correct: true, response: '👀 Piel muy seca y enrojecida | Labios pálidos | Lengua seca' },
+          { text: 'Preguntar: ¿Tomaste agua? ¿Medicamentos?', revealed: false, correct: true, response: '💬 "Tomé mi insulina esta mañana, pero casi no bebí agua"' },
+          { text: 'Preguntar: ¿Estás urinando mucho?', revealed: false, correct: true, response: '💬 "Sí, mucho. Cada 30 minutos debo ir al baño"' }
+        ],
+        correctDiagnosis: 'hiperglucemia',
+        correctAction: 'emergency',
+        diagnosis: 'HIPERGLUCEMIA - Estado Hiperosmolar',
+        explanation: 'ANÁLISIS: Calor + deshidratación + glucosa alta = crisis peligrosa. No es hipoglucemia, es LO OPUESTO.\n\nSíntomas: sed extrema, piel seca y roja, orinar frecuente, confusión, respiración rápida.\n\n✅ ACCIÓN CORRECTA: Llevar a SOMBRA INMEDIATA + LLAMAR EMERGENCIAS + agua en pequeños sorbos.\n\n❌ ERROR CRÍTICO: Darle mucho azúcar es MORTAL. Necesita médico urgente.'
+      },
+      {
+        id: 4,
+        name: 'Niño Confundido',
+        emoji: '👦',
+        situation: 'Un niño pequeño está en la cancha deportiva. No responde bien a preguntas, parece desorientado y está asustado.',
+        visibleSymptoms: '👦 Confundido | Asustado | Sin respuesta clara',
+        hints: [
+          { text: 'Buscar a sus padres o adulto responsable', revealed: false, correct: true, response: '👨‍👩‍👦 Sus padres aparecen: "Tiene diabetes tipo 1. ¡Debe estar en crisis!"' },
+          { text: 'Revisar si tiene pulsera o brazalete médico', revealed: false, correct: true, response: '⌚ BRAZALETE: "Diabético - Si está confundido, DAR GLUCOSA"' },
+          { text: 'Intentar comunicarte: ¿Sabes dónde estás?', revealed: false, correct: true, response: '👦 El niño murmura: "No sé... me duele la cabeza... quiero chocolate"' },
+          { text: 'Revisar su mochila para glucómetro', revealed: false, correct: true, response: '🎒 Glucómetro: 38 mg/dL ⚠️⚠️⚠️ MUY BAJO' }
+        ],
+        correctDiagnosis: 'hipoglucemia',
+        correctAction: 'sugar',
+        diagnosis: 'HIPOGLUCEMIA SEVERA - Emergencia Pediátrica',
+        explanation: 'ANÁLISIS: Confusión en niños = glucosa MUY baja. Los niños con diabetes pueden descompensarse rápidamente.\n\nSíntomas: desorientación, incapacidad de responder, miedo, glucómetro: 38 mg/dL (CRÍTICO).\n\n✅ ACCIÓN CORRECTA: GLUCOSA INMEDIATA (jugo, miel, caramelo) + avisar padres + si no responde = EMERGENCIAS.\n\n❌ ERROR: Ignorar "simplemente está asustado" = puede perder conciencia.'
+      },
+      {
+        id: 5,
+        name: 'Mujer con Crisis Respiratoria',
+        emoji: '👩',
+        situation: 'Una mujer adulta dice que su visión está borrosa y tiene un aliento raro. Respira muy rápido y dice que se siente muy mal.',
+        visibleSymptoms: '👩 Respiración rápida | Aliento extraño | Muy pálida',
+        hints: [
+          { text: 'Pregunta: ¿Cuándo fue tu último medicamento?', revealed: false, correct: true, response: '💬 "Hace 3 días. Dejé de tomar insulina, tenía miedo de los efectos"' },
+          { text: 'Oler su aliento', revealed: false, correct: true, response: '👃 OLOR AFRUTADO muy fuerte (como acetona o fruta podrida)' },
+          { text: 'Preguntar: ¿Cuánto tiempo te sientes así?', revealed: false, correct: true, response: '💬 "Desde ayer. Náuseas, no como, dolor de cabeza"' },
+          { text: 'Observar su respiración y estado', revealed: false, correct: true, response: '👀 Respira muy rápido y profundo | Sudorosa | Desorientada | Débil' }
+        ],
+        correctDiagnosis: 'hiperglucemia',
+        correctAction: 'emergency',
+        diagnosis: 'CETOACIDOSIS DIABÉTICA - EMERGENCIA CRÍTICA',
+        explanation: 'ANÁLISIS: NO tomó insulina durante DÍAS = glucosa EXTREMADAMENTE alta = cuerpo entra en acidosis.\n\nSíntomas CLÁSICOS: Aliento afrutado (acetona), respiración rápida, náuseas, visión borrosa, desorientación.\n\n✅ ACCIÓN CORRECTA: LLAMAR EMERGENCIAS INMEDIATAMENTE. NO dar azúcar (paradójicamente). Hospital urgente.\n\n❌ ERROR FATAL: Esta es la SITUACIÓN MÁS GRAVE. Sin tratamiento médico = muerte. Nunca ignorar aliento afrutado.'
+      }
+    ];
+
+    // ============== INITIALIZATION ==============
+    function initializeGame() {
+      renderCases();
+    }
+
+    function renderCases() {
+      const grid = document.getElementById('casesGrid');
+      grid.innerHTML = cases.map(c => `
+        <div class="case-card" onclick="startCase(${c.id})">
+          <div class="case-card-icon">${c.emoji}</div>
+          <div class="case-card-name">Caso ${c.id}</div>
+        </div>
+      `).join('');
+    }
+
+    function startCase(caseId) {
+      gameState.currentCase = cases.find(c => c.id === caseId);
+      gameState.timeRemaining = 120;
+      gameState.observations = [];
+      gameState.decisions = [];
+      gameState.score = 0;
+
+      document.getElementById('introScreen').classList.add('hidden');
+      document.getElementById('gameScreen').classList.remove('hidden');
+      
+      updateGameDisplay();
+      startTimer();
+    }
+
+    function updateGameDisplay() {
+      const c = gameState.currentCase;
+      
+      document.getElementById('caseNumber').textContent = `${c.id}`;
+      document.getElementById('sceneTitle').textContent = c.name;
+      document.getElementById('patientEmoji').textContent = c.emoji;
+      document.getElementById('patientName').textContent = c.name;
+      document.getElementById('dialogBox').textContent = c.situation;
+      document.getElementById('visibleSymptoms').textContent = c.visibleSymptoms;
+      
+      renderObservations();
+      renderActions();
+    }
+
+    function renderObservations() {
+      const list = document.getElementById('observationsList');
+      
+      if (gameState.observations.length === 0) {
+        list.innerHTML = '<div class="observation-item" style="opacity: 0.6;">📍 Aún no has investigado nada. Selecciona una acción para descubrir información.</div>';
+        return;
+      }
+
+      list.innerHTML = gameState.observations.map(obs => `
+        <div class="observation-item ${obs.type || ''}" style="border-left: 4px solid ${obs.type === 'success' ? '#51cf66' : '#ffc107'}; background: ${obs.type === 'success' ? 'rgba(81,207,102,0.1)' : 'rgba(255,193,7,0.1)'} ; padding: 1rem; margin-bottom: 0.8rem; border-radius: 0.5rem;">
+          <strong>${obs.investigation}</strong><br>
+          ${obs.response}
+          <div style="font-size: 0.85rem; opacity: 0.7; margin-top: 0.5rem;">+${obs.points} pts</div>
+        </div>
+      `).join('');
+    }
+
+    function renderActions() {
+      const list = document.getElementById('actionsList');
+      
+      const availableHints = gameState.currentCase.hints.filter(h => !h.revealed);
+      
+      if (availableHints.length === 0) {
+        list.innerHTML = '<div class="observation-item" style="color: #51cf66; font-weight: bold;">✓ Has investigado TODO. Ya tienes suficiente información para decidir.</div>';
+        return;
+      }
+
+      list.innerHTML = '<strong style="display: block; margin-bottom: 0.8rem; color: #667eea;">Selecciona qué investigar:</strong>' + availableHints.map((hint) => {
+        const originalIdx = gameState.currentCase.hints.indexOf(hint);
+        return `
+        <button class="action-btn" onclick="investigateHint(${originalIdx})" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: block; width: 100%; text-align: left; margin-bottom: 0.8rem; transition: all 0.3s ease;">
+          🔍 ${hint.text}
+        </button>
+      `;
+      }).join('');
+    }
+
+    function investigateHint(idx) {
+      const hint = gameState.currentCase.hints[idx];
+      hint.revealed = true;
+
+      // Add observation with detailed response
+      gameState.observations.push({
+        investigation: hint.text,
+        response: hint.response,
+        type: hint.correct ? 'success' : 'warning',
+        points: 10
+      });
+
+      if (hint.correct) {
+        gameState.score += 10;
+      }
+
+      renderObservations();
+      renderActions();
+    }
+
+    function askSumi() {
+      const unrevealed = gameState.currentCase.hints.filter(h => !h.revealed);
+      
+      if (unrevealed.length === 0) {
+        showSumiMessage('Has investigado todo. Ahora deberías tomar una decisión basada en lo que observaste.');
+        return;
+      }
+
+      const messages = [
+        '¿Qué síntomas has observado? Piensa si todos apuntan a lo mismo.',
+        '¿Has hablado con el paciente? ¿Qué información importante obtuviste?',
+        '¿Hay algún objeto o evidencia que aún no hayas revisado?',
+        'Los síntomas que ves, ¿son de glucosa baja o alta? Piensa en cada uno.',
+        '¿Sabes cuándo fue el último medicamento? ¿Cuándo comió? ¿Hizo ejercicio?'
+      ];
+
+      const message = messages[Math.floor(Math.random() * messages.length)];
+      showSumiMessage(message);
+    }
+
+    function showSumiMessage(message) {
+      document.getElementById('sumiMessage').textContent = message;
+      document.getElementById('sumiModal').classList.add('active');
+    }
+
+    function closeSumiModal() {
+      document.getElementById('sumiModal').classList.remove('active');
+    }
+
+    function makeDecision() {
+      const decisions = [
+        { text: 'Darle algo dulce rápidamente (caramelo, jugo)', action: 'sugar' },
+        { text: 'Acostarlo de lado', action: 'lie' },
+        { text: 'Llamar emergencias', action: 'emergency' },
+        { text: 'Darle agua', action: 'water' },
+        { text: 'Aplicar insulina', action: 'insulin' },
+        { text: 'Esperar a ver qué pasa', action: 'wait' }
+      ];
+
+      const container = document.getElementById('decisionsContainer');
+      container.innerHTML = decisions.map(d => `
+        <button class="btn btn-primary" onclick="chooseAction('${d.action}')" style="display: block; width: 100%; text-align: left; margin-bottom: 0.8rem;">
+          ${d.text}
+        </button>
+      `).join('');
+
+      document.getElementById('decisionModal').classList.add('active');
+    }
+
+    function chooseAction(action) {
+      closeDecisionModal();
+      
+      const c = gameState.currentCase;
+      let isCorrect = false;
+      let feedback = '';
+      let detailedFeedback = '';
+
+      // More comprehensive decision logic
+      if (c.correctDiagnosis === 'hipoglucemia') {
+        if (action === 'sugar') {
+          isCorrect = true;
+          feedback = '✅ ¡CORRECTO! Azúcar rápida es lo que necesita.';
+          detailedFeedback = 'En hipoglucemia, la glucosa baja necesita azúcar INMEDIATA (caramelo, jugo, gaseosa). Es lo único que sube rápido.';
+        } else if (action === 'insulin') {
+          feedback = '❌ PELIGROSO: Insulina en hipoglucemia empeora TODO';
+          detailedFeedback = 'La insulina BAJA más la glucosa. En hipoglucemia, nunca aplicar insulina. Es MORTAL.';
+        } else if (action === 'wait') {
+          feedback = '❌ PELIGRO: Esperar es crítico';
+          detailedFeedback = 'Con glucosa muy baja (< 70), cada minuto cuenta. Esperar puede causar desmayo o convulsiones.';
+        } else if (action === 'water') {
+          feedback = '❌ INSUFICIENTE: Agua no sube glucosa rápido';
+          detailedFeedback = 'El agua NO tiene azúcar. La persona necesita CARBOHIDRATOS de absorción rápida para elevar glucosa.';
+        } else {
+          feedback = '❌ Acción inefectiva';
+          detailedFeedback = 'En hipoglucemia aguda, la acción principal debe elevar glucosa INMEDIATAMENTE.';
+        }
+      } else if (c.correctDiagnosis === 'hiperglucemia') {
+        if (action === 'emergency') {
+          isCorrect = true;
+          feedback = '✅ ¡CORRECTO! Llamar emergencias es crítico.';
+          detailedFeedback = 'En hiperglucemia grave (especialmente cetoacidosis), se necesita atención médica URGENTE. Requiere hospital.';
+        } else if (action === 'sugar') {
+          feedback = '❌ MORTAL: Más azúcar empeora TODO';
+          detailedFeedback = 'En hiperglucemia, dar más azúcar es FATAL. Empeora la acidosis del cuerpo. Esta persona necesita insulina y médico.';
+        } else if (action === 'insulin') {
+          feedback = '⚠️ Parcialmente correcto (solo médico debe aplicar)';
+          detailedFeedback = 'Insulina es lo que necesita, pero NO puedes aplicarla. Requiere hospital y profesionales. Llamar emergencias es lo correcto.';
+        } else if (action === 'water') {
+          feedback = '⚠️ Parcialmente correcto (pero insuficiente)';
+          detailedFeedback = 'Agua para hidratación es bueno, pero en hiperglucemia severa se necesita HOSPITAL INMEDIATO.';
+        } else {
+          feedback = '❌ Acción inefectiva';
+          detailedFeedback = 'En hiperglucemia grave, la acción crítica es LLAMAR EMERGENCIAS.';
+        }
+      }
+
+      gameState.decisions.push({
+        action: action,
+        correct: isCorrect,
+        time: 120 - gameState.timeRemaining,
+        feedback: detailedFeedback
+      });
+
+      if (isCorrect) {
+        gameState.score += 50;
+      } else {
+        gameState.score += 10;
+      }
+
+      if (feedback) {
+        showSumiMessage(feedback + '\n\n' + detailedFeedback);
+        setTimeout(() => endCase(), 2500);
+      } else {
+        endCase();
+      }
+    }
+
+    function closeDecisionModal() {
+      document.getElementById('decisionModal').classList.remove('active');
+    }
+
+    function startTimer() {
+      clearInterval(gameState.timerId);
+      
+      gameState.timerId = setInterval(() => {
+        gameState.timeRemaining--;
+        
+        const percentage = (gameState.timeRemaining / 120) * 100;
+        document.getElementById('timerFill').style.width = percentage + '%';
+        document.getElementById('timerText').textContent = gameState.timeRemaining + 's';
+
+        if (gameState.timeRemaining <= 0) {
+          endCase();
+        }
+      }, 1000);
+    }
+
+    function endCase() {
+      clearInterval(gameState.timerId);
+      document.getElementById('gameScreen').classList.add('hidden');
+      showResults();
+    }
+
+    function showResults() {
+      const c = gameState.currentCase;
+      
+      document.getElementById('scoreNumber').textContent = gameState.score;
+      
+      // Timeline
+      const timeline = document.getElementById('timelineContainer');
+      const timelineHTML = `
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 1rem; margin-bottom: 1.5rem;">
+          <div style="color: #ffc107; font-weight: 700; margin-bottom: 1rem;">🔍 INVESTIGACIONES REALIZADAS</div>
+          ${gameState.observations.map((obs, idx) => `
+            <div style="background: rgba(255,255,255,0.05); padding: 0.8rem; margin-bottom: 0.8rem; border-left: 3px solid #667eea; border-radius: 0.3rem;">
+              <strong style="color: #e0e0e0;">${obs.investigation}</strong><br>
+              <span style="color: #b0b0b0; font-size: 0.9rem;">${obs.response}</span>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 1rem; margin-bottom: 1.5rem;">
+          <div style="color: #51cf66; font-weight: 700; margin-bottom: 1rem;">✅ DECISIÓN TOMADA</div>
+          ${gameState.decisions.map((d, idx) => `
+            <div style="background: ${d.correct ? 'rgba(81,207,102,0.2)' : 'rgba(255,107,107,0.2)'}; padding: 1rem; border-left: 3px solid ${d.correct ? '#51cf66' : '#ff6b6b'}; border-radius: 0.3rem;">
+              <strong>${d.correct ? '✅ CORRECTA' : '❌ INCORRECTA'}</strong><br>
+              Acción: ${d.action}<br>
+              <span style="font-size: 0.9rem; opacity: 0.9; margin-top: 0.5rem; display: block;">${d.feedback || ''}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      timeline.innerHTML = timelineHTML;
+
+      // Diagnosis
+      document.getElementById('diagnosisTitle').textContent = c.diagnosis;
+      document.getElementById('diagnosisText').textContent = c.explanation;
+
+      document.getElementById('resultsScreen').classList.add('active');
+    }
+
+    function goBackToCases() {
+      document.getElementById('resultsScreen').classList.remove('active');
+      document.getElementById('introScreen').classList.remove('hidden');
+      gameState.currentCase = null;
+      renderCases();
+    }
+
+    function goHome() {
+      window.location.href = '/views/pages/minijuegos.html';
+    }
+
+    // Initialize
+    initializeGame();
+  </script>
+</body>
+</html>

@@ -72,16 +72,17 @@
   </style>
 </head>
 <body>
-
   <header>
-    <div class="logo"><a href="/index.html">SumaqVida</a></div>
+    <div class="logo">
+      <a href="/index.html">SumaqVida</a>
+    </div>
     <nav class="desktop-menu">
       <a href="/index.html">Inicio</a>
       <div class="dropdown">
         <a href="#" class="dropdown-toggle">IA</a>
         <div class="dropdown-content">
           <a href="/views/pages/registro-diario.html">Registro diario</a>
-          <a href="/views/pages/evaluacion.html">Evaluacion antes de comer</a>
+          <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
           <a href="/views/pages/recetas.html">Recetas</a>
         </div>
       </div>
@@ -106,24 +107,26 @@
           <a href="/index.html#sobre">Trabajo colaborativo</a>
         </div>
       </div>
-      <a href="/views/pages/scanner.html">Escaner</a>
+      <a href="/views/pages/scanner.html">Escáner</a>
       <a href="/views/pages/panel.html">Mi Panel</a>
     </nav>
     <div class="login-btn desktop-menu">
       <span id="usuarioNombre" class="usuario-nombre" style="margin-right:16px;color:#e0356d;font-weight:500;"></span>
-      <a href="/views/pages/login.html">Iniciar sesion</a>
+      <a href="/views/pages/login.html">Iniciar sesión</a>
     </div>
-    <div class="hamburger" onclick="toggleMobileMenu()">&#9776;</div>
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
     <div class="mobile-menu" id="mobileMenu">
-      <div class="close-btn" onclick="toggleMobileMenu()">&times;</div>
+      <div class="close-btn" onclick="toggleMobileMenu()">×</div>
       <div class="menu-centrado">
         <a href="/index.html">Inicio</a>
-        <details><summary>IA</summary>
+        <details>
+          <summary>IA</summary>
           <a href="/views/pages/registro-diario.html">Registro diario</a>
-          <a href="/views/pages/evaluacion.html">Evaluacion antes de comer</a>
+          <a href="/views/pages/evaluacion.html">Evaluación antes de comer</a>
           <a href="/views/pages/recetas.html">Recetas</a>
         </details>
-        <details><summary>Comunidad</summary>
+        <details>
+          <summary>Comunidad</summary>
           <a href="/views/pages/minijuegos.html">Minijuegos</a>
           <a href="/Calendario/calendario.html">Calendario</a>
           <a href="/Glosa/Glosario.html">Glosario</a>
@@ -141,11 +144,13 @@
           <a href="/index.html#sobre">Trabajo colaborativo</a>
         </div>
       </div>
-        <a href="/views/pages/scanner.html">Escaner</a>
+        <a href="/views/pages/scanner.html">Escáner</a>
       </div>
-      <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesion</a>
+      <a href="/views/pages/login.html" class="btn-mobile-login">Iniciar sesión</a>
     </div>
   </header>
+
+    <div id="include-header"></div>
 
 <div class="container mt-5 pt-5">
   <h2 class="section-title">Registro Diario</h2>
@@ -261,3 +266,5 @@
 
 </body>
 </html>
+
+

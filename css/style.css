@@ -1842,3 +1842,1200 @@ left:8px;
     object-fit: cover;
     border-radius: 20px 20px 0 0;
 }
+
+/* ============================================================
+   SUMAQVIDA — REGISTRO DIARIO
+============================================================ */
+main {
+    padding-top: 240px;
+}
+:root {
+    --rosa: #ef2f70;
+    --rosa-hover: #d92562;
+    --rosa-claro: #fff1f6;
+    --rosa-suave: #ffe2ec;
+
+    --azul: #1769ff;
+    --azul-claro: #edf4ff;
+
+    --verde: #16a05d;
+    --verde-claro: #eaf9f1;
+
+    --texto: #172033;
+    --gris: #667085;
+    --gris-claro: #98a2b3;
+
+    --borde: #e1e4e8;
+
+    --blanco: #ffffff;
+
+    --sombra:
+        0 5px 18px rgba(30, 40, 60, 0.07);
+}
+
+
+/* ============================================================
+   FONDO GENERAL
+============================================================ */
+
+body {
+
+    margin: 0;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #fffafd 100%
+        );
+
+    color: var(--texto);
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+
+/* ============================================================
+   CONTENEDOR PRINCIPAL
+============================================================ */
+
+.container {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+/* Espacio para el header fijo */
+main {
+    padding-top: 105px;
+}
+/* ============================================================
+   TITULO PRINCIPAL
+============================================================ */
+.section-title {
+
+    color: var(--rosa);
+
+    font-size: 2.35rem;
+
+    font-weight: 800;
+
+    text-align: left;
+
+    margin:
+        18px 0 6px;
+
+    letter-spacing: -1px;
+}
+
+
+/* Línea decorativa */
+
+.section-title::after {
+
+    content: "";
+
+    display: none;
+}
+
+
+/* ============================================================
+   SUBTITULO
+============================================================ */
+
+/*
+Si tienes un párrafo debajo del título,
+se verá limpio y gris.
+*/
+
+.container > p {
+
+    color: var(--gris);
+
+    font-size: 1rem;
+
+    margin-bottom: 28px;
+}
+
+
+/* ============================================================
+   TARJETAS SUPERIORES
+============================================================ */
+
+.row.g-4.mb-5 {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin:
+        0 0 34px !important;
+}
+
+
+/* ============================================================
+   TARJETA INDIVIDUAL
+============================================================ */
+
+.row.g-4.mb-5 .card {
+
+    position: relative;
+
+    min-height: 100px;
+
+    padding:
+        20px 25px;
+
+    background: var(--blanco);
+
+    border:
+        1px solid #eeeeee;
+
+    border-radius: 16px;
+
+    box-shadow: var(--sombra);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+
+    overflow: hidden;
+}
+
+
+/* línea superior */
+
+.row.g-4.mb-5 .card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    height: 4px;
+
+    background: var(--rosa);
+}
+
+
+/* segunda tarjeta */
+
+.row.g-4.mb-5 .card:nth-child(2)::before {
+
+    background: var(--verde);
+}
+
+
+/* tercera tarjeta */
+
+.row.g-4.mb-5 .card:nth-child(3)::before {
+
+    background: var(--rosa);
+}
+
+
+/* hover */
+
+.row.g-4.mb-5 .card:hover {
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(30,40,60,.10);
+}
+
+
+/* ============================================================
+   TITULOS DE TARJETAS
+============================================================ */
+
+.row.g-4.mb-5 h6 {
+
+    margin:
+        0 0 5px;
+
+    color: var(--gris);
+
+    font-size: .92rem;
+
+    font-weight: 500;
+
+    text-transform: none;
+}
+
+
+/* ============================================================
+   VALORES
+============================================================ */
+
+.row.g-4.mb-5 h2,
+.row.g-4.mb-5 h5 {
+
+    margin: 0;
+
+    padding: 0;
+
+    background: transparent;
+
+    border: none;
+
+    box-shadow: none;
+
+    min-width: auto;
+
+    font-weight: 800;
+}
+
+
+/* glucosa */
+
+.row.g-4.mb-5 h2 {
+
+    color: var(--azul);
+
+    font-size: 1.65rem;
+}
+
+
+/* actividad */
+
+.row.g-4.mb-5 h5 {
+
+    color: var(--verde);
+
+    font-size: 1.45rem;
+}
+
+
+/* registros */
+
+.row.g-4.mb-5
+.card:last-child h2 {
+
+    color: var(--texto);
+}
+
+
+/* ============================================================
+   FORMULARIO
+============================================================ */
+
+
+/*
+   Quitamos la apariencia de tarjeta.
+   El formulario queda flotando sobre el fondo.
+*/
+
+.card {
+
+    background: transparent;
+
+    border: none;
+
+    border-radius: 0;
+
+    padding: 0;
+
+    box-shadow: none;
+}
+
+
+/* ============================================================
+   TITULO "REGISTRAR INFORMACIÓN"
+============================================================ */
+
+.card h4 {
+
+    position: relative;
+
+    color: var(--texto);
+
+    text-align: left;
+
+    font-size: 1.35rem;
+
+    font-weight: 800;
+
+    margin:
+        0 0 25px;
+
+    padding-left: 34px;
+}
+
+
+/* icono decorativo */
+
+.card h4::before {
+
+    content: "✎";
+
+    position: absolute;
+
+    left: 0;
+
+    top: -4px;
+
+    color: var(--rosa);
+
+    font-size: 1.65rem;
+
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   FORMULARIO EN DOS COLUMNAS
+============================================================ */
+
+/*
+   Bootstrap normalmente usa filas/columnas.
+   Esta regla hace que los campos se distribuyan
+   como en la imagen de referencia.
+*/
+
+.card form .row {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    column-gap: 32px;
+
+    row-gap: 0;
+}
+
+
+/* observaciones ocupa todo */
+
+.card form
+.row
+[class*="col-12"] {
+
+    grid-column:
+        1 / -1;
+}
+
+
+/* ============================================================
+   LABELS
+============================================================ */
+
+.form-label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--texto);
+
+    font-size: .94rem;
+
+    font-weight: 500;
+}
+
+
+/* ============================================================
+   CAMPOS
+============================================================ */
+
+.form-select,
+.form-control {
+
+    width: 100%;
+
+    min-height: 48px;
+
+    padding:
+        11px 15px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #d5d9df;
+
+    border-radius: 10px;
+
+    color: var(--texto);
+
+    font-size: .96rem;
+
+    box-shadow: none;
+
+    transition:
+        border .2s,
+        box-shadow .2s;
+}
+
+
+/* hover */
+
+.form-select:hover,
+.form-control:hover {
+
+    border-color:
+        #b9bec7;
+}
+
+
+/* focus */
+
+.form-select:focus,
+.form-control:focus {
+
+    outline: none;
+
+    border-color:
+        var(--rosa);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(239,47,112,.10);
+}
+
+
+/* ============================================================
+   TEXTAREA
+============================================================ */
+
+textarea.form-control {
+
+    min-height: 90px;
+
+    resize: vertical;
+
+    padding-top: 13px;
+}
+
+
+/* placeholder */
+
+.form-control::placeholder {
+
+    color:
+        var(--gris-claro);
+}
+
+
+/* ============================================================
+   ESPACIADO DE CAMPOS
+============================================================ */
+
+.card form
+.row > [class*="col-"] {
+
+    margin-bottom: 20px;
+}
+
+
+/* ============================================================
+   BOTON GUARDAR
+============================================================ */
+
+.btn-success {
+
+    background:
+        linear-gradient(
+            135deg,
+            #ef2f70,
+            #f83d7b
+        );
+
+    border: none;
+
+    border-radius: 9px;
+
+    padding:
+        11px 25px;
+
+    min-width: 180px;
+
+    color: white;
+
+    font-size: .92rem;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 6px 15px
+        rgba(239,47,112,.20);
+
+    transition:
+        .2s ease;
+}
+
+
+/* hover */
+
+.btn-success:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #d92562,
+            #ed326f
+        );
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 9px 20px
+        rgba(239,47,112,.28);
+}
+
+
+/* ============================================================
+   ESTADO ACTUAL
+============================================================ */
+
+#glucosaActual {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 175px;
+
+    min-height: 60px;
+
+    padding:
+        8px 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #edf4ff,
+            #f8fbff
+        );
+
+    border:
+        1px solid
+        #d9e6ff;
+
+    border-radius: 16px;
+
+    color: var(--azul);
+
+    font-size: 1.75rem;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 6px 18px
+        rgba(23,105,255,.08);
+}
+
+
+/* ============================================================
+   ESTADO DE GLUCOSA
+============================================================ */
+
+#glucosaEstado {
+
+    display: inline-block;
+
+    margin:
+        12px 0 0 5px;
+
+    padding:
+        8px 16px;
+
+    background:
+        var(--rosa-claro);
+
+    border:
+        1px solid
+        #ffd6e4;
+
+    border-radius: 50px;
+
+    color:
+        var(--rosa);
+
+    font-size: .86rem;
+
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   RECOMENDACIONES
+============================================================ */
+
+#recomendaciones {
+
+    margin-top: 18px;
+
+    padding:
+        18px 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff4f8,
+            #fffafd
+        );
+
+    border:
+        1px solid
+        #ffdce8;
+
+    border-left:
+        4px solid
+        var(--rosa);
+
+    border-radius:
+        0 13px 13px 0;
+
+    color:
+        #475467;
+
+    font-size: .91rem;
+
+    line-height: 1.6;
+
+    box-shadow:
+        0 4px 12px
+        rgba(239,47,112,.04);
+}
+
+
+/* ============================================================
+   META DIARIA
+============================================================ */
+
+.progress {
+
+    height: 20px;
+
+    padding: 3px;
+
+    margin-top: 10px;
+
+    background:
+        #f3e8ed;
+
+    border-radius: 50px;
+
+    overflow: hidden;
+
+    box-shadow:
+        inset 0 1px 4px
+        rgba(0,0,0,.05);
+}
+
+
+/* ============================================================
+   BARRA DE PROGRESO
+============================================================ */
+
+.progress-bar {
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ef2f70,
+            #ff83a9
+        );
+
+    border-radius: 50px;
+
+    color: white;
+
+    font-size: .72rem;
+
+    font-weight: 800;
+
+    transition:
+        width .5s ease;
+}
+
+
+/* ============================================================
+   PANEL META DIARIA
+============================================================ */
+
+.progress
++ * {
+
+    margin-top: 10px;
+}
+
+
+/*
+   Si tu meta diaria está dentro de una sección/card,
+   le damos el acabado rosado de la referencia.
+*/
+
+.card:has(.progress) {
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff9fb,
+            #fff4f8
+        );
+
+    border:
+        1px solid
+        #ffdce8;
+
+    border-radius: 15px;
+
+    padding:
+        25px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(239,47,112,.05);
+}
+
+
+/* ============================================================
+   TITULO META DIARIA
+============================================================ */
+
+.card:has(.progress) h4 {
+
+    color:
+        var(--rosa);
+
+    text-align: center;
+
+    padding-left: 0;
+
+    font-size: 1.05rem;
+
+    margin-bottom: 22px;
+}
+
+
+/* ============================================================
+   HISTORIAL
+============================================================ */
+
+.table-responsive {
+
+    margin-top: 12px;
+
+    background: white;
+
+    border:
+        1px solid
+        #eeeeee;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 5px 18px
+        rgba(30,40,60,.06);
+}
+
+
+/* ============================================================
+   TABLA
+============================================================ */
+
+.table {
+
+    width: 100%;
+
+    margin: 0;
+
+    background: white;
+
+    border-collapse:
+        separate;
+
+    border-spacing: 0;
+}
+
+
+/* ============================================================
+   CABECERA
+============================================================ */
+
+.table thead {
+
+    background:
+        linear-gradient(
+            135deg,
+            #ef2f70,
+            #f63c79
+        );
+
+    color: white;
+}
+
+
+.table thead th {
+
+    padding:
+        14px 15px;
+
+    color: white;
+
+    font-size: .87rem;
+
+    font-weight: 800;
+
+    text-align: left;
+
+    border: none;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   CELDAS
+============================================================ */
+
+.table tbody td {
+
+    padding:
+        14px 15px;
+
+    color:
+        #475467;
+
+    font-size: .89rem;
+
+    border-bottom:
+        1px solid
+        #f0f1f3;
+
+    background: white;
+}
+
+
+/* última fila */
+
+.table tbody tr:last-child td {
+
+    border-bottom: none;
+}
+
+
+/* hover */
+
+.table tbody tr:hover td {
+
+    background:
+        #fff8fa;
+}
+
+
+/* ============================================================
+   GLUCOSA EN HISTORIAL
+============================================================ */
+
+.table tbody td:nth-child(2) {
+
+    color:
+        var(--azul);
+
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   INSULINA
+============================================================ */
+
+.table tbody td:nth-child(3) {
+
+    color:
+        var(--rosa);
+
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   ACTIVIDAD
+============================================================ */
+
+.table tbody td:nth-child(5) {
+
+    color:
+        var(--verde);
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   BOTON BORRAR HISTORIAL
+============================================================ */
+
+.btn-outline-danger {
+
+    border:
+        1px solid
+        #ffc6d8;
+
+    background:
+        #fff5f8;
+
+    color:
+        var(--rosa);
+
+    border-radius: 8px;
+
+    padding:
+        7px 13px;
+
+    font-size: .82rem;
+
+    font-weight: 700;
+
+    transition: .2s;
+}
+
+
+.btn-outline-danger:hover {
+
+    background:
+        var(--rosa);
+
+    border-color:
+        var(--rosa);
+
+    color: white;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* ============================================================
+   SWEET ALERT
+============================================================ */
+
+.swal2-popup {
+
+    border-radius:
+        18px !important;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+
+.swal2-confirm {
+
+    background:
+        var(--rosa) !important;
+
+    border-radius:
+        9px !important;
+}
+
+
+/* ============================================================
+   ESPACIADO ENTRE SECCIONES
+============================================================ */
+
+.mt-5 {
+
+    margin-top:
+        38px !important;
+}
+
+
+.mb-5 {
+
+    margin-bottom:
+        32px !important;
+}
+
+
+/* ============================================================
+   RESPONSIVE — TABLET
+============================================================ */
+
+@media (max-width: 900px) {
+
+    .container {
+
+        padding:
+            0 20px;
+    }
+
+
+    .section-title {
+
+        font-size:
+            2rem;
+    }
+
+
+    .row.g-4.mb-5 {
+
+        gap: 12px;
+    }
+
+
+    .card form .row {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .card form
+    .row
+    [class*="col-12"] {
+
+        grid-column:
+            auto;
+    }
+
+}
+
+
+/* ============================================================
+   RESPONSIVE — CELULAR
+============================================================ */
+
+@media (max-width: 600px) {
+
+    .container {
+
+        padding:
+            0 15px;
+    }
+
+
+    .section-title {
+
+        font-size:
+            1.75rem;
+
+        margin-top:
+            15px;
+    }
+
+
+    .row.g-4.mb-5 {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .row.g-4.mb-5 .card {
+
+        min-height:
+            85px;
+    }
+
+
+    .card h4 {
+
+        font-size:
+            1.2rem;
+    }
+
+
+    .form-select,
+    .form-control {
+
+        min-height:
+            48px;
+    }
+
+
+    .btn-success {
+
+        width: 100%;
+    }
+
+
+    #glucosaActual {
+
+        min-width:
+            150px;
+    }
+
+
+    #glucosaEstado {
+
+        margin-left:
+            0;
+
+        display: block;
+
+        width:
+            fit-content;
+    }
+
+
+    .table-responsive {
+
+        overflow-x:
+            auto;
+    }
+
+
+    .table {
+
+        min-width:
+            650px;
+    }
+
+}
+/* ======================================================
+   REGISTRO DIARIO — ESPACIO PARA HEADER
+====================================================== */
+
+.registro-page {
+    max-width: 1150px;
+    margin: 0 auto;
+
+    padding-left: 30px;
+    padding-right: 30px;
+
+    padding-top: 105px;
+}
